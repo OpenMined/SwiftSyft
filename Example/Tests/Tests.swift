@@ -1,5 +1,4 @@
 import XCTest
-import SwiftSyft
 
 class Tests: XCTestCase {
     
