@@ -8,4 +8,4 @@ You can work on the project by opening `Example/SwiftSyft.xcworkspace`. When the
 
 ## License
 
-SwiftSyft is available under the MIT license. See the LICENSE file for more info.
+SwiftSyft is available under the Apache 2 license. See the LICENSE file for more info.
