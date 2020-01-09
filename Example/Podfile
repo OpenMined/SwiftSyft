@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'SwiftSyft_Example' do
+  pod 'SwiftSyft', :path => '../'
+
+  target 'SwiftSyft_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
