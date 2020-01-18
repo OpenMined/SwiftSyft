@@ -1,0 +1,6 @@
+excluded:
+  - Pods
+
+included:
+  - ./SwiftSyft
+  - ../SwiftSyft
