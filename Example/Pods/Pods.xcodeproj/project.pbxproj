@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
+		52B60EC2A583F24ACBB69C113F5488B9 /* SwiftLint */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = AE7B4FB01588B9E6DF09CB79FC7CE7BD /* Build configuration list for PBXAggregateTarget "SwiftLint" */;
+			buildPhases = (
+			);
+			dependencies = (
+			);
+			name = SwiftLint;
+		};
 		91B207498E2D5F1F9161594983380E15 /* LibTorch */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 5DE6AC5E2151AC23DC67042630DCC8FA /* Build configuration list for PBXAggregateTarget "LibTorch" */;
@@ -19,14 +28,28 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		0B71CA3E5821083FEC23FA11478B213D /* Pods-SwiftSyft_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 188006CCFDBE156CF0F67CF5373984B6 /* Pods-SwiftSyft_Example-dummy.m */; };
 		2C6DFADA30556DA268C3C53C43D14CD2 /* ReplaceMe.swift in Sources */ = {isa = PBXBuildFile; fileRef = A350815F9394240D3AEFE11D40081CE4 /* ReplaceMe.swift */; };
-		5A049E5CDB4CCA3FEA0B1DF3B1AFE02F /* Pods-SwiftSyft_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CF16D43D0322111FE65D82795316B4A /* Pods-SwiftSyft_Example-umbrella.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		3FD37660B46789ADC2F8D1E69494DC1D /* Pods-SwiftSyft_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 188006CCFDBE156CF0F67CF5373984B6 /* Pods-SwiftSyft_Example-dummy.m */; };
+		4409F07D969BBD546F1D14BBA4D10EB4 /* Pods-SwiftSyft_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CF16D43D0322111FE65D82795316B4A /* Pods-SwiftSyft_Example-umbrella.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		A338AE3F4940AD1DC998CA274C5002F8 /* SwiftSyft-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DC9876D91C9C2B4BCD5AB79639AE1D /* SwiftSyft-dummy.m */; };
 		DFF872AAF830FEA8A46A233048430085 /* SwiftSyft-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CAC95A189A2DF01F6D6A4C2302C1CB7 /* SwiftSyft-umbrella.h */; settings = {ATTRIBUTES = (Project, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		075B12259F0B6B2161640E925BE19C2F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2D5A6AF628AF6E47ABD60798349E5620;
+			remoteInfo = SwiftSyft;
+		};
+		4972B1E2B6628EEB65CA191F69F50701 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 52B60EC2A583F24ACBB69C113F5488B9;
+			remoteInfo = SwiftLint;
+		};
 		84469F6BE4FE6F753E9AAA89751483E8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
@@ -34,62 +57,56 @@
 			remoteGlobalIDString = 91B207498E2D5F1F9161594983380E15;
 			remoteInfo = LibTorch;
 		};
-		A04DB23AE5E17648ACC1048CD4AE3B1F /* PBXContainerItemProxy */ = {
+		E5032E8FE2887A1CEDEBF12919DA1D1E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 91B207498E2D5F1F9161594983380E15;
 			remoteInfo = LibTorch;
 		};
-		BEB5796FBEC1D189448F921FE63EE32D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2D5A6AF628AF6E47ABD60798349E5620;
-			remoteInfo = SwiftSyft;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		00D5945624C2DFECB9C4CAF4E4E216D5 /* Pods-SwiftSyft_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-SwiftSyft_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
-		012864C3102B0172328FDA777321B876 /* libeigen_blas.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libeigen_blas.a; path = install/lib/libeigen_blas.a; sourceTree = "<group>"; };
 		022524478F373A4980FD55121D2F685F /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
-		078937B12A193FCE7AD1F3D99B7FE11B /* libclog.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libclog.a; path = install/lib/libclog.a; sourceTree = "<group>"; };
 		0BA5FC68FB03160C635153B3BA2A2971 /* Pods-SwiftSyft_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SwiftSyft_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		188006CCFDBE156CF0F67CF5373984B6 /* Pods-SwiftSyft_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-SwiftSyft_Example-dummy.m"; sourceTree = "<group>"; };
-		2BDD42AE8E8DB838AD283A574DB26202 /* libpytorch_qnnpack.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libpytorch_qnnpack.a; path = install/lib/libpytorch_qnnpack.a; sourceTree = "<group>"; };
+		1990B109AE72CDA14B3E50C2275079C7 /* libeigen_blas.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libeigen_blas.a; path = install/lib/libeigen_blas.a; sourceTree = "<group>"; };
+		41065823A480CF4EE4018E60DBCCF1E1 /* libtorch.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libtorch.a; path = install/lib/libtorch.a; sourceTree = "<group>"; };
 		4282C1695733F75F107C3318B661A2E6 /* Pods-SwiftSyft_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-SwiftSyft_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		4CC6A11806F2F2AC8A94ED5700F69827 /* SwiftSyft.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = SwiftSyft.modulemap; sourceTree = "<group>"; };
 		516E1F8E93E6AAED0428E106303079AE /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
 		55ABF510074D1128F0E769BD1055DD1D /* SwiftSyft.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftSyft.xcconfig; sourceTree = "<group>"; };
-		577B0BB45B908B63975227AB726688A9 /* LibTorch.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = LibTorch.xcconfig; sourceTree = "<group>"; };
 		5CAC95A189A2DF01F6D6A4C2302C1CB7 /* SwiftSyft-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftSyft-umbrella.h"; sourceTree = "<group>"; };
 		5CF16D43D0322111FE65D82795316B4A /* Pods-SwiftSyft_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-SwiftSyft_Example-umbrella.h"; sourceTree = "<group>"; };
+		6101FED321124FABF6CBDF50A9A6455D /* LibTorch.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = LibTorch.xcconfig; sourceTree = "<group>"; };
 		6F2DC9AA9EDAC1D82FABEDA67EB7F341 /* SwiftSyft-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftSyft-prefix.pch"; sourceTree = "<group>"; };
+		70620BD9FAE417BDD47153C836C5268C /* libpytorch_qnnpack.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libpytorch_qnnpack.a; path = install/lib/libpytorch_qnnpack.a; sourceTree = "<group>"; };
 		730947EF1656B7E3D4D7C841EFFB6D5D /* SwiftSyft.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = SwiftSyft.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		870CAF6158E6B69B24917060A9169739 /* libcpuinfo.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libcpuinfo.a; path = install/lib/libcpuinfo.a; sourceTree = "<group>"; };
 		88DC9876D91C9C2B4BCD5AB79639AE1D /* SwiftSyft-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SwiftSyft-dummy.m"; sourceTree = "<group>"; };
+		97D71E8478FB38C84A1A3FB7DC1E28AC /* SwiftLint.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftLint.xcconfig; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9F90877B66C99D9F8D76342B218CB2FB /* LibTorch.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LibTorch.h; path = src/LibTorch.h; sourceTree = "<group>"; };
 		A350815F9394240D3AEFE11D40081CE4 /* ReplaceMe.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReplaceMe.swift; path = SwiftSyft/Classes/ReplaceMe.swift; sourceTree = "<group>"; };
 		ADD8212AEFCDCF8BDF0E167E0D50229E /* libPods-SwiftSyft_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libPods-SwiftSyft_Example.a"; path = "libPods-SwiftSyft_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4415AA08636F66B2971C4B6D545825F /* libSwiftSyft.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libSwiftSyft.a; path = libSwiftSyft.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		B4AEB00E1941B53477565FA83D568C4E /* libtorch.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libtorch.a; path = install/lib/libtorch.a; sourceTree = "<group>"; };
-		B4F2627909247EF1F1D165C420075FF1 /* libnnpack.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libnnpack.a; path = install/lib/libnnpack.a; sourceTree = "<group>"; };
-		CCD2CE6D5BF3813A0F28041FA2632D47 /* LibTorch.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LibTorch.h; path = src/LibTorch.h; sourceTree = "<group>"; };
-		DB8D009E91D4195723F89059E3ADF4BA /* libc10.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libc10.a; path = install/lib/libc10.a; sourceTree = "<group>"; };
+		C0B47D01AEA4B5286DF3EA9DA46E6792 /* libnnpack.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libnnpack.a; path = install/lib/libnnpack.a; sourceTree = "<group>"; };
+		C4C3D85EDB1119CDE43080AC1C9019A4 /* libc10.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libc10.a; path = install/lib/libc10.a; sourceTree = "<group>"; };
+		C720C3AA80A8ADC703F5975E688857E0 /* libclog.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libclog.a; path = install/lib/libclog.a; sourceTree = "<group>"; };
+		DF487A61ADFC71EC7C42DD5F9720F8BA /* libcpuinfo.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libcpuinfo.a; path = install/lib/libcpuinfo.a; sourceTree = "<group>"; };
 		F01FFD98631CC8A592ABBC7AB12C4662 /* Pods-SwiftSyft_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SwiftSyft_Example.release.xcconfig"; sourceTree = "<group>"; };
 		F5F24845D59D4243C2B2F1A98E766E78 /* Pods-SwiftSyft_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-SwiftSyft_Example.modulemap"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		9D226B4AEA7160BFDB79B732ACEF4A1C /* Frameworks */ = {
+		22641FB3870EDDDA169C1F76BB5E8727 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D21CEBACE1211A8F33F2F0BB65D94AA7 /* Frameworks */ = {
+		9D226B4AEA7160BFDB79B732ACEF4A1C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -99,12 +116,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		03EA0050E7B97187A794540C0600AE89 /* Torch */ = {
+		110C2D848EB52C40558B81DDDA4E2EA4 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				70F25C7159632EEEE02B667AD58D2665 /* Frameworks */,
+				6101FED321124FABF6CBDF50A9A6455D /* LibTorch.xcconfig */,
 			);
-			name = Torch;
+			name = "Support Files";
+			path = "../Target Support Files/LibTorch";
 			sourceTree = "<group>";
 		};
 		224BE09183B47D9C10DF89CFC5F20A7C /* Development Pods */ = {
@@ -115,27 +133,55 @@
 			name = "Development Pods";
 			sourceTree = "<group>";
 		};
-		4F02E25FF091E6EC2D6431F085F5089C /* Support Files */ = {
+		2C3F6287A5986A5D9F1B77BF507FDF99 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				577B0BB45B908B63975227AB726688A9 /* LibTorch.xcconfig */,
-			);
-			name = "Support Files";
-			path = "../Target Support Files/LibTorch";
-			sourceTree = "<group>";
-		};
-		70F25C7159632EEEE02B667AD58D2665 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				DB8D009E91D4195723F89059E3ADF4BA /* libc10.a */,
-				078937B12A193FCE7AD1F3D99B7FE11B /* libclog.a */,
-				870CAF6158E6B69B24917060A9169739 /* libcpuinfo.a */,
-				012864C3102B0172328FDA777321B876 /* libeigen_blas.a */,
-				B4F2627909247EF1F1D165C420075FF1 /* libnnpack.a */,
-				2BDD42AE8E8DB838AD283A574DB26202 /* libpytorch_qnnpack.a */,
-				B4AEB00E1941B53477565FA83D568C4E /* libtorch.a */,
+				C4C3D85EDB1119CDE43080AC1C9019A4 /* libc10.a */,
+				C720C3AA80A8ADC703F5975E688857E0 /* libclog.a */,
+				DF487A61ADFC71EC7C42DD5F9720F8BA /* libcpuinfo.a */,
+				1990B109AE72CDA14B3E50C2275079C7 /* libeigen_blas.a */,
+				C0B47D01AEA4B5286DF3EA9DA46E6792 /* libnnpack.a */,
+				70620BD9FAE417BDD47153C836C5268C /* libpytorch_qnnpack.a */,
+				41065823A480CF4EE4018E60DBCCF1E1 /* libtorch.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		325FB0B2EF00551EB04B02B80866C307 /* Torch */ = {
+			isa = PBXGroup;
+			children = (
+				2C3F6287A5986A5D9F1B77BF507FDF99 /* Frameworks */,
+			);
+			name = Torch;
+			sourceTree = "<group>";
+		};
+		452F321299DC0EBE5BEDB4CDDB069E53 /* SwiftLint */ = {
+			isa = PBXGroup;
+			children = (
+				5DB76B7163AAA30280E41748ABBBB6A7 /* Support Files */,
+			);
+			name = SwiftLint;
+			path = SwiftLint;
+			sourceTree = "<group>";
+		};
+		5DB76B7163AAA30280E41748ABBBB6A7 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				97D71E8478FB38C84A1A3FB7DC1E28AC /* SwiftLint.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/SwiftLint";
+			sourceTree = "<group>";
+		};
+		6D778453302978A6C34B2A2443836E22 /* LibTorch */ = {
+			isa = PBXGroup;
+			children = (
+				85A6911F843CC0F1D09765DE44D66F22 /* Core */,
+				110C2D848EB52C40558B81DDDA4E2EA4 /* Support Files */,
+				325FB0B2EF00551EB04B02B80866C307 /* Torch */,
+			);
+			name = LibTorch;
+			path = LibTorch;
 			sourceTree = "<group>";
 		};
 		7C586190FD1535E3E5B661E6F71AB9FD /* Support Files */ = {
@@ -149,6 +195,14 @@
 			);
 			name = "Support Files";
 			path = "Example/Pods/Target Support Files/SwiftSyft";
+			sourceTree = "<group>";
+		};
+		85A6911F843CC0F1D09765DE44D66F22 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				9F90877B66C99D9F8D76342B218CB2FB /* LibTorch.h */,
+			);
+			name = Core;
 			sourceTree = "<group>";
 		};
 		8DD4BAE16545DAC873E060005B993269 /* Products */ = {
@@ -171,6 +225,15 @@
 			path = ../..;
 			sourceTree = "<group>";
 		};
+		B6600900EDE5C0DD3705CC31706F87B4 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				6D778453302978A6C34B2A2443836E22 /* LibTorch */,
+				452F321299DC0EBE5BEDB4CDDB069E53 /* SwiftLint */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		BA05ABCBDA5D6E0B195304F80DCE82F8 /* Targets Support Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -189,32 +252,13 @@
 			name = Pod;
 			sourceTree = "<group>";
 		};
-		C42338EC378461C75E95435C3FF4114E /* Core */ = {
-			isa = PBXGroup;
-			children = (
-				CCD2CE6D5BF3813A0F28041FA2632D47 /* LibTorch.h */,
-			);
-			name = Core;
-			sourceTree = "<group>";
-		};
-		C9FD2C575525BDFF475B02D54BAC2E7B /* LibTorch */ = {
-			isa = PBXGroup;
-			children = (
-				C42338EC378461C75E95435C3FF4114E /* Core */,
-				4F02E25FF091E6EC2D6431F085F5089C /* Support Files */,
-				03EA0050E7B97187A794540C0600AE89 /* Torch */,
-			);
-			name = LibTorch;
-			path = LibTorch;
-			sourceTree = "<group>";
-		};
 		CF1408CF629C7361332E53B88F7BD30C = {
 			isa = PBXGroup;
 			children = (
 				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
 				224BE09183B47D9C10DF89CFC5F20A7C /* Development Pods */,
 				D89477F20FB1DE18A04690586D7808C4 /* Frameworks */,
-				FD52B374DA15F1B9E363F460D1034CE6 /* Pods */,
+				B6600900EDE5C0DD3705CC31706F87B4 /* Pods */,
 				8DD4BAE16545DAC873E060005B993269 /* Products */,
 				BA05ABCBDA5D6E0B195304F80DCE82F8 /* Targets Support Files */,
 			);
@@ -242,22 +286,14 @@
 			path = "Target Support Files/Pods-SwiftSyft_Example";
 			sourceTree = "<group>";
 		};
-		FD52B374DA15F1B9E363F460D1034CE6 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				C9FD2C575525BDFF475B02D54BAC2E7B /* LibTorch */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		495B8C759F5230149FC1CA44F4D00A41 /* Headers */ = {
+		082A071E5EBA296955F8996E16A130D8 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A049E5CDB4CCA3FEA0B1DF3B1AFE02F /* Pods-SwiftSyft_Example-umbrella.h in Headers */,
+				4409F07D969BBD546F1D14BBA4D10EB4 /* Pods-SwiftSyft_Example-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -293,17 +329,18 @@
 		};
 		BA6EBB246E07A8B07E5BCBCF6F99365D /* Pods-SwiftSyft_Example */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 80B9251CB80D8EE31270CEA223AC3AB1 /* Build configuration list for PBXNativeTarget "Pods-SwiftSyft_Example" */;
+			buildConfigurationList = 4EB5C25139DA83F5C37D7C273B26ED77 /* Build configuration list for PBXNativeTarget "Pods-SwiftSyft_Example" */;
 			buildPhases = (
-				495B8C759F5230149FC1CA44F4D00A41 /* Headers */,
-				84D234443DFF532782CFFFFBBE943A72 /* Sources */,
-				D21CEBACE1211A8F33F2F0BB65D94AA7 /* Frameworks */,
+				082A071E5EBA296955F8996E16A130D8 /* Headers */,
+				6F660ACC04E43EEA58379A233E8D38F6 /* Sources */,
+				22641FB3870EDDDA169C1F76BB5E8727 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				E754CB683CD8FCC214017B02A4016168 /* PBXTargetDependency */,
-				A0D0399567426BBD5FAE4D34A1848F08 /* PBXTargetDependency */,
+				1FD5D5F939DB1E5E8D8F6FED727D19FF /* PBXTargetDependency */,
+				9D6EEEA00F57D2695837D7BE10934F15 /* PBXTargetDependency */,
+				E2E84C1A40075E60548C0F23CA686000 /* PBXTargetDependency */,
 			);
 			name = "Pods-SwiftSyft_Example";
 			productName = "Pods-SwiftSyft_Example";
@@ -334,6 +371,7 @@
 			targets = (
 				91B207498E2D5F1F9161594983380E15 /* LibTorch */,
 				BA6EBB246E07A8B07E5BCBCF6F99365D /* Pods-SwiftSyft_Example */,
+				52B60EC2A583F24ACBB69C113F5488B9 /* SwiftLint */,
 				2D5A6AF628AF6E47ABD60798349E5620 /* SwiftSyft */,
 			);
 		};
@@ -367,11 +405,11 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		84D234443DFF532782CFFFFBBE943A72 /* Sources */ = {
+		6F660ACC04E43EEA58379A233E8D38F6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0B71CA3E5821083FEC23FA11478B213D /* Pods-SwiftSyft_Example-dummy.m in Sources */,
+				3FD37660B46789ADC2F8D1E69494DC1D /* Pods-SwiftSyft_Example-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -387,11 +425,17 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		A0D0399567426BBD5FAE4D34A1848F08 /* PBXTargetDependency */ = {
+		1FD5D5F939DB1E5E8D8F6FED727D19FF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = SwiftSyft;
-			target = 2D5A6AF628AF6E47ABD60798349E5620 /* SwiftSyft */;
-			targetProxy = BEB5796FBEC1D189448F921FE63EE32D /* PBXContainerItemProxy */;
+			name = LibTorch;
+			target = 91B207498E2D5F1F9161594983380E15 /* LibTorch */;
+			targetProxy = E5032E8FE2887A1CEDEBF12919DA1D1E /* PBXContainerItemProxy */;
+		};
+		9D6EEEA00F57D2695837D7BE10934F15 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SwiftLint;
+			target = 52B60EC2A583F24ACBB69C113F5488B9 /* SwiftLint */;
+			targetProxy = 4972B1E2B6628EEB65CA191F69F50701 /* PBXContainerItemProxy */;
 		};
 		BA59151BCBC8EDFA6EA3393CFD0A90C8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -399,11 +443,11 @@
 			target = 91B207498E2D5F1F9161594983380E15 /* LibTorch */;
 			targetProxy = 84469F6BE4FE6F753E9AAA89751483E8 /* PBXContainerItemProxy */;
 		};
-		E754CB683CD8FCC214017B02A4016168 /* PBXTargetDependency */ = {
+		E2E84C1A40075E60548C0F23CA686000 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = LibTorch;
-			target = 91B207498E2D5F1F9161594983380E15 /* LibTorch */;
-			targetProxy = A04DB23AE5E17648ACC1048CD4AE3B1F /* PBXContainerItemProxy */;
+			name = SwiftSyft;
+			target = 2D5A6AF628AF6E47ABD60798349E5620 /* SwiftSyft */;
+			targetProxy = 075B12259F0B6B2161640E925BE19C2F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -468,9 +512,33 @@
 			};
 			name = Release;
 		};
+		16546E4D5A6ED5C791644FEB39C9B061 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0BA5FC68FB03160C635153B3BA2A2971 /* Pods-SwiftSyft_Example.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-SwiftSyft_Example/Pods-SwiftSyft_Example.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 		545D76907B3669BDC00ED172E71687D3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 577B0BB45B908B63975227AB726688A9 /* LibTorch.xcconfig */;
+			baseConfigurationReference = 6101FED321124FABF6CBDF50A9A6455D /* LibTorch.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -510,7 +578,54 @@
 			};
 			name = Debug;
 		};
-		6896B86FAFBE7615406A389988167428 /* Release */ = {
+		74B41FE339CF436E4855F2AD4662EDF3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 97D71E8478FB38C84A1A3FB7DC1E28AC /* SwiftLint.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8F3080E0B59945DC45B2A9A25544AC4D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6101FED321124FABF6CBDF50A9A6455D /* LibTorch.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		9FEBCE27D7C08834BC4537F723B3E4F1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 97D71E8478FB38C84A1A3FB7DC1E28AC /* SwiftLint.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B3F2A3787FFFE8D55C425F7D6EB5BC14 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F01FFD98631CC8A592ABBC7AB12C4662 /* Pods-SwiftSyft_Example.release.xcconfig */;
 			buildSettings = {
@@ -530,46 +645,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		8857D6560F2664AAA13FB06BF42479D9 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0BA5FC68FB03160C635153B3BA2A2971 /* Pods-SwiftSyft_Example.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-SwiftSyft_Example/Pods-SwiftSyft_Example.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		8F3080E0B59945DC45B2A9A25544AC4D /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 577B0BB45B908B63975227AB726688A9 /* LibTorch.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -679,6 +754,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		4EB5C25139DA83F5C37D7C273B26ED77 /* Build configuration list for PBXNativeTarget "Pods-SwiftSyft_Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				16546E4D5A6ED5C791644FEB39C9B061 /* Debug */,
+				B3F2A3787FFFE8D55C425F7D6EB5BC14 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		553085E7932DEA4D6F06BEB4B2943497 /* Build configuration list for PBXNativeTarget "SwiftSyft" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -697,11 +781,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		80B9251CB80D8EE31270CEA223AC3AB1 /* Build configuration list for PBXNativeTarget "Pods-SwiftSyft_Example" */ = {
+		AE7B4FB01588B9E6DF09CB79FC7CE7BD /* Build configuration list for PBXAggregateTarget "SwiftLint" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				8857D6560F2664AAA13FB06BF42479D9 /* Debug */,
-				6896B86FAFBE7615406A389988167428 /* Release */,
+				9FEBCE27D7C08834BC4537F723B3E4F1 /* Debug */,
+				74B41FE339CF436E4855F2AD4662EDF3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
