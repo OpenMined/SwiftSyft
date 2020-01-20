@@ -15,6 +15,7 @@
 			dependencies = (
 			);
 			name = SwiftLint;
+			productName = SwiftLint;
 		};
 		91B207498E2D5F1F9161594983380E15 /* LibTorch */ = {
 			isa = PBXAggregateTarget;
@@ -24,14 +25,18 @@
 			dependencies = (
 			);
 			name = LibTorch;
+			productName = LibTorch;
 		};
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		2C6DFADA30556DA268C3C53C43D14CD2 /* ReplaceMe.swift in Sources */ = {isa = PBXBuildFile; fileRef = A350815F9394240D3AEFE11D40081CE4 /* ReplaceMe.swift */; };
 		3FD37660B46789ADC2F8D1E69494DC1D /* Pods-SwiftSyft_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 188006CCFDBE156CF0F67CF5373984B6 /* Pods-SwiftSyft_Example-dummy.m */; };
 		4409F07D969BBD546F1D14BBA4D10EB4 /* Pods-SwiftSyft_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CF16D43D0322111FE65D82795316B4A /* Pods-SwiftSyft_Example-umbrella.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		A338AE3F4940AD1DC998CA274C5002F8 /* SwiftSyft-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DC9876D91C9C2B4BCD5AB79639AE1D /* SwiftSyft-dummy.m */; };
+		BEFB7B1423D58E8E00738D52 /* SocketProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFB7B1323D58E8E00738D52 /* SocketProtocol.swift */; };
+		BEFB7B1623D5907900738D52 /* SignallingClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFB7B1523D5907900738D52 /* SignallingClientProtocol.swift */; };
+		BEFB7B1923D5B88600738D52 /* SyftClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFB7B1823D5B88600738D52 /* SyftClientProtocol.swift */; };
+		BEFB7B1B23D5BB3E00738D52 /* WebRTCClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFB7B1A23D5BB3E00738D52 /* WebRTCClientProtocol.swift */; };
 		DFF872AAF830FEA8A46A233048430085 /* SwiftSyft-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CAC95A189A2DF01F6D6A4C2302C1CB7 /* SwiftSyft-umbrella.h */; settings = {ATTRIBUTES = (Project, ); }; };
 /* End PBXBuildFile section */
 
@@ -68,28 +73,32 @@
 
 /* Begin PBXFileReference section */
 		00D5945624C2DFECB9C4CAF4E4E216D5 /* Pods-SwiftSyft_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-SwiftSyft_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
-		022524478F373A4980FD55121D2F685F /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		022524478F373A4980FD55121D2F685F /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		0BA5FC68FB03160C635153B3BA2A2971 /* Pods-SwiftSyft_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SwiftSyft_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		188006CCFDBE156CF0F67CF5373984B6 /* Pods-SwiftSyft_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-SwiftSyft_Example-dummy.m"; sourceTree = "<group>"; };
 		1990B109AE72CDA14B3E50C2275079C7 /* libeigen_blas.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libeigen_blas.a; path = install/lib/libeigen_blas.a; sourceTree = "<group>"; };
 		41065823A480CF4EE4018E60DBCCF1E1 /* libtorch.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libtorch.a; path = install/lib/libtorch.a; sourceTree = "<group>"; };
 		4282C1695733F75F107C3318B661A2E6 /* Pods-SwiftSyft_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-SwiftSyft_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		4CC6A11806F2F2AC8A94ED5700F69827 /* SwiftSyft.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = SwiftSyft.modulemap; sourceTree = "<group>"; };
-		516E1F8E93E6AAED0428E106303079AE /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		516E1F8E93E6AAED0428E106303079AE /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		55ABF510074D1128F0E769BD1055DD1D /* SwiftSyft.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftSyft.xcconfig; sourceTree = "<group>"; };
 		5CAC95A189A2DF01F6D6A4C2302C1CB7 /* SwiftSyft-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftSyft-umbrella.h"; sourceTree = "<group>"; };
 		5CF16D43D0322111FE65D82795316B4A /* Pods-SwiftSyft_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-SwiftSyft_Example-umbrella.h"; sourceTree = "<group>"; };
 		6101FED321124FABF6CBDF50A9A6455D /* LibTorch.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = LibTorch.xcconfig; sourceTree = "<group>"; };
 		6F2DC9AA9EDAC1D82FABEDA67EB7F341 /* SwiftSyft-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftSyft-prefix.pch"; sourceTree = "<group>"; };
 		70620BD9FAE417BDD47153C836C5268C /* libpytorch_qnnpack.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libpytorch_qnnpack.a; path = install/lib/libpytorch_qnnpack.a; sourceTree = "<group>"; };
-		730947EF1656B7E3D4D7C841EFFB6D5D /* SwiftSyft.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = SwiftSyft.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		730947EF1656B7E3D4D7C841EFFB6D5D /* SwiftSyft.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = SwiftSyft.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		88DC9876D91C9C2B4BCD5AB79639AE1D /* SwiftSyft-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SwiftSyft-dummy.m"; sourceTree = "<group>"; };
 		97D71E8478FB38C84A1A3FB7DC1E28AC /* SwiftLint.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftLint.xcconfig; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9F90877B66C99D9F8D76342B218CB2FB /* LibTorch.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LibTorch.h; path = src/LibTorch.h; sourceTree = "<group>"; };
-		A350815F9394240D3AEFE11D40081CE4 /* ReplaceMe.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReplaceMe.swift; path = SwiftSyft/Classes/ReplaceMe.swift; sourceTree = "<group>"; };
-		ADD8212AEFCDCF8BDF0E167E0D50229E /* libPods-SwiftSyft_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libPods-SwiftSyft_Example.a"; path = "libPods-SwiftSyft_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		B4415AA08636F66B2971C4B6D545825F /* libSwiftSyft.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libSwiftSyft.a; path = libSwiftSyft.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		ADD8212AEFCDCF8BDF0E167E0D50229E /* libPods-SwiftSyft_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SwiftSyft_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B4415AA08636F66B2971C4B6D545825F /* libSwiftSyft.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSwiftSyft.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		BEFB7B1223D58E8E00738D52 /* Pods-SwiftSyft_Example-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Pods-SwiftSyft_Example-Bridging-Header.h"; sourceTree = "<group>"; };
+		BEFB7B1323D58E8E00738D52 /* SocketProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketProtocol.swift; sourceTree = "<group>"; };
+		BEFB7B1523D5907900738D52 /* SignallingClientProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignallingClientProtocol.swift; sourceTree = "<group>"; };
+		BEFB7B1823D5B88600738D52 /* SyftClientProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyftClientProtocol.swift; sourceTree = "<group>"; };
+		BEFB7B1A23D5BB3E00738D52 /* WebRTCClientProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRTCClientProtocol.swift; sourceTree = "<group>"; };
 		C0B47D01AEA4B5286DF3EA9DA46E6792 /* libnnpack.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libnnpack.a; path = install/lib/libnnpack.a; sourceTree = "<group>"; };
 		C4C3D85EDB1119CDE43080AC1C9019A4 /* libc10.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libc10.a; path = install/lib/libc10.a; sourceTree = "<group>"; };
 		C720C3AA80A8ADC703F5975E688857E0 /* libclog.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libclog.a; path = install/lib/libclog.a; sourceTree = "<group>"; };
@@ -160,7 +169,6 @@
 			children = (
 				5DB76B7163AAA30280E41748ABBBB6A7 /* Support Files */,
 			);
-			name = SwiftLint;
 			path = SwiftLint;
 			sourceTree = "<group>";
 		};
@@ -180,7 +188,6 @@
 				110C2D848EB52C40558B81DDDA4E2EA4 /* Support Files */,
 				325FB0B2EF00551EB04B02B80866C307 /* Torch */,
 			);
-			name = LibTorch;
 			path = LibTorch;
 			sourceTree = "<group>";
 		};
@@ -217,7 +224,9 @@
 		A5CB831ED8893B34CADED8E827B00E83 /* SwiftSyft */ = {
 			isa = PBXGroup;
 			children = (
-				A350815F9394240D3AEFE11D40081CE4 /* ReplaceMe.swift */,
+				BEFB7B1723D5910800738D52 /* Models */,
+				BEFB7B1123D58E6D00738D52 /* Protocols */,
+				BEFB7B1223D58E8E00738D52 /* Pods-SwiftSyft_Example-Bridging-Header.h */,
 				BFEDD03BD92167EE5F88F89C83A7F83C /* Pod */,
 				7C586190FD1535E3E5B661E6F71AB9FD /* Support Files */,
 			);
@@ -240,6 +249,24 @@
 				F60231CFF5A2F33315E23DEB24F200EB /* Pods-SwiftSyft_Example */,
 			);
 			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		BEFB7B1123D58E6D00738D52 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				BEFB7B1323D58E8E00738D52 /* SocketProtocol.swift */,
+				BEFB7B1523D5907900738D52 /* SignallingClientProtocol.swift */,
+				BEFB7B1A23D5BB3E00738D52 /* WebRTCClientProtocol.swift */,
+				BEFB7B1823D5B88600738D52 /* SyftClientProtocol.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		BEFB7B1723D5910800738D52 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		BFEDD03BD92167EE5F88F89C83A7F83C /* Pod */ = {
@@ -355,6 +382,11 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1100;
 				LastUpgradeCheck = 1100;
+				TargetAttributes = {
+					BA6EBB246E07A8B07E5BCBCF6F99365D = {
+						LastSwiftMigration = 1130;
+					};
+				};
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -410,6 +442,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FD37660B46789ADC2F8D1E69494DC1D /* Pods-SwiftSyft_Example-dummy.m in Sources */,
+				BEFB7B1B23D5BB3E00738D52 /* WebRTCClientProtocol.swift in Sources */,
+				BEFB7B1923D5B88600738D52 /* SyftClientProtocol.swift in Sources */,
+				BEFB7B1423D58E8E00738D52 /* SocketProtocol.swift in Sources */,
+				BEFB7B1623D5907900738D52 /* SignallingClientProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,7 +453,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2C6DFADA30556DA268C3C53C43D14CD2 /* ReplaceMe.swift in Sources */,
 				A338AE3F4940AD1DC998CA274C5002F8 /* SwiftSyft-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -505,8 +540,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};
@@ -518,12 +552,14 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-SwiftSyft_Example/Pods-SwiftSyft_Example.modulemap";
 				OTHER_LDFLAGS = "";
@@ -532,6 +568,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "../../Pods-SwiftSyft_Example-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -631,12 +670,14 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-SwiftSyft_Example/Pods-SwiftSyft_Example.modulemap";
 				OTHER_LDFLAGS = "";
@@ -645,6 +686,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "../../Pods-SwiftSyft_Example-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
