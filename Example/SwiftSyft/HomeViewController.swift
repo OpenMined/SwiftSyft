@@ -19,7 +19,7 @@ enum StaticHomeScreenStrings {
     static let openMined = "OpenMined"
     static let openMinedKey = "@OpenMined@"
     static let openMinedURL = "https://github.com/OpenMined/grid.js"
-    static let socketURL = "ws://localhost:3000"
+    static let socketURL = "wss://localhost:3000"
     static let protocolID = "50801316202"
     static let connectButtonText = "Connect to grid.js server"
     static let messagePlaceholder = "Enter your message ..."
@@ -29,6 +29,7 @@ enum StaticHomeScreenStrings {
 class HomeViewController: UIViewController, UITextViewDelegate {
     var isConnected = false
 
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var headerDescriptionLabel: UILabel!
     @IBOutlet weak var descriptionTextView: UITextView!
     @IBOutlet weak var socketURLTextField: UITextField!
@@ -39,12 +40,23 @@ class HomeViewController: UIViewController, UITextViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard),
+                                       name: UIResponder.keyboardWillHideNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard),
+                                       name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+
         headerDescriptionLabel.text = StaticHomeScreenStrings.headerDescription
 
         descriptionTextView.text = StaticHomeScreenStrings.description
         descriptionTextView.attributedText = descriptionTextView.attributedText?
-            .fillInLink(StaticHomeScreenStrings.swiftSyftKey, with: StaticHomeScreenStrings.swiftSyft, url: StaticHomeScreenStrings.swiftSyftURL)
-            .fillInLink(StaticHomeScreenStrings.openMinedKey, with: StaticHomeScreenStrings.openMined, url: StaticHomeScreenStrings.openMinedURL)
+            .fillInLink(StaticHomeScreenStrings.swiftSyftKey,
+                        with: StaticHomeScreenStrings.swiftSyft,
+                        url: StaticHomeScreenStrings.swiftSyftURL)
+            .fillInLink(StaticHomeScreenStrings.openMinedKey,
+                        with: StaticHomeScreenStrings.openMined,
+                        url: StaticHomeScreenStrings.openMinedURL)
 
         socketURLTextField.text = StaticHomeScreenStrings.socketURL
         protocolIDTextField.text = StaticHomeScreenStrings.protocolID
@@ -104,6 +116,41 @@ class HomeViewController: UIViewController, UITextViewDelegate {
             textView.text = StaticHomeScreenStrings.messagePlaceholder
             textView.textColor = UIColor.lightGray
         }
+    }
+
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
+    }
+
+    @objc func adjustForKeyboard(notification: Notification) {
+        guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey]
+            as? NSValue else { return }
+
+        let keyboardScreenEndFrame = keyboardValue.cgRectValue
+        let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
+
+        if notification.name == UIResponder.keyboardWillHideNotification {
+            messageTextView.contentInset = .zero
+        } else {
+            let userInfo = notification.userInfo!
+            var keyboardFrame: CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey]
+                as? NSValue)!.cgRectValue
+            keyboardFrame = self.view.convert(keyboardFrame, from: nil)
+
+            var contentInset: UIEdgeInsets = self.scrollView.contentInset
+            contentInset.bottom = keyboardFrame.size.height
+            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0,
+                                                   bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom, right: 0)
+        }
+
+        messageTextView.scrollIndicatorInsets = messageTextView.contentInset
+
+        let selectedRange = messageTextView.selectedRange
+        messageTextView.scrollRangeToVisible(selectedRange)
     }
 }
 
