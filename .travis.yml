@@ -6,7 +6,7 @@ osx_image: xcode11.3
 language: objective-c
 xcode_workspace: Example/SwiftSyft.xcworkspace
 xcode_scheme: SwiftSyft-Example
-xcode_destination: platform=iOS Simulator,OS=13.0,name=iPhone X
+xcode_destination: platform=iOS Simulator,OS=13.0,name=iPhone 11
 # cache: cocoapods
 # podfile: Example/Podfile
 # before_install:
