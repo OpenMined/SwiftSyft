@@ -10,7 +10,7 @@ import Foundation
 /// Wrapper over any websocket client provider
 protocol SocketClientProtocol {
 
-    init(url: URL, pingInterval: TimeInteval = 20)
+    init(url: URL, pingInterval: TimeInteval)
 
     var delegate: SocketClientDelegate? { get set }
     func connect()
