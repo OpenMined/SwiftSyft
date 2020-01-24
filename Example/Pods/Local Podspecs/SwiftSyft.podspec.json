@@ -22,7 +22,7 @@
     "ios": "12.0"
   },
   "swift_versions": "5.1.3",
-  "source_files": "SwiftSyft/Classes/**/*",
+  "source_files": "SwiftSyft/**/*",
   "static_framework": true,
   "dependencies": {
     "LibTorch": [
