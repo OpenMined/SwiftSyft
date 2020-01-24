@@ -1,4 +1,5 @@
 PODS:
+  - GoogleWebRTC (1.1.29400)
   - LibTorch (1.3.1):
     - LibTorch/Core (= 1.3.1)
   - LibTorch/Core (1.3.1):
@@ -6,6 +7,7 @@ PODS:
   - LibTorch/Torch (1.3.1)
   - SwiftLint (0.38.2)
   - SwiftSyft (0.1.0):
+    - GoogleWebRTC (~> 1.1.0)
     - LibTorch (~> 1.3.0)
 
 DEPENDENCIES:
@@ -14,6 +16,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - GoogleWebRTC
     - LibTorch
     - SwiftLint
 
@@ -22,9 +25,10 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
+  GoogleWebRTC: cfb83bc346435a17fe06bb05f04ad826b858a7fb
   LibTorch: 0e6ed44fe40c356f891d34f42bf18bd2f4a84234
   SwiftLint: 8f5d2f903e1c9bcbc832fd16771e80a263ac6cbb
-  SwiftSyft: f1ec652e804456b143e3c515810c29038c5ae520
+  SwiftSyft: 26c129c05e88ef5979f8dfedb6c51aa94b1f35f8
 
 PODFILE CHECKSUM: 413b656db3fadaa6cc1705cc14c0324fa5d08cc1
 
