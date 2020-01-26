@@ -62,6 +62,14 @@ private class WebRTCPeer: NSObject {
         iceCandidates.append(remoteIceCandidate)
     }
 
+    func setRemoteDescription(_ remoteSessionDescription: RTCSessionDescription) {
+        self.rtcPeerConnection.setRemoteDescription(remoteSessionDescription) { error in
+            if let error = error {
+                debugPrint(error.localizedDescription)
+            }
+        }
+    }
+
     @discardableResult func addDiscoveredLocalIceCandidateObserver<T: AnyObject>(_ observer: T,
                                                                                  closure: @escaping (T, String, RTCIceCandidate) -> Void) -> ObservationToken {
 
