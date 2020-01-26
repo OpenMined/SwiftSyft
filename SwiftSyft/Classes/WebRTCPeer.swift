@@ -16,7 +16,7 @@ class ObservationToken {
 }
 
 enum WebRTCConnectionType {
-    case initiator
+    case initiator(RTCDataChannel)
     case receiver
 }
 
@@ -47,10 +47,8 @@ private class WebRTCPeer: NSObject {
         self.rtcPeerConnection.delegate = self
 
         switch connectionType {
-        case .initiator:
-            let dataChannelConfig = RTCDataChannelConfiguration()
-            self.rtcDataChannel = self.rtcPeerConnection.dataChannel(forLabel: "dataChannel",
-                                                                     configuration: dataChannelConfig)
+        case .initiator(let dataChannel):
+            self.rtcDataChannel = dataChannel
             self.rtcDataChannel?.delegate = self
         case .receiver:
             break
