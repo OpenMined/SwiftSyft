@@ -22,7 +22,7 @@ enum WebRTCConnectionType {
 
 /// Wraps a peer connection and its data channel. Allows other observers
 /// to observer peer connection and data channel events.
-private class WebRTCPeer: NSObject {
+class WebRTCPeer: NSObject {
 
     let workerId: String
     let rtcPeerConnection: RTCPeerConnection
