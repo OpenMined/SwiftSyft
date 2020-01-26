@@ -9,10 +9,14 @@ PODS:
   - SwiftSyft (0.1.0):
     - GoogleWebRTC (~> 1.1.0)
     - LibTorch (~> 1.3.0)
+  - SwiftSyft/Tests (0.1.0):
+    - GoogleWebRTC (~> 1.1.0)
+    - LibTorch (~> 1.3.0)
 
 DEPENDENCIES:
   - SwiftLint (~> 0.38.0)
   - SwiftSyft (from `../`)
+  - SwiftSyft/Tests (from `../`)
 
 SPEC REPOS:
   trunk:
@@ -28,8 +32,8 @@ SPEC CHECKSUMS:
   GoogleWebRTC: cfb83bc346435a17fe06bb05f04ad826b858a7fb
   LibTorch: 0e6ed44fe40c356f891d34f42bf18bd2f4a84234
   SwiftLint: 8f5d2f903e1c9bcbc832fd16771e80a263ac6cbb
-  SwiftSyft: 26c129c05e88ef5979f8dfedb6c51aa94b1f35f8
+  SwiftSyft: b64cd4dad0e2b92f3170baeb1885c5baea2b85df
 
-PODFILE CHECKSUM: 413b656db3fadaa6cc1705cc14c0324fa5d08cc1
+PODFILE CHECKSUM: 743baf65f2b93c9f7045ac3429b9946c0dc810ea
 
 COCOAPODS: 1.8.4

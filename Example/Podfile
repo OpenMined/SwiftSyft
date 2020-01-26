@@ -1,7 +1,7 @@
 platform :ios, '12.0'
 
 target 'SwiftSyft_Example' do
-  pod 'SwiftSyft', :path => '../'
+  pod 'SwiftSyft', :path => '../', :testspecs => ['Tests'] 
   pod 'SwiftLint', '~> 0.38.0'
 
   # Not included until https://github.com/CocoaPods/CocoaPods/issues/9473 is resolved
