@@ -55,3 +55,14 @@ extension WebRTCPeer: RTCPeerConnectionDelegate {
 
     }
 }
+
+extension WebRTCPeer: RTCDataChannelDelegate {
+
+    func dataChannelDidChangeState(_ dataChannel: RTCDataChannel) {
+
+    }
+
+    func dataChannel(_ dataChannel: RTCDataChannel, didReceiveMessageWith buffer: RTCDataBuffer) {
+    }
+
+}
