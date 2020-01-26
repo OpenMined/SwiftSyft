@@ -36,6 +36,11 @@ private class WebRTCPeer: NSObject {
         }
     }
 
+    func add(_ remoteIceCandidate: RTCIceCandidate) {
+        self.rtcPeerConnection.add(remoteIceCandidate)
+        iceCandidates.append(remoteIceCandidate)
+    }
+
 }
 
 extension WebRTCPeer: RTCPeerConnectionDelegate {
