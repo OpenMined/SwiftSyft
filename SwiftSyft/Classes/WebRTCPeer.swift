@@ -1,6 +1,20 @@
 import Foundation
 import WebRTC
 
+/// ObservationToken pattern to use for cancelling observers from
+///  https://www.swiftbysundell.com/articles/observers-in-swift-part-2/
+class ObservationToken {
+    private let cancellationClosure: () -> Void
+
+    init(cancellationClosure: @escaping () -> Void) {
+        self.cancellationClosure = cancellationClosure
+    }
+
+    func cancel() {
+        cancellationClosure()
+    }
+}
+
 enum WebRTCConnectionType {
     case initiator
     case receiver
@@ -10,6 +24,7 @@ enum WebRTCConnectionType {
 /// to observer peer connection and data channel events.
 private class WebRTCPeer: NSObject {
 
+    let workerId: String
     let rtcPeerConnection: RTCPeerConnection
     var rtcDataChannel: RTCDataChannel? {
         didSet {
@@ -19,7 +34,13 @@ private class WebRTCPeer: NSObject {
     var iceCandidates: [RTCIceCandidate] = []
     var connectionType: WebRTCConnectionType
 
-    init(rtcPeerConnection: RTCPeerConnection, connectionType: WebRTCConnectionType) {
+    private var observations = (
+        discoveredLocalCandidate: [UUID: (String, RTCIceCandidate) -> Void](),
+        receivedDataChannelMessage: [UUID: (Data) -> Void]()
+    )
+
+    init(workerId: String, rtcPeerConnection: RTCPeerConnection, connectionType: WebRTCConnectionType) {
+        self.workerId = workerId
         self.rtcPeerConnection = rtcPeerConnection
         self.connectionType = connectionType
         super.init()
@@ -39,6 +60,49 @@ private class WebRTCPeer: NSObject {
     func add(_ remoteIceCandidate: RTCIceCandidate) {
         self.rtcPeerConnection.add(remoteIceCandidate)
         iceCandidates.append(remoteIceCandidate)
+    }
+
+    @discardableResult func addDiscoveredLocalIceCandidateObserver<T: AnyObject>(_ observer: T,
+                                                                                 closure: @escaping (T, String, RTCIceCandidate) -> Void) -> ObservationToken {
+
+        let observerId = UUID()
+
+        observations.discoveredLocalCandidate[observerId] = { [weak self, weak observer] workerId, iceCandidate in
+
+            guard let observer = observer else {
+                self?.observations.discoveredLocalCandidate.removeValue(forKey: observerId)
+                return
+            }
+
+            closure(observer, workerId, iceCandidate)
+
+        }
+
+        return ObservationToken { [weak self] in
+            self?.observations.discoveredLocalCandidate.removeValue(forKey: observerId)
+        }
+    }
+
+    @discardableResult func addReceivedDataChannelMessageObserver<T: AnyObject>(_ observer: T,
+                                                                                 closure: @escaping (T, Data) -> Void) -> ObservationToken {
+
+        let observerId = UUID()
+
+        observations.receivedDataChannelMessage[observerId] = { [weak self, weak observer] messageData in
+
+            guard let observer = observer else {
+                self?.observations.receivedDataChannelMessage.removeValue(forKey: observerId)
+                return
+            }
+
+            closure(observer, messageData)
+
+        }
+
+        return ObservationToken { [weak self] in
+            self?.observations.receivedDataChannelMessage.removeValue(forKey: observerId)
+        }
+
     }
 
 }
