@@ -134,7 +134,9 @@ extension WebRTCPeer: RTCPeerConnectionDelegate {
     }
 
     func peerConnection(_ peerConnection: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {
-
+        self.observations.discoveredLocalCandidate.values.forEach { closure in
+            closure(self.workerId, candidate)
+        }
     }
 
     func peerConnection(_ peerConnection: RTCPeerConnection, didRemove candidates: [RTCIceCandidate]) {
@@ -153,6 +155,9 @@ extension WebRTCPeer: RTCDataChannelDelegate {
     }
 
     func dataChannel(_ dataChannel: RTCDataChannel, didReceiveMessageWith buffer: RTCDataBuffer) {
+        self.observations.receivedDataChannelMessage.values.forEach { closure in
+            closure(buffer.data)
+        }
     }
 
 }
