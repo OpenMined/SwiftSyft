@@ -10,9 +10,11 @@ PODS:
   - SwiftSyft (0.1.0):
     - GoogleWebRTC (~> 1.1.0)
     - LibTorch (~> 1.3.0)
+    - Starscream (~> 4.0.0)
   - SwiftSyft/Tests (0.1.0):
     - GoogleWebRTC (~> 1.1.0)
     - LibTorch (~> 1.3.0)
+    - Starscream (~> 4.0.0)
 
 DEPENDENCIES:
   - Starscream (~> 4.0.0)
@@ -36,7 +38,7 @@ SPEC CHECKSUMS:
   LibTorch: 0e6ed44fe40c356f891d34f42bf18bd2f4a84234
   Starscream: 04b26f02727e10a002e6b5d21b188ba0d049910b
   SwiftLint: 8f5d2f903e1c9bcbc832fd16771e80a263ac6cbb
-  SwiftSyft: b64cd4dad0e2b92f3170baeb1885c5baea2b85df
+  SwiftSyft: d33ae45ca4f1390c35b03dd5a9a618e94114bf1a
 
 PODFILE CHECKSUM: de5496d7cc0ff82c4354487acef95af791f45669
 
