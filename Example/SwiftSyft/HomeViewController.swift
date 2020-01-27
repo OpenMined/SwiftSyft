@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import Starscream
+import SwiftSyft
 
 enum StaticHomeScreenStrings {
     static let headerDescription = "syft.js/grid.js testing"
@@ -29,9 +29,8 @@ enum StaticHomeScreenStrings {
 }
 
 class HomeViewController: UIViewController, UITextViewDelegate {
+    var socket: SyftWebSocket!
     var isConnected = false
-    var socket: WebSocket!
-    let server = WebSocketServer()
 
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var headerDescriptionLabel: UILabel!
@@ -65,7 +64,6 @@ class HomeViewController: UIViewController, UITextViewDelegate {
         socketURLTextField.text = StaticHomeScreenStrings.socketURL
         protocolIDTextField.text = StaticHomeScreenStrings.protocolID
 
-        //connectButton.titleLabel?.text = StaticHomeScreenStrings.connectButtonText
         messageTextView.text = StaticHomeScreenStrings.messagePlaceholder
         messageTextView.textColor = UIColor.lightGray
         messageTextView.delegate = self
@@ -80,8 +78,8 @@ class HomeViewController: UIViewController, UITextViewDelegate {
     }
 
     deinit {
-      socket.disconnect()
-      socket.delegate = nil
+        socket.disconnect()
+        socket.socketDelegate = nil
     }
 
     @IBAction func connectPressed(_ sender: UIButton) {
@@ -99,8 +97,15 @@ class HomeViewController: UIViewController, UITextViewDelegate {
 
             var request = URLRequest(url: URL(string: StaticHomeScreenStrings.socketURL)!)
             request.timeoutInterval = 5
-            socket = WebSocket(request: request)
-            socket.delegate = self
+
+            if #available(iOS 13, *) {
+                socket = SyftWebSocket(url: request.url!,
+                                       pingInterval: request.timeoutInterval)
+            } else {
+                socket = SyftWebSocketIOS12(url: request.url!,
+                                     pingInterval: request.timeoutInterval)
+            }
+            socket.socketDelegate = self
             socket.connect()
         }
     }
@@ -110,7 +115,9 @@ class HomeViewController: UIViewController, UITextViewDelegate {
             print("Message is empty!")
             return
         }
-        socket.write(string: messageTextView.text)
+        socket.sendText(text: messageTextView.text)
+        messageTextView.text = StaticHomeScreenStrings.messagePlaceholder
+        messageTextView.textColor = UIColor.lightGray
     }
 
     func showServerConnectedUI(_ isConnected: Bool) {
@@ -186,61 +193,51 @@ extension NSAttributedString {
     }
 }
 
-// MARK: - WebSocketDelegate
-extension HomeViewController: WebSocketDelegate {
-    func didReceive(event: WebSocketEvent, client: WebSocket) {
-        switch event {
-        case .connected(let headers):
-            websocketDidConnect(client)
-            print("websocket is connected: \(headers)")
-        case .disconnected(let reason, let code):
-            websocketDidDisconnect(client, reason: reason, code: code )
-            print("websocket is disconnected: \(reason) with code: \(code)")
-        case .text(let string):
-            websocketDidReceiveMessage(client, text: string)
-            print("Received text: \(string)")
-        case .binary(let data):
-            websocketDidReceiveData(client, data: data)
-            print("Received data: \(data.count)")
-        case .cancelled:
-            websocketDidCanceld(client)
-        case .error(let error):
-            isConnected = false
-            handleError(error)
-        default: // ping, pong, viablityChanged, reconnectSuggested
-            break
-        }
-    }
+// MARK: - SyftWebSocketDelegate
+extension HomeViewController: SyftWebSocketDelegate {
+    func didReceive(event: SyftWebSocketEvent) {
+            switch event {
+            case .connected:
+                websocketDidConnect()
+            case .disconnected:
+                websocketDidDisconnect()
+            case .text(let string):
+                websocketDidReceiveMessage(text: string)
+                print("Received text: \(string)")
+            case .binary(let data):
+                websocketDidReceiveData(data: data)
+                print("Received data: \(data.count)")
+            case .cancelled:
+                websocketDidCanceld()
+            case .error(let error):
+                isConnected = false
+                handleError(error)
+            }
+}
 
     func handleError(_ error: Error?) {
-        if let err = error as? WSError {
-            print("websocket encountered an error: \(err.message)")
-        } else if let err = error {
-            print("websocket encountered an error: \(err.localizedDescription)")
-        } else {
-            print("websocket encountered an error")
-        }
+
     }
 
-    public func websocketDidConnect(_ socket: Starscream.WebSocket) {
+    public func websocketDidConnect() {
         isConnected = true
         showServerConnectedUI(isConnected)
     }
 
-    public func websocketDidDisconnect(_ socket: Starscream.WebSocket, reason: String, code: UInt16) {
+    public func websocketDidDisconnect() {
         isConnected = false
         showServerConnectedUI(isConnected)
     }
 
-    public func websocketDidReceiveMessage(_ socket: Starscream.WebSocket, text: String) {
+    public func websocketDidReceiveMessage(text: String) {
 
     }
 
-    public func websocketDidReceiveData(_ socket: Starscream.WebSocket, data: Data) {
+    public func websocketDidReceiveData(data: Data) {
 
     }
 
-    public func websocketDidCanceld(_ socket: Starscream.WebSocket) {
+    public func websocketDidCanceld() {
         isConnected = false
         showServerConnectedUI(isConnected)
     }
