@@ -8,7 +8,7 @@
 import Foundation
 import Starscream
 
-public enum SyftWebSocketEvent {
+public enum WSEventType {
     case connected
     case disconnected
     case text(String)
@@ -18,10 +18,11 @@ public enum SyftWebSocketEvent {
 }
 
 public class SyftWebSocket: SocketClientProtocol {
-    var delegate: SocketClientDelegate?
-    public weak var socketDelegate: SyftWebSocketDelegate?
+    weak var delegate: SocketClientDelegate?
+    public weak var socketDelegate: WSDelegate?
     var url: URL?
     var pingInterval: Double?
+
     public var callbackQueue = DispatchQueue.main
 
     // MARK: - SocketClientProtocol
@@ -31,30 +32,30 @@ public class SyftWebSocket: SocketClientProtocol {
     }
 
     public func connect() {
-        didReceive(event: SyftWebSocketEvent.connected)
+        didReceive(event: WSEventType.connected)
     }
 
     public func disconnect() {
-        didReceive(event: SyftWebSocketEvent.disconnected)
+        didReceive(event: WSEventType.disconnected)
     }
 
     func send(data: Data) {
-        didReceive(event: SyftWebSocketEvent.binary(data))
+        didReceive(event: WSEventType.binary(data))
     }
 
     public func sendText(text: String) {
-        didReceive(event: SyftWebSocketEvent.text(text))
+        didReceive(event: WSEventType.text(text))
     }
 
     // MARK: - Delegate
-    public func didReceive(event: SyftWebSocketEvent) {
+    public func didReceive(event: WSEventType) {
         callbackQueue.async { [weak self] in
-            guard let s11 = self else { return }
-            s11.socketDelegate?.didReceive(event: event)
+            guard let selfObject = self else { return }
+            selfObject.socketDelegate?.didReceive(event: event)
         }
     }
 }
 
-public protocol SyftWebSocketDelegate: class {
-    func didReceive(event: SyftWebSocketEvent)
+public protocol WSDelegate: class {
+    func didReceive(event: WSEventType)
 }

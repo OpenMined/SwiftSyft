@@ -9,10 +9,9 @@ import Foundation
 import Starscream
 
 public class SyftWebSocketIOS12: SyftWebSocket, WebSocketDelegate {
-    var client: WebSocket?
+    var socket: WebSocket!
 
     public func didReceive(event: WebSocketEvent, client: WebSocket) {
-        self.client = client
         switch event {
         case .connected(let headers):
             connected()
@@ -45,9 +44,6 @@ public class SyftWebSocketIOS12: SyftWebSocket, WebSocketDelegate {
         }
     }
 
-    var socket: WebSocket!
-    let server = WebSocketServer()
-
     // MARK: - SocketClientProtocol
     required public init(url: URL, pingInterval: Double) {
         super.init(url: url, pingInterval: pingInterval)
@@ -60,18 +56,17 @@ public class SyftWebSocketIOS12: SyftWebSocket, WebSocketDelegate {
     }
 
     func connected() {
-        didReceive(event: SyftWebSocketEvent.connected)
+        didReceive(event: WSEventType.connected)
     }
 
     override public func disconnect() {
         socket.disconnect()
         socket.delegate = nil
-        didReceive(event: SyftWebSocketEvent.disconnected)
+        didReceive(event: WSEventType.disconnected)
     }
 
     override func send(data: Data) {
         socket.write(data: data, completion: nil)
-        
     }
 
     override public func sendText(text: String) {

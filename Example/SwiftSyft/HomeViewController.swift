@@ -193,9 +193,9 @@ extension NSAttributedString {
     }
 }
 
-// MARK: - SyftWebSocketDelegate
-extension HomeViewController: SyftWebSocketDelegate {
-    func didReceive(event: SyftWebSocketEvent) {
+// MARK: - WSDelegate
+extension HomeViewController: WSDelegate {
+    func didReceive(event: WSEventType) {
             switch event {
             case .connected:
                 websocketDidConnect()
