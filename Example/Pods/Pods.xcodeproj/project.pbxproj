@@ -37,21 +37,29 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		2314E50E82A040AD6B74F6521799B80A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
-		33B02DAFCCA17608D54E7046662EA59C /* SwiftSyft-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = B3E846FAADE9939B2A71D9F83E16B7EF /* SwiftSyft-umbrella.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		31026EBA6769512CE43B734D7847ED89 /* WebRTCClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7978A6116E995DAC9E36B1FE3D3AFC0 /* WebRTCClientTests.swift */; };
+		33B02DAFCCA17608D54E7046662EA59C /* SwiftSyft-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = FF6AC30310FF447881C6E19B710C01B3 /* SwiftSyft-umbrella.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		422B1F86AF6A90C0AD02AB030C723B54 /* Pods-SwiftSyft_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A9354A7B8C97D456F42D8BA33FA76017 /* Pods-SwiftSyft_Example-dummy.m */; };
-		47AE88E6B95718B960BFB76CD3703412 /* SyftClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C35F0A55BB7CC4BFA1F92F10B01471C /* SyftClientProtocol.swift */; };
-		6FCE2AC37826BE644F0F391F07EE0A9D /* SignallingClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B2468FEDA8F0C191D6E5E48F43266E /* SignallingClientProtocol.swift */; };
-		77428D7D6A169F05E1D2589427988444 /* WebRTCClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069DF0C19185C3E1D4A6AC285393D220 /* WebRTCClient.swift */; };
-		B85351722CB835D4677DBDE21A80BAC5 /* WebRTCPeer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A86FA42EDFD6ED82C1F49678764D84 /* WebRTCPeer.swift */; };
-		BD6CE190FD4653A65ECF255ECDE189EA /* WebRTCClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE172F74505858EF827508E8731DAD1 /* WebRTCClientProtocol.swift */; };
+		479926F07BB1D0158851BF68AD14B73C /* WebRTCPeerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2370E55D6ED4B8D4624B9E7D0741BB /* WebRTCPeerTests.swift */; };
+		47AE88E6B95718B960BFB76CD3703412 /* SyftClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97607BF4AF4FAD88487993D3227B0F4D /* SyftClientProtocol.swift */; };
+		6FCE2AC37826BE644F0F391F07EE0A9D /* SignallingClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620D0A312CD07DE441CF4F6E4FEE2F7D /* SignallingClientProtocol.swift */; };
+		77428D7D6A169F05E1D2589427988444 /* WebRTCClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7C78B40B2057D6E61A8B44F3C2C6D4 /* WebRTCClient.swift */; };
+		A3EE198FDC26503356DE57A58C898F4F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
+		B85351722CB835D4677DBDE21A80BAC5 /* WebRTCPeer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D34DFA8D33A471AE00A5A783150228 /* WebRTCPeer.swift */; };
+		BD6CE190FD4653A65ECF255ECDE189EA /* WebRTCClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354B6C6C9B76F270F10A665402903DEE /* WebRTCClientProtocol.swift */; };
 		D2ADC96A8D3F40C7E208E623F8B9408D /* Pods-SwiftSyft_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E4C507666BBF13A1B985685540F63AC /* Pods-SwiftSyft_Example-umbrella.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		D7EC0DCDB6EBD1C1274D25040A60A0A3 /* SocketClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFB111A68F8DAE312CCE85585E9B186 /* SocketClientProtocol.swift */; };
-		D9C82094E87DC9F16D7964934F90A752 /* SwiftSyft-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 5756DA98F93600F6C4B3A1B5B62D741B /* SwiftSyft-dummy.m */; };
-		F3C5E80F3EA65A8643AD8C6494891E0F /* WebRTCPeerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287B55D6ADC3FCBD66A174624C8F76A9 /* WebRTCPeerTests.swift */; };
+		D7EC0DCDB6EBD1C1274D25040A60A0A3 /* SocketClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6C7761B360006055019B9E37E5E400 /* SocketClientProtocol.swift */; };
+		D9C82094E87DC9F16D7964934F90A752 /* SwiftSyft-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = B757DFA6C6DC1CF29E01C95F89098A5A /* SwiftSyft-dummy.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		09E9858AD1E1693B73C5E68AFA1A092E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2D5A6AF628AF6E47ABD60798349E5620;
+			remoteInfo = SwiftSyft;
+		};
 		0A3A34992A0CB6C6B6B20B7CCF89A4D2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
@@ -87,13 +95,6 @@
 			remoteGlobalIDString = EC23BFCFC44D9224C054485B54824B8E;
 			remoteInfo = GoogleWebRTC;
 		};
-		DFFF64527B95A35CCF2A63C815ADE1E4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2D5A6AF628AF6E47ABD60798349E5620;
-			remoteInfo = SwiftSyft;
-		};
 		E8A684AD1F4E528AC839E42ACA8E3824 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
@@ -104,50 +105,51 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		01A43152DEE97CEAC6A5EBC69DD76F7D /* SwiftSyft-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftSyft-prefix.pch"; sourceTree = "<group>"; };
 		04207AF8767A8F4D9B94AD0245B4DBE1 /* libcpuinfo.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libcpuinfo.a; path = install/lib/libcpuinfo.a; sourceTree = "<group>"; };
-		069DF0C19185C3E1D4A6AC285393D220 /* WebRTCClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WebRTCClient.swift; sourceTree = "<group>"; };
 		07C7775D2D6E7036A076F504CF09BBE6 /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebRTC.framework; path = Frameworks/frameworks/WebRTC.framework; sourceTree = "<group>"; };
 		0E27AFDA4196D1AD5F0013246B5D4892 /* Pods-SwiftSyft_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-SwiftSyft_Example.modulemap"; sourceTree = "<group>"; };
 		10129592E35CE9FF4F4E0E66D1A567C1 /* libnnpack.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libnnpack.a; path = install/lib/libnnpack.a; sourceTree = "<group>"; };
-		131DAA2F7227FA353652F5E9781FAF00 /* SwiftSyft-Unit-Tests-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftSyft-Unit-Tests-prefix.pch"; sourceTree = "<group>"; };
+		16FFE980CF8A3FD2BC2D9C1678EEC7E4 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
 		1AA818F5C31D126CF68AB3B01AD6238B /* libclog.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libclog.a; path = install/lib/libclog.a; sourceTree = "<group>"; };
 		215CB57243B749C41BA8C0D18559B0FC /* libeigen_blas.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libeigen_blas.a; path = install/lib/libeigen_blas.a; sourceTree = "<group>"; };
-		27D4ADCCC19B149687AEF5D301EE8654 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
-		287B55D6ADC3FCBD66A174624C8F76A9 /* WebRTCPeerTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WebRTCPeerTests.swift; path = Tests/WebRTCPeerTests.swift; sourceTree = "<group>"; };
 		2B0CB6D525BCF80F709DF25D50F8B690 /* LibTorch.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LibTorch.h; path = src/LibTorch.h; sourceTree = "<group>"; };
-		2FE172F74505858EF827508E8731DAD1 /* WebRTCClientProtocol.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WebRTCClientProtocol.swift; sourceTree = "<group>"; };
+		2D7266BDB4E1C962C0E725C9B150846C /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
 		3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		3FB8FD7B1B961FE02B1ACB3753294C9D /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
-		42F03A6DCCA3D936AFE9FF29245A346F /* SwiftSyft.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = SwiftSyft.modulemap; sourceTree = "<group>"; };
+		354B6C6C9B76F270F10A665402903DEE /* WebRTCClientProtocol.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WebRTCClientProtocol.swift; sourceTree = "<group>"; };
 		4572A9AC62CB02BB49C565BA7ECFFA26 /* libpytorch_qnnpack.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libpytorch_qnnpack.a; path = install/lib/libpytorch_qnnpack.a; sourceTree = "<group>"; };
 		4A134F89C86F1AC9A3A5A9BCBCF6E692 /* Pods-SwiftSyft_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-SwiftSyft_Example-frameworks.sh"; sourceTree = "<group>"; };
-		4DFB111A68F8DAE312CCE85585E9B186 /* SocketClientProtocol.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SocketClientProtocol.swift; sourceTree = "<group>"; };
-		551C81B22BE66A7A6408C86B49802648 /* SwiftSyft.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftSyft.xcconfig; sourceTree = "<group>"; };
+		4F2370E55D6ED4B8D4624B9E7D0741BB /* WebRTCPeerTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WebRTCPeerTests.swift; path = Tests/WebRTCPeerTests.swift; sourceTree = "<group>"; };
+		504845EC74CA1BCD3543825B5336E5B2 /* SwiftSyft-Unit-Tests-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftSyft-Unit-Tests-prefix.pch"; sourceTree = "<group>"; };
+		540A391890F8F6E25D8E46F59A7BFF9C /* SwiftSyft-Unit-Tests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "SwiftSyft-Unit-Tests-Info.plist"; sourceTree = "<group>"; };
 		55BE85F82B014CCE80F36E42EAB02179 /* LibTorch.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = LibTorch.xcconfig; sourceTree = "<group>"; };
-		5756DA98F93600F6C4B3A1B5B62D741B /* SwiftSyft-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SwiftSyft-dummy.m"; sourceTree = "<group>"; };
+		620D0A312CD07DE441CF4F6E4FEE2F7D /* SignallingClientProtocol.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SignallingClientProtocol.swift; sourceTree = "<group>"; };
+		674622C367D3AE4C5C683FD1C59E2437 /* SwiftSyft-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftSyft-prefix.pch"; sourceTree = "<group>"; };
+		6965CE97B03212B0FA09F8A64D285158 /* SwiftSyft-Unit-Tests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "SwiftSyft-Unit-Tests-frameworks.sh"; sourceTree = "<group>"; };
 		75EC98A1D8DF279FDDC9D29DDDDF828C /* Pods-SwiftSyft_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SwiftSyft_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		7BAD52B912477B7CAD71D12B1375126A /* SwiftSyft.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = SwiftSyft.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		7E4C507666BBF13A1B985685540F63AC /* Pods-SwiftSyft_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-SwiftSyft_Example-umbrella.h"; sourceTree = "<group>"; };
-		87B2468FEDA8F0C191D6E5E48F43266E /* SignallingClientProtocol.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SignallingClientProtocol.swift; sourceTree = "<group>"; };
-		89A86FA42EDFD6ED82C1F49678764D84 /* WebRTCPeer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WebRTCPeer.swift; sourceTree = "<group>"; };
-		8C35F0A55BB7CC4BFA1F92F10B01471C /* SyftClientProtocol.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SyftClientProtocol.swift; sourceTree = "<group>"; };
-		9072EEB070E9CD08FDE6841AB5B88FCF /* SwiftSyft-Unit-Tests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "SwiftSyft-Unit-Tests-frameworks.sh"; sourceTree = "<group>"; };
-		9608F4E3BE6CB34EA8095C1D865493A9 /* SwiftSyft.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = SwiftSyft.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		81D34DFA8D33A471AE00A5A783150228 /* WebRTCPeer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WebRTCPeer.swift; sourceTree = "<group>"; };
+		8B6C7761B360006055019B9E37E5E400 /* SocketClientProtocol.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SocketClientProtocol.swift; sourceTree = "<group>"; };
+		97607BF4AF4FAD88487993D3227B0F4D /* SyftClientProtocol.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SyftClientProtocol.swift; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9FC7F58A3AD15F401FF0D93D4CBDF445 /* GoogleWebRTC.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = GoogleWebRTC.xcconfig; sourceTree = "<group>"; };
 		A9354A7B8C97D456F42D8BA33FA76017 /* Pods-SwiftSyft_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-SwiftSyft_Example-dummy.m"; sourceTree = "<group>"; };
 		ADD8212AEFCDCF8BDF0E167E0D50229E /* libPods-SwiftSyft_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libPods-SwiftSyft_Example.a"; path = "libPods-SwiftSyft_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFE1BE8CDD0C0E1EA09911C685B04DA6 /* libc10.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libc10.a; path = install/lib/libc10.a; sourceTree = "<group>"; };
 		B1F4DA65A2EF104D3243065829A6DB74 /* SwiftSyft-Unit-Tests */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "SwiftSyft-Unit-Tests"; path = "SwiftSyft-Unit-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		B3E846FAADE9939B2A71D9F83E16B7EF /* SwiftSyft-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftSyft-umbrella.h"; sourceTree = "<group>"; };
 		B4415AA08636F66B2971C4B6D545825F /* libSwiftSyft.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libSwiftSyft.a; path = libSwiftSyft.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		B709CC0CBC77F4BB2B99171A2779FE53 /* SwiftSyft-Unit-Tests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "SwiftSyft-Unit-Tests-Info.plist"; sourceTree = "<group>"; };
+		B757DFA6C6DC1CF29E01C95F89098A5A /* SwiftSyft-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SwiftSyft-dummy.m"; sourceTree = "<group>"; };
+		BF7C78B40B2057D6E61A8B44F3C2C6D4 /* WebRTCClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WebRTCClient.swift; sourceTree = "<group>"; };
 		C0612887B9672E48887B7D0841F0D916 /* Pods-SwiftSyft_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SwiftSyft_Example.release.xcconfig"; sourceTree = "<group>"; };
+		C7978A6116E995DAC9E36B1FE3D3AFC0 /* WebRTCClientTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WebRTCClientTests.swift; path = Tests/WebRTCClientTests.swift; sourceTree = "<group>"; };
+		C8218F67D9AB43C8F3CF6F6CE3E80BAE /* SwiftSyft.unit-tests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "SwiftSyft.unit-tests.xcconfig"; sourceTree = "<group>"; };
+		CC772FC1D008EE2C97C4C97BDAF3F5F7 /* SwiftSyft.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = SwiftSyft.modulemap; sourceTree = "<group>"; };
+		D3B3B9E6DF9D47F1A22A2DDA6D2733CD /* SwiftSyft.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftSyft.xcconfig; sourceTree = "<group>"; };
 		DE569B15BFDE44FD6D02D3A4F4C00F33 /* SwiftLint.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftLint.xcconfig; sourceTree = "<group>"; };
 		E74D70423477A2784AD9027BCC964C95 /* Pods-SwiftSyft_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-SwiftSyft_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
 		ECAB9EEAF0248CF255E4CF2EB4D69E35 /* Pods-SwiftSyft_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-SwiftSyft_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		F4DDBDCD5C36D8AD0067CB0F912471D5 /* libtorch.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libtorch.a; path = install/lib/libtorch.a; sourceTree = "<group>"; };
-		F5C85268C85C17CAAA3F4F5A5D060D3A /* SwiftSyft.unit-tests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "SwiftSyft.unit-tests.xcconfig"; sourceTree = "<group>"; };
+		FF6AC30310FF447881C6E19B710C01B3 /* SwiftSyft-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftSyft-umbrella.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,11 +160,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		813443E0025A00564E029E804F62B4C5 /* Frameworks */ = {
+		7F255CAC8492BC1EB53337B2FE5BF5D9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2314E50E82A040AD6B74F6521799B80A /* Foundation.framework in Frameworks */,
+				A3EE198FDC26503356DE57A58C898F4F /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,22 +196,66 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		17A80C864663FE449CCAF3739A0C516E /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				620D0A312CD07DE441CF4F6E4FEE2F7D /* SignallingClientProtocol.swift */,
+				8B6C7761B360006055019B9E37E5E400 /* SocketClientProtocol.swift */,
+				97607BF4AF4FAD88487993D3227B0F4D /* SyftClientProtocol.swift */,
+				354B6C6C9B76F270F10A665402903DEE /* WebRTCClientProtocol.swift */,
+			);
+			name = Protocols;
+			path = SwiftSyft/Protocols;
+			sourceTree = "<group>";
+		};
 		24EEAD61DD2A4773121DAEC0BB568A32 /* Development Pods */ = {
 			isa = PBXGroup;
 			children = (
-				BAA41DBCDF0DAA6361D4659E7EF310DF /* SwiftSyft */,
+				3651B59524D1C1F8819FD1FD3101CD1E /* SwiftSyft */,
 			);
 			name = "Development Pods";
 			sourceTree = "<group>";
 		};
-		50FD37099EC96DE7BE5A5188FEBB818F /* Pod */ = {
+		2860351A106942FB5ACBE85018ECAEEC /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				3FB8FD7B1B961FE02B1ACB3753294C9D /* LICENSE */,
-				27D4ADCCC19B149687AEF5D301EE8654 /* README.md */,
-				9608F4E3BE6CB34EA8095C1D865493A9 /* SwiftSyft.podspec */,
+				BF7C78B40B2057D6E61A8B44F3C2C6D4 /* WebRTCClient.swift */,
+				81D34DFA8D33A471AE00A5A783150228 /* WebRTCPeer.swift */,
+			);
+			name = Classes;
+			path = SwiftSyft/Classes;
+			sourceTree = "<group>";
+		};
+		3651B59524D1C1F8819FD1FD3101CD1E /* SwiftSyft */ = {
+			isa = PBXGroup;
+			children = (
+				2860351A106942FB5ACBE85018ECAEEC /* Classes */,
+				3B49204266A41BD2FD3690BF5F3CD0D5 /* Pod */,
+				17A80C864663FE449CCAF3739A0C516E /* Protocols */,
+				B017B026B893CE30EF3861703AFBD1A6 /* Support Files */,
+				4652396AC5C4410AF0267415E530F5C2 /* Tests */,
+			);
+			name = SwiftSyft;
+			path = ../..;
+			sourceTree = "<group>";
+		};
+		3B49204266A41BD2FD3690BF5F3CD0D5 /* Pod */ = {
+			isa = PBXGroup;
+			children = (
+				2D7266BDB4E1C962C0E725C9B150846C /* LICENSE */,
+				16FFE980CF8A3FD2BC2D9C1678EEC7E4 /* README.md */,
+				7BAD52B912477B7CAD71D12B1375126A /* SwiftSyft.podspec */,
 			);
 			name = Pod;
+			sourceTree = "<group>";
+		};
+		4652396AC5C4410AF0267415E530F5C2 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				C7978A6116E995DAC9E36B1FE3D3AFC0 /* WebRTCClientTests.swift */,
+				4F2370E55D6ED4B8D4624B9E7D0741BB /* WebRTCPeerTests.swift */,
+			);
+			name = Tests;
 			sourceTree = "<group>";
 		};
 		51EA51128A965EB2F957BFA053168857 /* GoogleWebRTC */ = {
@@ -220,18 +266,6 @@
 			);
 			name = GoogleWebRTC;
 			path = GoogleWebRTC;
-			sourceTree = "<group>";
-		};
-		5515FB6CE890975BE8180F20B839A65F /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				87B2468FEDA8F0C191D6E5E48F43266E /* SignallingClientProtocol.swift */,
-				4DFB111A68F8DAE312CCE85585E9B186 /* SocketClientProtocol.swift */,
-				8C35F0A55BB7CC4BFA1F92F10B01471C /* SyftClientProtocol.swift */,
-				2FE172F74505858EF827508E8731DAD1 /* WebRTCClientProtocol.swift */,
-			);
-			name = Protocols;
-			path = SwiftSyft/Protocols;
 			sourceTree = "<group>";
 		};
 		59263E010C0B0D838213638844E7B95A /* Support Files */ = {
@@ -254,39 +288,12 @@
 			path = LibTorch;
 			sourceTree = "<group>";
 		};
-		7FFE061DAB76DD548512B146FBF9619F /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				42F03A6DCCA3D936AFE9FF29245A346F /* SwiftSyft.modulemap */,
-				551C81B22BE66A7A6408C86B49802648 /* SwiftSyft.xcconfig */,
-				5756DA98F93600F6C4B3A1B5B62D741B /* SwiftSyft-dummy.m */,
-				01A43152DEE97CEAC6A5EBC69DD76F7D /* SwiftSyft-prefix.pch */,
-				B3E846FAADE9939B2A71D9F83E16B7EF /* SwiftSyft-umbrella.h */,
-				9072EEB070E9CD08FDE6841AB5B88FCF /* SwiftSyft-Unit-Tests-frameworks.sh */,
-				B709CC0CBC77F4BB2B99171A2779FE53 /* SwiftSyft-Unit-Tests-Info.plist */,
-				131DAA2F7227FA353652F5E9781FAF00 /* SwiftSyft-Unit-Tests-prefix.pch */,
-				F5C85268C85C17CAAA3F4F5A5D060D3A /* SwiftSyft.unit-tests.xcconfig */,
-			);
-			name = "Support Files";
-			path = "Example/Pods/Target Support Files/SwiftSyft";
-			sourceTree = "<group>";
-		};
 		873572DE0FD32F068B64C7099730418F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				07C7775D2D6E7036A076F504CF09BBE6 /* WebRTC.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		8C9F6A24411A7DA2B03F1AD238EA3036 /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				069DF0C19185C3E1D4A6AC285393D220 /* WebRTCClient.swift */,
-				89A86FA42EDFD6ED82C1F49678764D84 /* WebRTCPeer.swift */,
-			);
-			name = Classes;
-			path = SwiftSyft/Classes;
 			sourceTree = "<group>";
 		};
 		A5A479F255CFCA92CCBEC2EE65698230 /* Products */ = {
@@ -299,12 +306,21 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		AE0727247F20013331F3FB16F43C6E67 /* Tests */ = {
+		B017B026B893CE30EF3861703AFBD1A6 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				287B55D6ADC3FCBD66A174624C8F76A9 /* WebRTCPeerTests.swift */,
+				CC772FC1D008EE2C97C4C97BDAF3F5F7 /* SwiftSyft.modulemap */,
+				D3B3B9E6DF9D47F1A22A2DDA6D2733CD /* SwiftSyft.xcconfig */,
+				B757DFA6C6DC1CF29E01C95F89098A5A /* SwiftSyft-dummy.m */,
+				674622C367D3AE4C5C683FD1C59E2437 /* SwiftSyft-prefix.pch */,
+				FF6AC30310FF447881C6E19B710C01B3 /* SwiftSyft-umbrella.h */,
+				6965CE97B03212B0FA09F8A64D285158 /* SwiftSyft-Unit-Tests-frameworks.sh */,
+				540A391890F8F6E25D8E46F59A7BFF9C /* SwiftSyft-Unit-Tests-Info.plist */,
+				504845EC74CA1BCD3543825B5336E5B2 /* SwiftSyft-Unit-Tests-prefix.pch */,
+				C8218F67D9AB43C8F3CF6F6CE3E80BAE /* SwiftSyft.unit-tests.xcconfig */,
 			);
-			name = Tests;
+			name = "Support Files";
+			path = "Example/Pods/Target Support Files/SwiftSyft";
 			sourceTree = "<group>";
 		};
 		B0D9111342B393E028ED09F174F250E0 /* Pods-SwiftSyft_Example */ = {
@@ -330,19 +346,6 @@
 			);
 			name = SwiftLint;
 			path = SwiftLint;
-			sourceTree = "<group>";
-		};
-		BAA41DBCDF0DAA6361D4659E7EF310DF /* SwiftSyft */ = {
-			isa = PBXGroup;
-			children = (
-				8C9F6A24411A7DA2B03F1AD238EA3036 /* Classes */,
-				50FD37099EC96DE7BE5A5188FEBB818F /* Pod */,
-				5515FB6CE890975BE8180F20B839A65F /* Protocols */,
-				7FFE061DAB76DD548512B146FBF9619F /* Support Files */,
-				AE0727247F20013331F3FB16F43C6E67 /* Tests */,
-			);
-			name = SwiftSyft;
-			path = ../..;
 			sourceTree = "<group>";
 		};
 		C0834CEBB1379A84116EF29F93051C60 /* iOS */ = {
@@ -465,17 +468,17 @@
 		};
 		7A7F2EE98B0DF16CF0A3FD5DE5FECB4A /* SwiftSyft-Unit-Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3AF262446A4EDB3105473D451EED3D16 /* Build configuration list for PBXNativeTarget "SwiftSyft-Unit-Tests" */;
+			buildConfigurationList = EBF80CD1B42A6A752534590F2EBC0B22 /* Build configuration list for PBXNativeTarget "SwiftSyft-Unit-Tests" */;
 			buildPhases = (
-				0B661B37785A37ED3F0F4871CC1BD255 /* Sources */,
-				813443E0025A00564E029E804F62B4C5 /* Frameworks */,
-				0E4878CC55EFF06E9B917139EABE3EA2 /* Resources */,
-				03DF6EA669942B1DFED661DC4BAFFFDF /* [CP] Embed Pods Frameworks */,
+				DDC607FC241C00335BF6EA57D7F1C9B3 /* Sources */,
+				7F255CAC8492BC1EB53337B2FE5BF5D9 /* Frameworks */,
+				D8D1D38939A2A3CACBAF4035B31102EB /* Resources */,
+				39625A082B208FBA34971BEED196AD9F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				20C02D274FD2345FDAB61CC8057B7352 /* PBXTargetDependency */,
+				C13156623B6609051DA26FA965BB8BA7 /* PBXTargetDependency */,
 			);
 			name = "SwiftSyft-Unit-Tests";
 			productName = "SwiftSyft-Unit-Tests";
@@ -536,7 +539,7 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		0E4878CC55EFF06E9B917139EABE3EA2 /* Resources */ = {
+		D8D1D38939A2A3CACBAF4035B31102EB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -546,7 +549,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		03DF6EA669942B1DFED661DC4BAFFFDF /* [CP] Embed Pods Frameworks */ = {
+		39625A082B208FBA34971BEED196AD9F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -591,14 +594,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		0B661B37785A37ED3F0F4871CC1BD255 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F3C5E80F3EA65A8643AD8C6494891E0F /* WebRTCPeerTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		1724BB9ABB220E731AC61BA125F69D2B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -621,15 +616,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DDC607FC241C00335BF6EA57D7F1C9B3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				31026EBA6769512CE43B734D7847ED89 /* WebRTCClientTests.swift in Sources */,
+				479926F07BB1D0158851BF68AD14B73C /* WebRTCPeerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		20C02D274FD2345FDAB61CC8057B7352 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = SwiftSyft;
-			target = 2D5A6AF628AF6E47ABD60798349E5620 /* SwiftSyft */;
-			targetProxy = DFFF64527B95A35CCF2A63C815ADE1E4 /* PBXContainerItemProxy */;
-		};
 		23B5FF439335365EF0ECBCEC263A491B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = GoogleWebRTC;
@@ -647,6 +645,12 @@
 			name = SwiftSyft;
 			target = 2D5A6AF628AF6E47ABD60798349E5620 /* SwiftSyft */;
 			targetProxy = E8A684AD1F4E528AC839E42ACA8E3824 /* PBXContainerItemProxy */;
+		};
+		C13156623B6609051DA26FA965BB8BA7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SwiftSyft;
+			target = 2D5A6AF628AF6E47ABD60798349E5620 /* SwiftSyft */;
+			targetProxy = 09E9858AD1E1693B73C5E68AFA1A092E /* PBXContainerItemProxy */;
 		};
 		D1117B66F4D4C072C5AFC26CA729E463 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -733,6 +737,32 @@
 			};
 			name = Debug;
 		};
+		13EFF8FD211BCC2D3F6B74C4A5C07C3C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8218F67D9AB43C8F3CF6F6CE3E80BAE /* SwiftSyft.unit-tests.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/SwiftSyft/SwiftSyft-Unit-Tests-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SwiftSyft/SwiftSyft-Unit-Tests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "SwiftSyft-Unit-Tests";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.1.3;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		4881224DC2E3778419FE1DF0F2F8BE16 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C0612887B9672E48887B7D0841F0D916 /* Pods-SwiftSyft_Example.release.xcconfig */;
@@ -789,35 +819,6 @@
 			};
 			name = Release;
 		};
-		768167510B6120B455B6CC76E99F2E54 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = F5C85268C85C17CAAA3F4F5A5D060D3A /* SwiftSyft.unit-tests.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGNING_ALLOWED = YES;
-				CODE_SIGNING_REQUIRED = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/SwiftSyft/SwiftSyft-Unit-Tests-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/SwiftSyft/SwiftSyft-Unit-Tests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-lswiftSwiftOnoneSupport",
-				);
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_NAME = "SwiftSyft-Unit-Tests";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.1.3;
-			};
-			name = Debug;
-		};
 		8063E74F3B2017071ADD82BA24E4956B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9FC7F58A3AD15F401FF0D93D4CBDF445 /* GoogleWebRTC.xcconfig */;
@@ -849,6 +850,35 @@
 			};
 			name = Release;
 		};
+		8CD71CEE2FC480562A313294A1BED5FF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8218F67D9AB43C8F3CF6F6CE3E80BAE /* SwiftSyft.unit-tests.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/SwiftSyft/SwiftSyft-Unit-Tests-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SwiftSyft/SwiftSyft-Unit-Tests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lswiftSwiftOnoneSupport",
+				);
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "SwiftSyft-Unit-Tests";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.1.3;
+			};
+			name = Debug;
+		};
 		8F3080E0B59945DC45B2A9A25544AC4D /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 55BE85F82B014CCE80F36E42EAB02179 /* LibTorch.xcconfig */;
@@ -867,7 +897,7 @@
 		};
 		930EAFABE10D4E841F1EA66C8CF64122 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 551C81B22BE66A7A6408C86B49802648 /* SwiftSyft.xcconfig */;
+			baseConfigurationReference = D3B3B9E6DF9D47F1A22A2DDA6D2733CD /* SwiftSyft.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
@@ -931,35 +961,9 @@
 			};
 			name = Debug;
 		};
-		BD52FD66769F4103FB31707B2FEFB273 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = F5C85268C85C17CAAA3F4F5A5D060D3A /* SwiftSyft.unit-tests.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGNING_ALLOWED = YES;
-				CODE_SIGNING_REQUIRED = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/SwiftSyft/SwiftSyft-Unit-Tests-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/SwiftSyft/SwiftSyft-Unit-Tests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_NAME = "SwiftSyft-Unit-Tests";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.1.3;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
 		EEB9DA67A9F63C32FADCA0D53C16F983 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 551C81B22BE66A7A6408C86B49802648 /* SwiftSyft.xcconfig */;
+			baseConfigurationReference = D3B3B9E6DF9D47F1A22A2DDA6D2733CD /* SwiftSyft.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
@@ -1066,15 +1070,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3AF262446A4EDB3105473D451EED3D16 /* Build configuration list for PBXNativeTarget "SwiftSyft-Unit-Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				768167510B6120B455B6CC76E99F2E54 /* Debug */,
-				BD52FD66769F4103FB31707B2FEFB273 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1107,6 +1102,15 @@
 			buildConfigurations = (
 				B746EB75A731A7FA271337BBD0390C03 /* Debug */,
 				4881224DC2E3778419FE1DF0F2F8BE16 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EBF80CD1B42A6A752534590F2EBC0B22 /* Build configuration list for PBXNativeTarget "SwiftSyft-Unit-Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8CD71CEE2FC480562A313294A1BED5FF /* Debug */,
+				13EFF8FD211BCC2D3F6B74C4A5C07C3C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
