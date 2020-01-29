@@ -30,7 +30,8 @@ extension RTCMediaConstraints {
 
 extension RTCPeerConnection {
 
-    static func makeDefaultRTCConnection(withIceServers iceServers: [String], shouldCreateDataChannel: Bool) -> (RTCPeerConnection, RTCDataChannel?) {
+    static func makeDefaultRTCConnection(withIceServers iceServers: [String],
+                                         shouldCreateDataChannel: Bool) -> (RTCPeerConnection, RTCDataChannel?) {
 
         let peerConfig = RTCConfiguration()
         peerConfig.iceServers = [RTCIceServer(urlStrings: iceServers)]
@@ -55,12 +56,12 @@ extension RTCPeerConnection {
 
 class WebRTCClient {
 
-    var webRTCPeers: [UUID: WebRTCPeer] = [UUID: WebRTCPeer]()
-    var workerId: String?
-    var scopeId: String?
-    let sendSignallingMessage: (SignallingMessageRequest) -> Void
-
-    let iceServers: [String]
+    private var webRTCPeers: [UUID: WebRTCPeer] = [UUID: WebRTCPeer]()
+    private var workerId: String?
+    private var scopeId: String?
+    private let sendSignallingMessage: (SignallingMessageRequest) -> Void
+    private let rtcPeerConnectionFactory: (_ iceServers: [String], _ shouldCreateDataChannel: Bool) -> (RTCPeerConnection, RTCDataChannel?)
+    private let iceServers: [String]
 
     init(workerId: String? = nil,
          scopeId: String? = nil,
@@ -69,11 +70,13 @@ class WebRTCClient {
          "stun:stun2.l.google.com:19302",
          "stun:stun3.l.google.com:19302",
          "stun:stun4.l.google.com:19302"],
+         rtcPeerConnectionFactory: @escaping (_ iceServers: [String], _ shouldCreateDataChannel: Bool) -> (RTCPeerConnection, RTCDataChannel?) = RTCPeerConnection.makeDefaultRTCConnection,
          sendSignallingMessage: @escaping (SignallingMessageRequest) -> Void) {
 
         self.workerId = workerId
         self.scopeId = scopeId
         self.iceServers = iceServers
+        self.rtcPeerConnectionFactory = rtcPeerConnectionFactory
         self.sendSignallingMessage = sendSignallingMessage
 
     }
@@ -109,8 +112,7 @@ class WebRTCClient {
                let currentWorkerId = self.workerId,
                let scopeId = self.scopeId {
 
-                let (peerConnection, dataChannel) = RTCPeerConnection.makeDefaultRTCConnection(withIceServers: iceServers,
-                                                                                               shouldCreateDataChannel: true)
+                let (peerConnection, dataChannel) = self.rtcPeerConnectionFactory(iceServers, true)
 
                 if let dataChannel = dataChannel {
 
@@ -136,8 +138,7 @@ class WebRTCClient {
                let currentWorkerId = self.workerId,
                let scopeId = self.scopeId {
 
-                    let (peerConnection, _) = RTCPeerConnection.makeDefaultRTCConnection(withIceServers: iceServers,
-                                                                                     shouldCreateDataChannel: false)
+                    let (peerConnection, _) = self.rtcPeerConnectionFactory(iceServers, false)
                     let webRTCPeer = WebRTCPeer(workerId: offerSenderId,
                                             rtcPeerConnection: peerConnection,
                                             connectionType: .receiver)
