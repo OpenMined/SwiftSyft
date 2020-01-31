@@ -8,7 +8,7 @@
 import Foundation
 
 /// Wrapper over any websocket client provider
-protocol SocketClientProtocol {
+public protocol SocketClientProtocol {
 
     init(url: URL, pingInterval: Double)
 
@@ -16,10 +16,11 @@ protocol SocketClientProtocol {
     func connect()
     func disconnect()
     func send(data: Data)
+    func sendText(text: String)
 }
 
 /// Receive connection events from
-protocol SocketClientDelegate: class {
+public protocol SocketClientDelegate: class {
     func didConnect(_ socketClient: SocketClientProtocol)
     func didDisconnect(_ socketClient: SocketClientProtocol)
     func didReceive(socketMessage result: Result<Data, Error>)

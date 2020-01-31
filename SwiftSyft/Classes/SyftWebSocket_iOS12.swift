@@ -8,13 +8,15 @@
 import Foundation
 import Starscream
 
-public class SyftWebSocketIOS12: SyftWebSocket, WebSocketDelegate {
+public class SyftWebSocketIOS12: SocketClientProtocol, WebSocketDelegate {
+    public weak var delegate: SocketClientDelegate?
     var socket: WebSocket!
 
+    // MARK: - WebSocketDelegate
     public func didReceive(event: WebSocketEvent, client: WebSocket) {
         switch event {
         case .connected(let headers):
-            connected()
+            self.delegate?.didConnect(self)
             print("websocket is connected: \(headers)")
         case .disconnected(let reason, let code):
             disconnect()
@@ -46,30 +48,28 @@ public class SyftWebSocketIOS12: SyftWebSocket, WebSocketDelegate {
 
     // MARK: - SocketClientProtocol
     required public init(url: URL, pingInterval: Double) {
-        super.init(url: url, pingInterval: pingInterval)
+        guard url.absoluteString.hasPrefix("wss") else {
+            preconditionFailure("Path for socket server shoud start with wss://")
+        }
+
+        socket = WebSocket(request: URLRequest(url: url))
+        socket.delegate = self
     }
 
-    override public func connect() {
-        socket = WebSocket(request: URLRequest(url: self.url!))
-        socket.delegate = self
+    public func connect() {
         socket.connect()
     }
 
-    func connected() {
-        didReceive(event: WSEventType.connected)
-    }
-
-    override public func disconnect() {
+    public func disconnect() {
         socket.disconnect()
         socket.delegate = nil
-        didReceive(event: WSEventType.disconnected)
     }
 
-    override func send(data: Data) {
-        socket.write(data: data, completion: nil)
+    public func send(data: Data) {
+        //
     }
 
-    override public func sendText(text: String) {
-        socket.write(string: text)
+    public func sendText(text: String) {
+        //
     }
 }
