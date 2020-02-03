@@ -31,6 +31,8 @@ enum StaticHomeScreenStrings {
 class HomeViewController: UIViewController, UITextViewDelegate {
     var socket: SocketClientProtocol!
     var isConnected = false
+    var socket: WebSocket!
+    let server = WebSocketServer()
 
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var headerDescriptionLabel: UILabel!
@@ -78,8 +80,8 @@ class HomeViewController: UIViewController, UITextViewDelegate {
     }
 
     deinit {
-        socket.disconnect()
-        socket.delegate = nil
+      socket.disconnect()
+      socket.delegate = nil
     }
 
     @IBAction func connectPressed(_ sender: UIButton) {

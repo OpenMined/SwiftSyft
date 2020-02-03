@@ -4,3 +4,9 @@ excluded:
 included:
   - ./SwiftSyft
   - ../SwiftSyft
+
+disabled_rules:
+  - vertical_parameter_alignment
+
+line_length: 200
+
