@@ -7,9 +7,76 @@
 
 import Foundation
 
-public class SyftWebSocketIOS13 {
-    
-    
-    
-    
+@available(iOS 13.0, *)
+class SyftWebSocketIOS13: NSObject, SocketClientProtocol, URLSessionWebSocketDelegate {
+
+    public weak var delegate: SocketClientDelegate?
+    var webSocketTask: URLSessionWebSocketTask!
+    var urlSession: URLSession!
+    let delegateQueue = OperationQueue()
+    required public init(url: URL, pingInterval: Double) {
+        super.init()
+        guard url.absoluteString.hasPrefix("wss") else {
+            preconditionFailure("Path for socket server shoud start with wss://")
+        }
+        urlSession = URLSession(configuration: .default, delegate: self, delegateQueue: delegateQueue)
+        webSocketTask = urlSession.webSocketTask(with: url)
+    }
+    func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
+        self.delegate?.didConnect(self)
+    }
+    func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
+        self.delegate?.didDisconnect(self)
+    }
+    func connect() {
+        webSocketTask.resume()
+        listen()
+    }
+    func disconnect() {
+        webSocketTask.cancel(with: .goingAway, reason: nil)
+    }
+    func listen() {
+        webSocketTask.receive { result in
+            switch result {
+            case .failure(let error):
+                print("websocket encountered an error: \(error)")
+            case .success(let message):
+                switch message {
+                case .string(let text):
+                    guard let data = text.data(using: .utf8) else {
+                        break
+                    }
+                    self.delegate?.didReceive(socketMessage: .success(data))
+                    print("Received text: \(text)")
+                case .data(let data):
+                    self.delegate?.didReceive(socketMessage: .success(data))
+                    print("Received data: \(data.count)")
+                @unknown default:
+                    fatalError()
+                }
+                self.listen()
+            }
+        }
+    }
+    func send(text: String) {
+        webSocketTask.send(URLSessionWebSocketTask.Message.string(text)) { error in
+            if let error = error {
+                print("websocket encountered an error: \(error)")
+            }
+        }
+    }
+    func sendText(text: String) {
+        webSocketTask.send(URLSessionWebSocketTask.Message.string(text)) { error in
+            if let error = error {
+                print("websocket encountered an error: \(error)")
+            }
+        }
+    }
+    func send(data: Data) {
+        webSocketTask.send(URLSessionWebSocketTask.Message.data(data)) { error in
+            if let error = error {
+                print("websocket encountered an error: \(error)")
+            }
+        }
+    }
 }
