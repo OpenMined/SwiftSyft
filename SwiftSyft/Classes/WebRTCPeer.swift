@@ -24,7 +24,7 @@ enum WebRTCConnectionType {
 /// to observer peer connection and data channel events.
 class WebRTCPeer: NSObject {
 
-    let workerId: String
+    let workerId: UUID
     let rtcPeerConnection: RTCPeerConnection
     var rtcDataChannel: RTCDataChannel? {
         didSet {
@@ -35,11 +35,11 @@ class WebRTCPeer: NSObject {
     var connectionType: WebRTCConnectionType
 
     private var observations = (
-        discoveredLocalCandidate: [UUID: (String, RTCIceCandidate) -> Void](),
+        discoveredLocalCandidate: [UUID: (UUID, RTCIceCandidate) -> Void](),
         receivedDataChannelMessage: [UUID: (Data) -> Void]()
     )
 
-    init(workerId: String, rtcPeerConnection: RTCPeerConnection, connectionType: WebRTCConnectionType) {
+    init(workerId: UUID, rtcPeerConnection: RTCPeerConnection, connectionType: WebRTCConnectionType) {
         self.workerId = workerId
         self.rtcPeerConnection = rtcPeerConnection
         self.connectionType = connectionType
@@ -133,7 +133,7 @@ class WebRTCPeer: NSObject {
     }
 
     @discardableResult func addDiscoveredLocalIceCandidateObserver<T: AnyObject>(_ observer: T,
-                                                                                    closure: @escaping (T, String, RTCIceCandidate) -> Void) -> ObservationToken {
+                                                                                    closure: @escaping (T, UUID, RTCIceCandidate) -> Void) -> ObservationToken {
 
         let observerId = UUID()
 

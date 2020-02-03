@@ -1,23 +1,6 @@
 import Foundation
 import WebRTC
 
-enum SignallingMessageRequest {
-    case joinRoom(workerId: String, scopeId: String)
-    case sendOffer(workerId: String, scopeId: String, receiverId: String, remoteDescription: RTCSessionDescription)
-    case sendAnswer(workerId: String, scopeId: String, receiverId: String, remoteDescription: RTCSessionDescription)
-    case sendIceCandidate(workerId: String, scopeId: String, receiverId: String, iceCandidate: RTCIceCandidate)
-
-}
-
-enum SignallingMessageResponse {
-
-    case newPeerReceived(workerId: String)
-    case offerReceived(senderId: String, remoteDescription: RTCSessionDescription)
-    case answerReceived(senderId: String, remoteDescription: RTCSessionDescription)
-    case iceCandidateReceived(senderId: String, iceCandidate: RTCIceCandidate)
-
-}
-
 extension RTCMediaConstraints {
 
     static func makeDefaultMediaConstraints() -> RTCMediaConstraints {
@@ -57,21 +40,21 @@ extension RTCPeerConnection {
 class WebRTCClient {
 
     private var webRTCPeers: [UUID: WebRTCPeer] = [UUID: WebRTCPeer]()
-    private var workerId: String?
-    private var scopeId: String?
-    private let sendSignallingMessage: (SignallingMessageRequest) -> Void
-    private let webrtcPeerFactory: (_ workerId: String, _ rtcPeerConnection: RTCPeerConnection, _ connectionType: WebRTCConnectionType) -> WebRTCPeer
+    private var workerId: UUID?
+    private var scopeId: UUID?
+    private let sendSignallingMessage: (SignallingMessages) -> Void
+    private let webrtcPeerFactory: (_ workerId: UUID, _ rtcPeerConnection: RTCPeerConnection, _ connectionType: WebRTCConnectionType) -> WebRTCPeer
     private let iceServers: [String]
 
-    init(workerId: String? = nil,
-         scopeId: String? = nil,
+    init(workerId: UUID? = nil,
+         scopeId: UUID? = nil,
          iceServers: [String] = ["stun:stun.l.google.com:19302",
          "stun:stun1.l.google.com:19302",
          "stun:stun2.l.google.com:19302",
          "stun:stun3.l.google.com:19302",
          "stun:stun4.l.google.com:19302"],
-         webRTCPeerFactory: @escaping (_ workerId: String, _ rtcPeerConnection: RTCPeerConnection, _ connectionType: WebRTCConnectionType) -> WebRTCPeer = WebRTCPeer.init,
-         sendSignallingMessage: @escaping (SignallingMessageRequest) -> Void) {
+         webRTCPeerFactory: @escaping (_ workerId: UUID, _ rtcPeerConnection: RTCPeerConnection, _ connectionType: WebRTCConnectionType) -> WebRTCPeer = WebRTCPeer.init,
+         sendSignallingMessage: @escaping (SignallingMessages) -> Void) {
 
         self.workerId = workerId
         self.scopeId = scopeId
@@ -81,7 +64,7 @@ class WebRTCClient {
 
     }
 
-    func start(workerId: String? = nil, scopeId: String? = nil) {
+    func start(workerId: UUID? = nil, scopeId: UUID? = nil) {
 
         if let workerId = workerId,
             let scopeId = scopeId {
@@ -103,68 +86,67 @@ class WebRTCClient {
         self.webRTCPeers.removeAll()
     }
 
-    func received(_ signallingMessage: SignallingMessageResponse) {
+    func removePeer(workerUUID: UUID) {
+        self.webRTCPeers[workerUUID]?.rtcDataChannel?.close()
+        self.webRTCPeers[workerUUID] = nil
+    }
+
+    func received(_ signallingMessage: SignallingMessages) {
 
         switch signallingMessage {
 
-        case .newPeerReceived(let workerIdToInvite):
+        case .joinRoom(let workerUUIDToInvite, _):
 
-            if let uuid = UUID(uuidString: workerIdToInvite),
-               let currentWorkerId = self.workerId,
+            if  let currentWorkerId = self.workerId,
                let scopeId = self.scopeId {
 
                 let (peerConnection, dataChannel) = RTCPeerConnection.makeDefaultRTCConnection(withIceServers: iceServers, shouldCreateDataChannel: true)
 
                 if let dataChannel = dataChannel {
 
-                    let webRTCPeer = self.webrtcPeerFactory(workerIdToInvite, peerConnection, .initiator(dataChannel))
-                    self.webRTCPeers[uuid] = webRTCPeer
+                    let webRTCPeer = self.webrtcPeerFactory(workerUUIDToInvite, peerConnection, .initiator(dataChannel))
+                    self.webRTCPeers[workerUUIDToInvite] = webRTCPeer
                     observe(webRTCPeer)
 
                     webRTCPeer.createOffer(observer: self,
                                            mediaConstraints: RTCMediaConstraints.makeDefaultMediaConstraints()) { observer, sessionDescription in
 
-                            observer.sendSignallingMessage(.sendOffer(workerId: currentWorkerId,
-                                                                  scopeId: scopeId,
-                                                                  receiverId: workerIdToInvite,
-                                                                  remoteDescription: sessionDescription))
+                            observer.sendSignallingMessage(.webRTCInternalMessage(.sdpOffer(workerId: currentWorkerId, scopeId: scopeId, toId: workerUUIDToInvite, sdp: sessionDescription)))
                     }
 
                 }
             }
 
-        case .offerReceived(let offerSenderId, let remoteSessionDescription):
-            if let uuid = UUID(uuidString: offerSenderId),
-               let currentWorkerId = self.workerId,
-               let scopeId = self.scopeId {
+        case .webRTCPeerLeft(let peerWorkerUUID, _):
 
-                    let (peerConnection, _) = RTCPeerConnection.makeDefaultRTCConnection(withIceServers: iceServers, shouldCreateDataChannel: false)
-                    let webRTCPeer = self.webrtcPeerFactory(offerSenderId, peerConnection, .receiver)
-                    self.webRTCPeers[uuid] = webRTCPeer
-                    observe(webRTCPeer)
+            self.removePeer(workerUUID: peerWorkerUUID)
 
-                    webRTCPeer.receivedOffer(observer: self,
-                                             with: remoteSessionDescription) { observer, sessionDescription in
+        case .webRTCInternalMessage(let webrtcInternalMessage):
 
-                        observer.sendSignallingMessage(.sendAnswer(workerId: currentWorkerId,
-                                                               scopeId: scopeId,
-                                                               receiverId: offerSenderId,
-                                                               remoteDescription: sessionDescription))
-                }
-            }
-        case .answerReceived(let senderId, let sessionDescription):
-            if let uuid = UUID(uuidString: senderId) {
+            switch webrtcInternalMessage {
 
-                self.webRTCPeers[uuid]?.receivedAnswer(with: sessionDescription)
-            }
-        case .iceCandidateReceived(let senderId, let iceCandidate):
-            if let uuid = UUID(uuidString: senderId) {
+            case .sdpOffer(let offerSenderUUID, _, _, sdp: let remoteSessionDescription):
 
-                self.webRTCPeers[uuid]?.add(iceCandidate)
+                if let currentWorkerId = self.workerId,
+                   let scopeId = self.scopeId {
 
+                        let (peerConnection, _) = RTCPeerConnection.makeDefaultRTCConnection(withIceServers: iceServers, shouldCreateDataChannel: false)
+                        let webRTCPeer = self.webrtcPeerFactory(offerSenderUUID, peerConnection, .receiver)
+                        self.webRTCPeers[offerSenderUUID] = webRTCPeer
+                        observe(webRTCPeer)
+
+                        webRTCPeer.receivedOffer(observer: self,
+                                                 with: remoteSessionDescription) { observer, sessionDescription in
+
+                            observer.sendSignallingMessage(.webRTCInternalMessage(.sdpAnswer(workerId: currentWorkerId, scopeId: scopeId, toId: offerSenderUUID, sdp: sessionDescription)))
+                        }
+                    }
+            case .sdpAnswer(let answerSenderUUID, _, _, let sessionDescription):
+                self.webRTCPeers[answerSenderUUID]?.receivedAnswer(with: sessionDescription)
+            case .iceCandidate(let candidateSenderUUID, _, _, let iceCandidate):
+                self.webRTCPeers[candidateSenderUUID]?.add(iceCandidate)
             }
         }
-
     }
 
     private func observe(_ webRTCPeer: WebRTCPeer) {
@@ -182,10 +164,10 @@ class WebRTCClient {
             if let currentWorkerId = observer.workerId,
                 let scopeId = observer.scopeId {
 
-                observer.sendSignallingMessage(.sendIceCandidate(workerId: currentWorkerId,
-                                                                 scopeId: scopeId,
-                                                                 receiverId: receiverId,
-                                                                 iceCandidate: iceCandidate))
+                observer.sendSignallingMessage(.webRTCInternalMessage(.iceCandidate(workerId: currentWorkerId,
+                                                                                    scopeId: scopeId,
+                                                                                    toId: receiverId,
+                                                                                    sdp: iceCandidate)))
 
             }
 

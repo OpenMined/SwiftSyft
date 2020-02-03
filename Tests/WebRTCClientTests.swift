@@ -9,7 +9,7 @@ class MockWebRTCPeer: WebRTCPeer {
     var createOfferCalled = false
     var addIceCandidateCalled = false
 
-    init(workerId: String) {
+    init(workerId: UUID) {
 
         // Create stub RTCPeerFunction
         let constraints = RTCMediaConstraints(mandatoryConstraints: nil,
@@ -44,6 +44,10 @@ class MockWebRTCPeer: WebRTCPeer {
 
 class WebRTCClientTests: XCTestCase {
 
+    private let workerUUID: UUID = UUID(uuidString: "1B9D6BCD-BBFD-4B2D-9B5D-AB8DFBBD4BED")!
+    private let scopeUUID: UUID = UUID(uuidString: "F0BE538D-E185-47CC-AC68-27EC26088BA6")!
+    private let peerWorkerUUID: UUID = UUID(uuidString: "66432D2C-7057-4EC5-B62B-2DDC38517E6B")!
+
     override func setUp() {
         super.setUp()
     }
@@ -52,14 +56,14 @@ class WebRTCClientTests: XCTestCase {
 
         var signallingFunctionCalled = false
 
-        let webRTCClient = WebRTCClient(workerId: "123", scopeId: "456") { message in
+        let webRTCClient = WebRTCClient(workerId: workerUUID, scopeId: scopeUUID) { message in
 
             signallingFunctionCalled = true
 
             switch message {
-            case .joinRoom(let workerId, let scopeId):
-                XCTAssertEqual(workerId, "123")
-                XCTAssertEqual(scopeId, "456")
+            case .joinRoom(let workerIdToTest, let scopeIdToTest):
+                XCTAssertEqual(workerIdToTest, self.workerUUID)
+                XCTAssertEqual(scopeIdToTest, self.scopeUUID)
             default:
                 XCTFail("Incorrect message sent")
             }
@@ -75,9 +79,8 @@ class WebRTCClientTests: XCTestCase {
 
         var signallingFunctionCalled = false
         var mockWebRTCPeer: MockWebRTCPeer!
-        let testWorkerId = UUID().uuidString
 
-        let webRTCClient = WebRTCClient(workerId: "123", scopeId: "456", webRTCPeerFactory: { workerId, _, _ in
+        let webRTCClient = WebRTCClient(workerId: workerUUID, scopeId: scopeUUID, webRTCPeerFactory: { workerId, _, _ in
 
             mockWebRTCPeer = MockWebRTCPeer(workerId: workerId)
             return mockWebRTCPeer
@@ -87,16 +90,21 @@ class WebRTCClientTests: XCTestCase {
             signallingFunctionCalled = true
 
             switch message {
-            case .sendOffer(let senderId, let scopeId, let receiverId, _):
-                XCTAssertEqual(senderId, "123")
-                XCTAssertEqual(scopeId, "456")
-                XCTAssertEqual(receiverId, testWorkerId)
+            case .webRTCInternalMessage(let webrtCInternalMessage):
+                switch webrtCInternalMessage {
+                case .sdpOffer(let senderUUIDToTest, let scopeUUIDToTest, let peerWorkerUUIDToTest, _):
+                    XCTAssertEqual(senderUUIDToTest, self.workerUUID)
+                    XCTAssertEqual(scopeUUIDToTest, self.scopeUUID)
+                    XCTAssertEqual(peerWorkerUUIDToTest, self.peerWorkerUUID)
+                default:
+                    XCTFail()
+                }
             default:
                 XCTFail()
             }
         })
 
-        webRTCClient.received(.newPeerReceived(workerId: testWorkerId))
+        webRTCClient.received(.joinRoom(workerId: self.peerWorkerUUID, scopeId: scopeUUID))
 
         XCTAssertTrue(signallingFunctionCalled)
         XCTAssertTrue(mockWebRTCPeer.createOfferCalled)
@@ -107,9 +115,8 @@ class WebRTCClientTests: XCTestCase {
 
         var signallingFunctionCalled = false
         var mockWebRTCPeer: MockWebRTCPeer!
-        let testWorkerId = UUID().uuidString
 
-        let webRTCClient = WebRTCClient(workerId: "123", scopeId: "456", webRTCPeerFactory: { workerId, _, _ in
+        let webRTCClient = WebRTCClient(workerId: self.workerUUID, scopeId: self.scopeUUID, webRTCPeerFactory: { workerId, _, _ in
 
             mockWebRTCPeer = MockWebRTCPeer(workerId: workerId)
             return mockWebRTCPeer
@@ -119,16 +126,24 @@ class WebRTCClientTests: XCTestCase {
             signallingFunctionCalled = true
 
             switch message {
-            case .sendAnswer(let senderId, let scopeId, let receiverId, _):
-                XCTAssertEqual(senderId, "123")
-                XCTAssertEqual(scopeId, "456")
-                XCTAssertEqual(receiverId, testWorkerId)
+            case .webRTCInternalMessage(let webrtCInternalMessage):
+                switch webrtCInternalMessage {
+                case .sdpAnswer(let senderUUIDToTest, let scopeUUIDToTest, let peerWorkerUUIDToTest, _):
+                    XCTAssertEqual(senderUUIDToTest, self.workerUUID)
+                    XCTAssertEqual(scopeUUIDToTest, self.scopeUUID)
+                    XCTAssertEqual(peerWorkerUUIDToTest, self.peerWorkerUUID)
+                default:
+                    XCTFail()
+                }
             default:
                 XCTFail()
             }
         })
 
-        webRTCClient.received(.offerReceived(senderId: testWorkerId, remoteDescription: RTCSessionDescription(type: .offer, sdp: "sdp")))
+        webRTCClient.received(.webRTCInternalMessage(.sdpOffer(workerId: self.peerWorkerUUID,
+                                                               scopeId: self.scopeUUID,
+                                                               toId: self.workerUUID,
+                                                               sdp: RTCSessionDescription(type: .offer, sdp: "sdp"))))
 
         XCTAssertTrue(signallingFunctionCalled)
         XCTAssertTrue(mockWebRTCPeer.receivedOfferCalled)
@@ -139,11 +154,10 @@ class WebRTCClientTests: XCTestCase {
 
         var signallingFunctionCalled = false
         var mockWebRTCPeer: MockWebRTCPeer!
-        let testWorkerId = UUID().uuidString
 
-        let webRTCClient = WebRTCClient(workerId: "123", scopeId: "456", webRTCPeerFactory: { workerId, _, _ in
+        let webRTCClient = WebRTCClient(workerId: self.workerUUID, scopeId: self.scopeUUID, webRTCPeerFactory: { workerId, _, _ in
 
-            mockWebRTCPeer = MockWebRTCPeer(workerId: workerId)
+            mockWebRTCPeer = MockWebRTCPeer(workerId: self.peerWorkerUUID)
             return mockWebRTCPeer
 
         }, sendSignallingMessage: { _ in
@@ -152,8 +166,8 @@ class WebRTCClientTests: XCTestCase {
 
         })
 
-        webRTCClient.received(.newPeerReceived(workerId: testWorkerId))
-        webRTCClient.received(.answerReceived(senderId: testWorkerId, remoteDescription: RTCSessionDescription(type: .answer, sdp: "sdp")))
+        webRTCClient.received(.joinRoom(workerId: self.peerWorkerUUID, scopeId: scopeUUID))
+        webRTCClient.received(.webRTCInternalMessage(.sdpAnswer(workerId: self.peerWorkerUUID, scopeId: self.scopeUUID, toId: self.workerUUID, sdp: RTCSessionDescription(type: .answer, sdp: "sdp"))))
 
         XCTAssertTrue(signallingFunctionCalled)
         XCTAssertTrue(mockWebRTCPeer.receivedAnswerCalled)
@@ -164,9 +178,8 @@ class WebRTCClientTests: XCTestCase {
 
         var signallingFunctionCalled = false
         var mockWebRTCPeer: MockWebRTCPeer!
-        let testWorkerId = UUID().uuidString
 
-        let webRTCClient = WebRTCClient(workerId: "123", scopeId: "456", webRTCPeerFactory: { workerId, _, _ in
+        let webRTCClient = WebRTCClient(workerId: self.workerUUID, scopeId: self.scopeUUID, webRTCPeerFactory: { workerId, _, _ in
 
             mockWebRTCPeer = MockWebRTCPeer(workerId: workerId)
             return mockWebRTCPeer
@@ -177,8 +190,11 @@ class WebRTCClientTests: XCTestCase {
 
         })
 
-        webRTCClient.received(.newPeerReceived(workerId: testWorkerId))
-        webRTCClient.received(.iceCandidateReceived(senderId: testWorkerId, iceCandidate: RTCIceCandidate(sdp: "sdp", sdpMLineIndex: 12, sdpMid: nil)))
+        webRTCClient.received(.joinRoom(workerId: self.peerWorkerUUID, scopeId: scopeUUID))
+        webRTCClient.received(.webRTCInternalMessage(.iceCandidate(workerId: self.peerWorkerUUID,
+                                                                   scopeId: self.scopeUUID,
+                                                                   toId: self.workerUUID,
+                                                                   sdp: RTCIceCandidate(sdp: "sdp", sdpMLineIndex: -1, sdpMid: nil))))
 
         XCTAssertTrue(signallingFunctionCalled)
         XCTAssertTrue(mockWebRTCPeer.addIceCandidateCalled)
@@ -190,10 +206,9 @@ class WebRTCClientTests: XCTestCase {
 
         var signallingFunctionCalled = false
         var mockWebRTCPeer: MockWebRTCPeer!
-        let testWorkerId = UUID().uuidString
         var signallingMessageCount = 0
 
-        let webRTCClient = WebRTCClient(workerId: "123", scopeId: "456", webRTCPeerFactory: { workerId, _, _ in
+        let webRTCClient = WebRTCClient(workerId: self.workerUUID, scopeId: self.scopeUUID, webRTCPeerFactory: { workerId, _, _ in
 
             mockWebRTCPeer = MockWebRTCPeer(workerId: workerId)
             return mockWebRTCPeer
@@ -210,17 +225,22 @@ class WebRTCClientTests: XCTestCase {
             signallingFunctionCalled = true
 
             switch message {
-            case .sendIceCandidate(let senderId, let scopeId, let receiverId, _):
-                XCTAssertEqual(senderId, "123")
-                XCTAssertEqual(scopeId, "456")
-                XCTAssertEqual(receiverId, testWorkerId)
+            case .webRTCInternalMessage(let webRTCInternalMessage):
+                switch webRTCInternalMessage {
+                case .iceCandidate(let senderUUID, let scopeUUID, let receiverUUID, _):
+                    XCTAssertEqual(senderUUID, self.workerUUID)
+                    XCTAssertEqual(scopeUUID, self.scopeUUID)
+                    XCTAssertEqual(receiverUUID, self.peerWorkerUUID)
+                default:
+                    XCTFail()
+                }
             default:
                 XCTFail()
             }
         })
 
         // Create new peer first
-        webRTCClient.received(.newPeerReceived(workerId: testWorkerId))
+        webRTCClient.received(.joinRoom(workerId: self.peerWorkerUUID, scopeId: scopeUUID))
 
         // Trigger peer local ice candidate observer
         let (rtcPeerConnection, _) = RTCPeerConnection.makeDefaultRTCConnection(withIceServers: [], shouldCreateDataChannel: false)

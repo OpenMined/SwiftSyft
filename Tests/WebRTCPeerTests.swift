@@ -7,6 +7,8 @@ class WebRTCPeerTests: XCTestCase {
     var webRTCPeer: WebRTCPeer!
     var rtcPeerConnection: RTCPeerConnection!
     var dataChannel: RTCDataChannel!
+
+    private let workerUUID: UUID = UUID(uuidString: "1B9D6BCD-BBFD-4B2D-9B5D-AB8DFBBD4BED")!
     
     override func setUp() {
         super.setUp()
@@ -27,7 +29,7 @@ class WebRTCPeerTests: XCTestCase {
         var observerCalled = false
         var receivedIceCandidate: RTCIceCandidate?
 
-        self.webRTCPeer = WebRTCPeer(workerId: "1234", rtcPeerConnection: self.rtcPeerConnection, connectionType: .initiator(self.dataChannel))
+        self.webRTCPeer = WebRTCPeer(workerId: self.workerUUID, rtcPeerConnection: self.rtcPeerConnection, connectionType: .initiator(self.dataChannel))
 
         self.webRTCPeer.addDiscoveredLocalIceCandidateObserver(self) { (_, _, iceCandidate) in
             observerCalled = true
@@ -48,7 +50,7 @@ class WebRTCPeerTests: XCTestCase {
         var observerCalled = false
         var dataReceived: Data?
 
-        self.webRTCPeer = WebRTCPeer(workerId: "1234", rtcPeerConnection: self.rtcPeerConnection, connectionType: .initiator(self.dataChannel))
+        self.webRTCPeer = WebRTCPeer(workerId: self.workerUUID, rtcPeerConnection: self.rtcPeerConnection, connectionType: .initiator(self.dataChannel))
 
         self.webRTCPeer.addReceivedDataChannelMessageObserver(self) { (_, data) in
 
@@ -70,7 +72,7 @@ class WebRTCPeerTests: XCTestCase {
         var observerCalled = false
         var dataReceived: Data?
 
-        self.webRTCPeer = WebRTCPeer(workerId: "1234", rtcPeerConnection: self.rtcPeerConnection, connectionType: .receiver)
+        self.webRTCPeer = WebRTCPeer(workerId: self.workerUUID, rtcPeerConnection: self.rtcPeerConnection, connectionType: .receiver)
 
         self.webRTCPeer.addReceivedDataChannelMessageObserver(self) { (_, data) in
 
