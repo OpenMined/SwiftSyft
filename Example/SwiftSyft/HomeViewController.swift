@@ -31,8 +31,6 @@ enum StaticHomeScreenStrings {
 class HomeViewController: UIViewController, UITextViewDelegate {
     var socket: SocketClientProtocol!
     var isConnected = false
-    var socket: WebSocket!
-    let server = WebSocketServer()
 
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var headerDescriptionLabel: UILabel!
