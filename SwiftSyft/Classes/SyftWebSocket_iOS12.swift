@@ -10,7 +10,7 @@ import Starscream
 
 public class SyftWebSocketIOS12: SocketClientProtocol, WebSocketDelegate {
     public weak var delegate: SocketClientDelegate?
-    var socket: WebSocket!
+    let socket: WebSocket
 
     // MARK: - WebSocketDelegate
     public func didReceive(event: WebSocketEvent, client: WebSocket) {
@@ -19,7 +19,7 @@ public class SyftWebSocketIOS12: SocketClientProtocol, WebSocketDelegate {
             self.delegate?.didConnect(self)
             print("websocket is connected: \(headers)")
         case .disconnected(let reason, let code):
-            disconnect()
+            self.delegate?.didDisconnect(self)
             print("websocket is disconnected: \(reason) with code: \(code)")
         case .text(let string):
             sendText(text: string)
@@ -51,7 +51,6 @@ public class SyftWebSocketIOS12: SocketClientProtocol, WebSocketDelegate {
         guard url.absoluteString.hasPrefix("wss") else {
             preconditionFailure("Path for socket server shoud start with wss://")
         }
-
         socket = WebSocket(request: URLRequest(url: url))
         socket.delegate = self
     }
@@ -66,10 +65,10 @@ public class SyftWebSocketIOS12: SocketClientProtocol, WebSocketDelegate {
     }
 
     public func send(data: Data) {
-        //
+        socket.write(data: data)
     }
 
     public func sendText(text: String) {
-        //
+        socket.write(string: text)
     }
 }
