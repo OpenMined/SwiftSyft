@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftSyft
 
 enum StaticHomeScreenStrings {
     static let headerDescription = "syft.js/grid.js testing"
@@ -19,14 +20,16 @@ enum StaticHomeScreenStrings {
     static let openMined = "OpenMined"
     static let openMinedKey = "@OpenMined@"
     static let openMinedURL = "https://github.com/OpenMined/grid.js"
-    static let socketURL = "wss://localhost:3000"
+    static let socketURL = "ws://localhost:3000/" // "wss://localhost:3000/"
     static let protocolID = "50801316202"
     static let connectButtonText = "Connect to grid.js server"
+    static let disconnectButtonText = "Disconnect grid.js server"
     static let messagePlaceholder = "Enter your message ..."
     static let sendButtonText = "Send message"
 }
 
 class HomeViewController: UIViewController, UITextViewDelegate {
+    var socket: SocketClientProtocol!
     var isConnected = false
 
     @IBOutlet weak var scrollView: UIScrollView!
@@ -61,19 +64,12 @@ class HomeViewController: UIViewController, UITextViewDelegate {
         socketURLTextField.text = StaticHomeScreenStrings.socketURL
         protocolIDTextField.text = StaticHomeScreenStrings.protocolID
 
-        connectButton.titleLabel?.text = StaticHomeScreenStrings.connectButtonText
         messageTextView.text = StaticHomeScreenStrings.messagePlaceholder
         messageTextView.textColor = UIColor.lightGray
         messageTextView.delegate = self
         sendButton.titleLabel?.text = StaticHomeScreenStrings.sendButtonText
 
-        if isConnected {
-            messageTextView.isHidden = false
-            sendButton.isHidden = false
-        } else {
-            messageTextView.isHidden = true
-            sendButton.isHidden = true
-        }
+        showServerConnectedUI(isConnected)
     }
 
     override func didReceiveMemoryWarning() {
@@ -81,29 +77,59 @@ class HomeViewController: UIViewController, UITextViewDelegate {
         // Dispose of any resources that can be recreated.
     }
 
-    @IBAction func connectPressed(_ sender: Any) {
-        guard !socketURLTextField.text!.isEmpty else {
-            print("Socket URL is empty!")
-            return
-        }
-        guard !protocolIDTextField.text!.isEmpty else {
-            print("Protocol ID is empty!")
-            return
-        }
-        print("Socket URL: \(socketURLTextField.text!), Protocol ID: \(protocolIDTextField.text!)")
-
-        isConnected = true
-        messageTextView.isHidden = false
-        sendButton.isHidden = false
+    deinit {
+      socket.disconnect()
+      socket.delegate = nil
     }
+
+    @IBAction func connectPressed(_ sender: UIButton) {
+        if isConnected {
+            socket.disconnect()
+        } else {
+            guard !socketURLTextField.text!.isEmpty else {
+                print("Socket URL is empty!")
+                return
+            }
+            guard !protocolIDTextField.text!.isEmpty else {
+                print("Protocol ID is empty!")
+                return
+            }
+
+            var request = URLRequest(url: URL(string: StaticHomeScreenStrings.socketURL)!)
+            request.timeoutInterval = 5
+
+            if #available(iOS 13, *) {
+                //socket = SyftWebSocketIOS13(url: request.url!,
+                //                       pingInterval: request.timeoutInterval)
+            } else {
+                socket = SyftWebSocketIOS12(url: request.url!,
+                                     pingInterval: request.timeoutInterval)
+            }
+            socket.delegate = self
+            socket.connect()
+        }
+    }
+
     @IBAction func sendPressed(_ sender: Any) {
         guard !messageTextView.text!.isEmpty else {
             print("Message is empty!")
             return
         }
-        print("Message: \(messageTextView.text!)")
+        socket.sendText(text: messageTextView.text)
+        messageTextView.text = StaticHomeScreenStrings.messagePlaceholder
+        messageTextView.textColor = UIColor.lightGray
     }
 
+    func showServerConnectedUI(_ isConnected: Bool) {
+        let hideUIElements = !isConnected
+        messageTextView.isHidden = hideUIElements
+        sendButton.isHidden = hideUIElements
+        connectButton.titleLabel?.text = isConnected ?
+            StaticHomeScreenStrings.disconnectButtonText :
+            StaticHomeScreenStrings.connectButtonText
+    }
+
+    // MARK: - TextView behavior
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == UIColor.lightGray {
             textView.text = nil
@@ -143,8 +169,10 @@ class HomeViewController: UIViewController, UITextViewDelegate {
 
             var contentInset: UIEdgeInsets = self.scrollView.contentInset
             contentInset.bottom = keyboardFrame.size.height
-            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0,
-                                                   bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom, right: 0)
+            scrollView.contentInset = UIEdgeInsets(top: 0,
+                                                   left: 0,
+                                                   bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom,
+                                                   right: 0)
         }
 
         messageTextView.scrollIndicatorInsets = messageTextView.contentInset
@@ -162,5 +190,22 @@ extension NSAttributedString {
 
         mutableAttr.replaceCharacters(in: placeholderRange, with: linkAttr)
         return mutableAttr
+    }
+}
+
+// MARK: - SocketClientDelegate
+extension HomeViewController: SocketClientDelegate {
+    func didConnect(_ socketClient: SocketClientProtocol) {
+        isConnected = true
+        showServerConnectedUI(isConnected)
+    }
+
+    func didDisconnect(_ socketClient: SocketClientProtocol) {
+        isConnected = false
+        showServerConnectedUI(isConnected)
+    }
+
+    func didReceive(socketMessage result: Result<Data, Error>) {
+        //
     }
 }
