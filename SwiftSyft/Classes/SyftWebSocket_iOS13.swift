@@ -39,7 +39,9 @@ class SyftWebSocketIOS13: NSObject, SocketClientProtocol, URLSessionWebSocketDel
         webSocketTask.receive { result in
             switch result {
             case .failure(let error):
+                #if DEBUG
                 print("websocket encountered an error: \(error)")
+                #endif
             case .success(let message):
                 switch message {
                 case .string(let text):
@@ -47,10 +49,14 @@ class SyftWebSocketIOS13: NSObject, SocketClientProtocol, URLSessionWebSocketDel
                         break
                     }
                     self.delegate?.didReceive(socketMessage: .success(data))
+                    #if DEBUG
                     print("Received text: \(text)")
+                    #endif
                 case .data(let data):
                     self.delegate?.didReceive(socketMessage: .success(data))
+                    #if DEBUG
                     print("Received data: \(data.count)")
+                    #endif
                 @unknown default:
                     fatalError()
                 }
@@ -61,21 +67,27 @@ class SyftWebSocketIOS13: NSObject, SocketClientProtocol, URLSessionWebSocketDel
     func send(text: String) {
         webSocketTask.send(URLSessionWebSocketTask.Message.string(text)) { error in
             if let error = error {
+                #if DEBUG
                 print("websocket encountered an error: \(error)")
+                #endif
             }
         }
     }
     func sendText(text: String) {
         webSocketTask.send(URLSessionWebSocketTask.Message.string(text)) { error in
             if let error = error {
+                #if DEBUG
                 print("websocket encountered an error: \(error)")
+                #endif
             }
         }
     }
     func send(data: Data) {
         webSocketTask.send(URLSessionWebSocketTask.Message.data(data)) { error in
             if let error = error {
+                #if DEBUG
                 print("websocket encountered an error: \(error)")
+                #endif
             }
         }
     }
