@@ -60,7 +60,34 @@ class WebRTCPeer: NSObject {
         iceCandidates.append(remoteIceCandidate)
     }
 
-    func setRemoteDescription(_ remoteSessionDescription: RTCSessionDescription) {
+    func createOffer<T: AnyObject>(observer: T, mediaConstraints: RTCMediaConstraints, completion: @escaping (T, RTCSessionDescription) -> Void) {
+
+        self.rtcPeerConnection.offer(for: mediaConstraints) { [weak self] sessionDescription, error in
+
+            if let sessionDescription = sessionDescription {
+
+                self?.rtcPeerConnection.setLocalDescription(sessionDescription, completionHandler: { [weak observer] error in
+
+                    guard error != nil else {
+                        debugPrint(error!.localizedDescription)
+                        return
+                    }
+
+                    guard let observer = observer else {
+                        return
+                    }
+
+                    completion(observer, sessionDescription)
+
+                })
+
+            }
+
+        }
+
+    }
+
+    func receivedAnswer(with remoteSessionDescription: RTCSessionDescription) {
         self.rtcPeerConnection.setRemoteDescription(remoteSessionDescription) { error in
             if let error = error {
                 debugPrint(error.localizedDescription)
@@ -68,8 +95,45 @@ class WebRTCPeer: NSObject {
         }
     }
 
+    func receivedOffer<T: AnyObject>(observer: T,
+                                     with remoteSessionDescription: RTCSessionDescription,
+                                     completion: @escaping (T, RTCSessionDescription) -> Void) {
+
+        let constraints = RTCMediaConstraints(mandatoryConstraints: nil,
+                                             optionalConstraints: nil)
+
+        self.rtcPeerConnection.setRemoteDescription(remoteSessionDescription, completionHandler: { [weak self] error in
+            guard error == nil else {
+                return
+            }
+
+            self?.rtcPeerConnection.answer(for: constraints,
+                                           completionHandler: { [weak self] localSessionDescription, error in
+                guard let localSessionDescription = localSessionDescription else {
+                    return
+                }
+
+                self?.rtcPeerConnection.setLocalDescription(localSessionDescription, completionHandler: { [weak observer] error in
+
+                    guard error != nil else {
+                        debugPrint(error!.localizedDescription)
+                        return
+                    }
+
+                    guard let observer = observer else {
+                        return
+                    }
+
+                    completion(observer, localSessionDescription)
+
+                })
+            })
+        })
+
+    }
+
     @discardableResult func addDiscoveredLocalIceCandidateObserver<T: AnyObject>(_ observer: T,
-                                                                                 closure: @escaping (T, String, RTCIceCandidate) -> Void) -> ObservationToken {
+                                                                                    closure: @escaping (T, String, RTCIceCandidate) -> Void) -> ObservationToken {
 
         let observerId = UUID()
 
@@ -90,7 +154,7 @@ class WebRTCPeer: NSObject {
     }
 
     @discardableResult func addReceivedDataChannelMessageObserver<T: AnyObject>(_ observer: T,
-                                                                                 closure: @escaping (T, Data) -> Void) -> ObservationToken {
+                                                                                   closure: @escaping (T, Data) -> Void) -> ObservationToken {
 
         let observerId = UUID()
 
