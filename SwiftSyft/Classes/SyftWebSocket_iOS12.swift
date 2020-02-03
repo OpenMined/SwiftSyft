@@ -22,10 +22,13 @@ public class SyftWebSocketIOS12: SocketClientProtocol, WebSocketDelegate {
             self.delegate?.didDisconnect(self)
             print("websocket is disconnected: \(reason) with code: \(code)")
         case .text(let string):
-            sendText(text: string)
+            guard let data = string.data(using: .utf8) else {
+                break
+            }
+            self.delegate?.didReceive(socketMessage: .success(data))
             print("Received text: \(string)")
         case .binary(let data):
-            send(data: data)
+            self.delegate?.didReceive(socketMessage: .success(data))
             print("Received data: \(data.count)")
         case .cancelled:
             disconnect()
