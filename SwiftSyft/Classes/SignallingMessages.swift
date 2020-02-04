@@ -140,7 +140,7 @@ extension SignallingMessages: Codable {
 
             let dataContainer = try container.nestedContainer(keyedBy: DataPayloadCodingKeys.self, forKey: .data)
             let workerId = try dataContainer.decode(String.self, forKey: .workerId)
-            let scopeId = try dataContainer.decode(String.self, forKey: .workerId)
+            let scopeId = try dataContainer.decode(String.self, forKey: .scopeId)
             if let workerUUID = UUID(uuidString: workerId),
                 let scopeUUID = UUID(uuidString: scopeId) {
                 self = .joinRoom(workerId: workerUUID, scopeId: scopeUUID)
