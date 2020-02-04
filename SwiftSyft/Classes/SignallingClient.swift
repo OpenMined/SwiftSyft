@@ -4,13 +4,15 @@ class SignallingClient {
 
     private var socketClient: SocketClientProtocol
     private let pingInterval: Double
+    private let timerProvider: Timer.Type
     private var timer: Timer?
     weak var delegate: SignallingClientDelegate?
 
     init(url: URL,
-         pingInterval: Double, socketClientFactory: (_ url: URL, _ pingInterval: Double) -> SocketClientProtocol  = SignallingClient.defaultSocketClientFactory) {
+         pingInterval: Double, timerProvider: Timer.Type = Timer.self, socketClientFactory: (_ url: URL, _ pingInterval: Double) -> SocketClientProtocol  = SignallingClient.defaultSocketClientFactory) {
         self.socketClient = socketClientFactory(url, pingInterval)
         self.pingInterval = pingInterval
+        self.timerProvider = timerProvider
         self.socketClient.delegate = self
     }
 
@@ -43,7 +45,7 @@ extension SignallingClient: SocketClientDelegate {
 
     func didConnect(_ socketClient: SocketClientProtocol) {
         guard timer == nil else { return }
-        timer = Timer.scheduledTimer(withTimeInterval: self.pingInterval, repeats: true, block: { [weak self] _ in
+        timer = self.timerProvider.scheduledTimer(withTimeInterval: self.pingInterval, repeats: true, block: { [weak self] _ in
 
             let keepAliveMessage = ["type": "socket-ping"]
             do {
