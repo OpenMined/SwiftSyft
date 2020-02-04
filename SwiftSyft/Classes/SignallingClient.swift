@@ -3,14 +3,20 @@ import Foundation
 class SignallingClient {
 
     private var socketClient: SocketClientProtocol
+    private let pingInterval: Double
+    private var timer: Timer?
     weak var delegate: SignallingClientDelegate?
 
     init(url: URL,
          pingInterval: Double, socketClientFactory: (_ url: URL, _ pingInterval: Double) -> SocketClientProtocol  = SignallingClient.defaultSocketClientFactory) {
         self.socketClient = socketClientFactory(url, pingInterval)
+        self.pingInterval = pingInterval
         self.socketClient.delegate = self
     }
 
+    deinit {
+        timer?.invalidate()
+    }
 }
 
 extension SignallingClient: SignallingClientProtocol {
@@ -36,11 +42,22 @@ extension SignallingClient: SignallingClientProtocol {
 extension SignallingClient: SocketClientDelegate {
 
     func didConnect(_ socketClient: SocketClientProtocol) {
-        // TODO: Start timer
+        guard timer == nil else { return }
+        timer = Timer.scheduledTimer(withTimeInterval: self.pingInterval, repeats: true, block: { [weak self] _ in
+
+            let keepAliveMessage = ["type": "socket-ping"]
+            do {
+                let data = try JSONSerialization.data(withJSONObject: keepAliveMessage, options: .sortedKeys)
+                self?.socketClient.send(data: data)
+            } catch {
+                debugPrint("Error sending keep alive message")
+            }
+        })
     }
 
     func didDisconnect(_ socketClient: SocketClientProtocol) {
-        // TODO: Stop timer
+        self.timer?.invalidate()
+        self.timer = nil
     }
 
     func didReceive(socketMessage result: Result<Data, Error>) {
