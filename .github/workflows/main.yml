@@ -1,0 +1,26 @@
+name: SwiftSyft CI
+
+on: [pull_request]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+    env: 
+      DEVELOPER_DIR: /Applications/Xcode_11.3.1.app/Contents/Developer
+    strategy:
+      matrix:
+        destination: ["generic/platform=iOS"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Force Xcode 11
+        run: sudo xcode-select -switch /Applications/Xcode_11.3.app  
+      - name: Install Dependencies
+        run: |
+          cd Example
+          pod repo update
+          pod install
+        shell: bash    
+      - name: Build SwiftSyft project - ${{ matrix.destination }}
+        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme SwiftSyft-Example -workspace Example/SwiftSyft.xcworkspace -destination ${{ matrix.destination }} CODE_SIGNING_ALLOWED=NO IPHONEOS_DEPLOYMENT_TARGET=12.0 | xcpretty
