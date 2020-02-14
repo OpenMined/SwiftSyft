@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/OpenMined/SwiftSyft.git', :tag => s.version.to_s }
 
   s.pod_target_xcconfig = { 'ENABLE_BITCODE' => 'NO' }
-  s.ios.deployment_target = '12.0'
+  s.ios.deployment_target = '13.0'
   s.swift_versions = '5.1.3'
 
   s.source_files = 'SwiftSyft/**/*'
