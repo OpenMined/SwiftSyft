@@ -8,7 +8,7 @@
 import Foundation
 
 @available(iOS 13.0, *)
-public class SyftWebSocketIOS13: NSObject, SocketClientProtocol, URLSessionWebSocketDelegate {
+public class SyftWebSocket: NSObject, SocketClientProtocol, URLSessionWebSocketDelegate {
 
     public weak var delegate: SocketClientDelegate?
     var webSocketTask: URLSessionWebSocketTask!

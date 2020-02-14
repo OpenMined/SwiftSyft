@@ -98,7 +98,7 @@ class HomeViewController: UIViewController, UITextViewDelegate {
             var request = URLRequest(url: URL(string: StaticHomeScreenStrings.socketURL)!)
             request.timeoutInterval = 5
 
-            socket = SyftWebSocketIOS13(url: request.url!,
+            socket = SyftWebSocket(url: request.url!,
                                        pingInterval: request.timeoutInterval)
             socket.delegate = self
             socket.connect()
