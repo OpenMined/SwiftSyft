@@ -17,7 +17,6 @@ PODS:
     - Starscream (~> 4.0.0)
 
 DEPENDENCIES:
-  - Starscream (~> 4.0.0)
   - SwiftLint (~> 0.38.0)
   - SwiftSyft (from `../`)
   - SwiftSyft/Tests (from `../`)
@@ -40,6 +39,6 @@ SPEC CHECKSUMS:
   SwiftLint: 8f5d2f903e1c9bcbc832fd16771e80a263ac6cbb
   SwiftSyft: c2269f70f2ce33aa97e11b299afd32763caaca84
 
-PODFILE CHECKSUM: 0180259d92315df30048d7b7041a1ab7714491c7
+PODFILE CHECKSUM: d57feff56204c9b17e3d724f5f1062d6296a38a3
 
 COCOAPODS: 1.8.4

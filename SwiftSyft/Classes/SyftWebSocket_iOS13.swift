@@ -8,7 +8,7 @@
 import Foundation
 
 @available(iOS 13.0, *)
-class SyftWebSocketIOS13: NSObject, SocketClientProtocol, URLSessionWebSocketDelegate {
+public class SyftWebSocketIOS13: NSObject, SocketClientProtocol, URLSessionWebSocketDelegate {
 
     public weak var delegate: SocketClientDelegate?
     var webSocketTask: URLSessionWebSocketTask!
@@ -22,20 +22,20 @@ class SyftWebSocketIOS13: NSObject, SocketClientProtocol, URLSessionWebSocketDel
         urlSession = URLSession(configuration: .default, delegate: self, delegateQueue: delegateQueue)
         webSocketTask = urlSession.webSocketTask(with: url)
     }
-    func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
+    public func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
         self.delegate?.didConnect(self)
     }
-    func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
+    public func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
         self.delegate?.didDisconnect(self)
     }
-    func connect() {
+    public func connect() {
         webSocketTask.resume()
         listen()
     }
-    func disconnect() {
+    public func disconnect() {
         webSocketTask.cancel(with: .goingAway, reason: nil)
     }
-    func listen() {
+    public func listen() {
         webSocketTask.receive { result in
             switch result {
             case .failure(let error):
@@ -64,7 +64,7 @@ class SyftWebSocketIOS13: NSObject, SocketClientProtocol, URLSessionWebSocketDel
             }
         }
     }
-    func send(text: String) {
+    public func send(text: String) {
         webSocketTask.send(URLSessionWebSocketTask.Message.string(text)) { error in
             if let error = error {
                 #if DEBUG
@@ -73,7 +73,7 @@ class SyftWebSocketIOS13: NSObject, SocketClientProtocol, URLSessionWebSocketDel
             }
         }
     }
-    func sendText(text: String) {
+    public func sendText(text: String) {
         webSocketTask.send(URLSessionWebSocketTask.Message.string(text)) { error in
             if let error = error {
                 #if DEBUG
@@ -82,7 +82,7 @@ class SyftWebSocketIOS13: NSObject, SocketClientProtocol, URLSessionWebSocketDel
             }
         }
     }
-    func send(data: Data) {
+    public func send(data: Data) {
         webSocketTask.send(URLSessionWebSocketTask.Message.data(data)) { error in
             if let error = error {
                 #if DEBUG
