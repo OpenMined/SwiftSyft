@@ -85,7 +85,7 @@ extension SignallingClient {
             preconditionFailure("Path for socket server shoud start with wss://")
         }
 
-        let socketClient = SyftWebSocketIOS13(url: url, pingInterval: pingInterval)
+        let socketClient = SyftWebSocket(url: url, pingInterval: pingInterval)
         return socketClient
 
     }
