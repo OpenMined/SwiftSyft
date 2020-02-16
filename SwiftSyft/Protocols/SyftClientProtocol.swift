@@ -9,7 +9,21 @@ import Foundation
 
 /// Describes interface for syft client that coordinates signalling and peer-to-peer connection
 protocol SyftClientProtocol {
-    var workerId: String? { get set }
-    var scopeId: String? { get set }
-    var signallingClient: SignallingClientProtocol { get set}
+
+    /// - Parameter url: PyGrid URL
+    func newJob(modelName: String, version: String) -> SyftJob
+}
+
+protocol SyftJobProtocol {
+
+    var url: URL { get }
+    var modelName: String { get }
+    var version: String { get }
+
+    /// Request to join a federated learning cycle at "federated/cycle-request" endpoint (https://github.com/OpenMined/PyGrid/issues/445)
+    func start()
+
+
+    /// Report the results of the learning cycle to PyGrid at "federated
+    func report()
 }
