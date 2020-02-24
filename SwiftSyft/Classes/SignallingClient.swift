@@ -31,11 +31,15 @@ extension SignallingClient: SignallingClientProtocol {
         self.socketClient.disconnect()
     }
 
-    func send(_ message: SignallingMessages) throws {
+    func send(_ message: SignallingMessages) {
 
-        let encoder = JSONEncoder()
-        let data = try encoder.encode(message)
-        self.socketClient.send(data: data)
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(message)
+            self.socketClient.send(data: data)
+        } catch let error {
+            debugPrint(error.localizedDescription)
+        }
 
     }
 
@@ -55,6 +59,7 @@ extension SignallingClient: SocketClientDelegate {
                 debugPrint("Error sending keep alive message")
             }
         })
+        timer?.fire()
     }
 
     func didDisconnect(_ socketClient: SocketClientProtocol) {

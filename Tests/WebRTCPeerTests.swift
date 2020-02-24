@@ -8,7 +8,7 @@ class WebRTCPeerTests: XCTestCase {
     var rtcPeerConnection: RTCPeerConnection!
     var dataChannel: RTCDataChannel!
 
-    private let workerUUID: UUID = UUID(uuidString: "1B9D6BCD-BBFD-4B2D-9B5D-AB8DFBBD4BED")!
+    private let workerUUID: UUID = UUID(uuidString: "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed")!
     
     override func setUp() {
         super.setUp()

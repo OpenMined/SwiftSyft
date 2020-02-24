@@ -27,48 +27,49 @@ extension SignallingMessages: JSONTestable { }
 class SignallingMessagesTests: XCTestCase {
 
     private let joinRoomJSON = """
-{"type":"webrtc: join-room","data":{"workerId":"1B9D6BCD-BBFD-4B2D-9B5D-AB8DFBBD4BED","scopeId":"F0BE538D-E185-47CC-AC68-27EC26088BA6"}}
+{"type":"webrtc: join-room","data":{"workerId":"1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed","scopeId":"f0be538d-e185-47cc-ac68-27ec26088ba6"}}
 """
 
     private let webrtcPeerLeftJSON = """
-{"type":"webrtc: peer-left","data":{"workerId":"1B9D6BCD-BBFD-4B2D-9B5D-AB8DFBBD4BED","scopeId":"F0BE538D-E185-47CC-AC68-27EC26088BA6"}}
+{"type":"webrtc: peer-left","data":{"workerId":"1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed","scopeId":"f0be538d-e185-47cc-ac68-27ec26088ba6"}}
 """
 
     private let webrtcOfferJSON = """
-{"type":"webrtc: internal-message","data":{"scopeId":"F0BE538D-E185-47CC-AC68-27EC26088BA6","to":"5B06F42E-EE96-43E6-A6E7-E24F5A21268B","data":"SDP_OFFER","type":"offer","workerId":"1B9D6BCD-BBFD-4B2D-9B5D-AB8DFBBD4BED"}}
+{"type":"webrtc: internal-message","data":{"scopeId":"f0be538d-e185-47cc-ac68-27ec26088ba6","to":"5b06f42e-ee96-43e6-a6e7-e24f5a21268b","data":{"sdp":"SDP_OFFER","type":"offer"},"type":"offer","workerId":"1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed"}}
 """
 
     private let webrtcAnswerJSON = """
-{"type":"webrtc: internal-message","data":{"scopeId":"F0BE538D-E185-47CC-AC68-27EC26088BA6","to":"5B06F42E-EE96-43E6-A6E7-E24F5A21268B","data":"SDP_ANSWER","type":"answer","workerId":"1B9D6BCD-BBFD-4B2D-9B5D-AB8DFBBD4BED"}}
+{"type":"webrtc: internal-message","data":{"scopeId":"f0be538d-e185-47cc-ac68-27ec26088ba6","to":"5b06f42e-ee96-43e6-a6e7-e24f5a21268b","data":{"sdp":"SDP_ANSWER","type":"offer"},"type":"answer","workerId":"1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed"}}
 """
+
     private let webrtcIceCandidateJSON = """
-{"type":"webrtc: internal-message","data":{"scopeId":"F0BE538D-E185-47CC-AC68-27EC26088BA6","to":"5B06F42E-EE96-43E6-A6E7-E24F5A21268B","data":"SDP_CANDIDATE","type":"candidate","workerId":"1B9D6BCD-BBFD-4B2D-9B5D-AB8DFBBD4BED"}}
+{"type":"webrtc: internal-message","data":{"scopeId":"f0be538d-e185-47cc-ac68-27ec26088ba6","to":"5b06f42e-ee96-43e6-a6e7-e24f5a21268b","data":{"sdpMLineIndex":-1,"candidate":"SDP_CANDIDATE"},"type":"candidate","workerId":"1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed"}}
 """
 
     func testJoinRoomJSON() {
 
-        let joinRoom = SignallingMessages.joinRoom(workerId: UUID(uuidString: "1B9D6BCD-BBFD-4B2D-9B5D-AB8DFBBD4BED")!, scopeId: UUID(uuidString: "F0BE538D-E185-47CC-AC68-27EC26088BA6")!)
+        let joinRoom = SignallingMessages.joinRoom(workerId: UUID(uuidString: "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed")!, scopeId: UUID(uuidString: "f0be538d-e185-47cc-ac68-27ec26088ba6")!)
 
         XCTAssertEqual(joinRoomJSON, joinRoom.json())
     }
 
     func testWebrtcPeerLeftJSON() {
 
-        let peerLeft = SignallingMessages.webRTCPeerLeft(workerId: UUID(uuidString: "1B9D6BCD-BBFD-4B2D-9B5D-AB8DFBBD4BED")!, scopeId: UUID(uuidString: "F0BE538D-E185-47CC-AC68-27EC26088BA6")!)
+        let peerLeft = SignallingMessages.webRTCPeerLeft(workerId: UUID(uuidString: "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed")!, scopeId: UUID(uuidString: "f0be538d-e185-47cc-ac68-27ec26088ba6")!)
 
         XCTAssertEqual(webrtcPeerLeftJSON, peerLeft.json())
     }
 
     func testWebrtcOfferJSON() {
 
-        let offerJSON = SignallingMessages.webRTCInternalMessage(.sdpOffer(workerId: UUID(uuidString: "1B9D6BCD-BBFD-4B2D-9B5D-AB8DFBBD4BED")!, scopeId: UUID(uuidString: "F0BE538D-E185-47CC-AC68-27EC26088BA6")!, toId: UUID(uuidString: "5B06F42E-EE96-43E6-A6E7-E24F5A21268B")!, sdp: RTCSessionDescription(type: .offer, sdp: "SDP_OFFER")))
+        let offerJSON = SignallingMessages.webRTCInternalMessage(.sdpOffer(workerId: UUID(uuidString: "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed")!, scopeId: UUID(uuidString: "f0be538d-e185-47cc-ac68-27ec26088ba6")!, toId: UUID(uuidString: "5b06f42e-ee96-43e6-a6e7-e24f5a21268b")!, sdp: RTCSessionDescription(type: .offer, sdp: "SDP_OFFER")))
 
         XCTAssertEqual(webrtcOfferJSON, offerJSON.json())
 
     }
 
     func testWebrtcAnswerJSON() {
-        let offerJSON = SignallingMessages.webRTCInternalMessage(.sdpAnswer(workerId: UUID(uuidString: "1B9D6BCD-BBFD-4B2D-9B5D-AB8DFBBD4BED")!, scopeId: UUID(uuidString: "F0BE538D-E185-47CC-AC68-27EC26088BA6")!, toId: UUID(uuidString: "5B06F42E-EE96-43E6-A6E7-E24F5A21268B")!, sdp: RTCSessionDescription(type: .offer, sdp: "SDP_ANSWER")))
+        let offerJSON = SignallingMessages.webRTCInternalMessage(.sdpAnswer(workerId: UUID(uuidString: "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed")!, scopeId: UUID(uuidString: "f0be538d-e185-47cc-ac68-27ec26088ba6")!, toId: UUID(uuidString: "5b06f42e-ee96-43e6-a6e7-e24f5a21268b")!, sdp: RTCSessionDescription(type: .offer, sdp: "SDP_ANSWER")))
 
         XCTAssertEqual(webrtcAnswerJSON, offerJSON.json())
 
@@ -76,7 +77,7 @@ class SignallingMessagesTests: XCTestCase {
 
     func testWebrtcIceCandidateJSON() {
 
-        let offerJSON = SignallingMessages.webRTCInternalMessage(.iceCandidate(workerId: UUID(uuidString: "1B9D6BCD-BBFD-4B2D-9B5D-AB8DFBBD4BED")!, scopeId: UUID(uuidString: "F0BE538D-E185-47CC-AC68-27EC26088BA6")!, toId: UUID(uuidString: "5B06F42E-EE96-43E6-A6E7-E24F5A21268B")!, sdp: RTCIceCandidate(sdp: "SDP_CANDIDATE", sdpMLineIndex: -1, sdpMid: nil)))
+        let offerJSON = SignallingMessages.webRTCInternalMessage(.iceCandidate(workerId: UUID(uuidString: "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed")!, scopeId: UUID(uuidString: "f0be538d-e185-47cc-ac68-27ec26088ba6")!, toId: UUID(uuidString: "5b06f42e-ee96-43e6-a6e7-e24f5a21268b")!, sdp: RTCIceCandidate(sdp: "SDP_CANDIDATE", sdpMLineIndex: -1, sdpMid: nil)))
 
         XCTAssertEqual(webrtcIceCandidateJSON, offerJSON.json())
 

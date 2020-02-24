@@ -20,7 +20,8 @@ enum StaticHomeScreenStrings {
     static let openMined = "OpenMined"
     static let openMinedKey = "@OpenMined@"
     static let openMinedURL = "https://github.com/OpenMined/grid.js"
-    static let socketURL = "ws://localhost:3000/" // "wss://localhost:3000/"
+    static let socketURL = "ws://127.0.0.1:3000" // "wss://localhost:3000/"
+//    static let socketURL = "ws://192.168.254.112:3000" // "wss://localhost:3000/"
     static let protocolID = "50801316202"
     static let connectButtonText = "Connect to grid.js server"
     static let disconnectButtonText = "Disconnect grid.js server"
@@ -30,6 +31,7 @@ enum StaticHomeScreenStrings {
 
 class HomeViewController: UIViewController, UITextViewDelegate {
     var socket: SocketClientProtocol!
+    var syftRTCClient: SyftRTCClient!
     var isConnected = false
 
     @IBOutlet weak var scrollView: UIScrollView!
@@ -83,26 +85,31 @@ class HomeViewController: UIViewController, UITextViewDelegate {
     }
 
     @IBAction func connectPressed(_ sender: UIButton) {
-        if isConnected {
-            socket.disconnect()
-        } else {
-            guard !socketURLTextField.text!.isEmpty else {
-                print("Socket URL is empty!")
-                return
-            }
-            guard !protocolIDTextField.text!.isEmpty else {
-                print("Protocol ID is empty!")
-                return
-            }
+//        if isConnected {
+//            socket.disconnect()
+//        } else {
+//            guard !socketURLTextField.text!.isEmpty else {
+//                print("Socket URL is empty!")
+//                return
+//            }
+//            guard !protocolIDTextField.text!.isEmpty else {
+//                print("Protocol ID is empty!")
+//                return
+//            }
+//
+//            var request = URLRequest(url: URL(string: StaticHomeScreenStrings.socketURL)!)
+//            request.timeoutInterval = 5
+//
+//            socket = SyftWebSocket(url: request.url!,
+//                                       pingInterval: request.timeoutInterval)
+//            socket.delegate = self
+//            socket.connect()
+//        }
 
-            var request = URLRequest(url: URL(string: StaticHomeScreenStrings.socketURL)!)
-            request.timeoutInterval = 5
+        let socketURL = URL(string: StaticHomeScreenStrings.socketURL)!
+        self.syftRTCClient = SyftRTCClient(socketURL: socketURL, workerId: UUID(uuidString: "eeb370bc-6a17-4cb3-9644-bde71e1a38a5")!, scopeId: UUID(uuidString: "d54cb968-517a-45b5-891d-4d233bbfa536")!)
+        self.syftRTCClient.connect()
 
-            socket = SyftWebSocket(url: request.url!,
-                                       pingInterval: request.timeoutInterval)
-            socket.delegate = self
-            socket.connect()
-        }
     }
 
     @IBAction func sendPressed(_ sender: Any) {

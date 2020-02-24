@@ -5,7 +5,8 @@ extension RTCMediaConstraints {
 
     static func makeDefaultMediaConstraints() -> RTCMediaConstraints {
         let constraints = RTCMediaConstraints(mandatoryConstraints: nil,
-                                              optionalConstraints: ["DtlsSrtpKeyAgreement": kRTCMediaConstraintsValueTrue])
+                                              optionalConstraints: ["DtlsSrtpKeyAgreement": kRTCMediaConstraintsValueTrue,
+                                                                    "RtpDataChannels": kRTCMediaConstraintsValueTrue ])
         return constraints
     }
 
@@ -146,6 +147,8 @@ class WebRTCClient {
             case .iceCandidate(let candidateSenderUUID, _, _, let iceCandidate):
                 self.webRTCPeers[candidateSenderUUID]?.add(iceCandidate)
             }
+        default:
+            break
         }
     }
 

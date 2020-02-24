@@ -44,8 +44,8 @@ class MockWebRTCPeer: WebRTCPeer {
 
 class WebRTCClientTests: XCTestCase {
 
-    private let workerUUID: UUID = UUID(uuidString: "1B9D6BCD-BBFD-4B2D-9B5D-AB8DFBBD4BED")!
-    private let scopeUUID: UUID = UUID(uuidString: "F0BE538D-E185-47CC-AC68-27EC26088BA6")!
+    private let workerUUID: UUID = UUID(uuidString: "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed")!
+    private let scopeUUID: UUID = UUID(uuidString: "f0be538d-e185-47cc-ac68-27ec26088ba6")!
     private let peerWorkerUUID: UUID = UUID(uuidString: "66432D2C-7057-4EC5-B62B-2DDC38517E6B")!
 
     override func setUp() {

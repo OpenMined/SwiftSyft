@@ -115,8 +115,8 @@ class WebRTCPeer: NSObject {
 
                 self?.rtcPeerConnection.setLocalDescription(localSessionDescription, completionHandler: { [weak observer] error in
 
-                    guard error != nil else {
-                        debugPrint(error!.localizedDescription)
+                    if let error = error {
+                        debugPrint(error.localizedDescription)
                         return
                     }
 
