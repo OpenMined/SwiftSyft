@@ -2,6 +2,8 @@ import WebRTC
 import Foundation
 
 enum SignallingMessages {
+    case getProtocolRequest(workerId: UUID, scopeId: UUID, protocolId: String)
+    case getProtocolResponse
     case joinRoom(workerId: UUID, scopeId: UUID)
     case webRTCPeerLeft(workerId: UUID, scopeId: UUID)
     case webRTCInternalMessage(WebRTCInternalMessage)
@@ -14,6 +16,7 @@ enum SignallingMessages {
     enum DataPayloadCodingKeys: String, CodingKey {
         case workerId
         case scopeId
+        case protocolId
     }
 }
 
@@ -29,9 +32,73 @@ enum WebRTCInternalMessage {
         case type = "type"
         case data = "data"
     }
+
+    enum SessionDescriptionCodingKeys: String, CodingKey {
+        case sdp
+        case type
+    }
+
+    enum IceCandidateCodingKeys: String, CodingKey {
+        case candidate
+        case sdpMLineIndex
+        case sdpMid
+    }
+
 }
 
-extension WebRTCInternalMessage: Codable {
+/// This enum is a swift wrapper over `RTCSdpType` for easy encode and decode. From https://github.com/stasel/WebRTC-iOS
+enum SdpType: String, Codable {
+    case offer, prAnswer, answer
+
+    var rtcSdpType: RTCSdpType {
+        switch self {
+        case .offer:    return .offer
+        case .answer:   return .answer
+        case .prAnswer: return .prAnswer
+        }
+    }
+}
+
+/// This struct is a swift wrapper over `RTCSessionDescription` for easy encode and decode. From https://github.com/stasel/WebRTC-iOS
+struct SessionDescription: Codable {
+    let sdp: String
+    let type: SdpType
+
+    init(from rtcSessionDescription: RTCSessionDescription) {
+        self.sdp = rtcSessionDescription.sdp
+
+        switch rtcSessionDescription.type {
+        case .offer:    self.type = .offer
+        case .prAnswer: self.type = .prAnswer
+        case .answer:   self.type = .answer
+        @unknown default:
+            fatalError("Unknown RTCSessionDescription type: \(rtcSessionDescription.type.rawValue)")
+        }
+    }
+
+    var rtcSessionDescription: RTCSessionDescription {
+        return RTCSessionDescription(type: self.type.rtcSdpType, sdp: self.sdp)
+    }
+}
+
+/// This struct is a swift wrapper over `RTCIceCandidate` for easy encode and decode. From https://github.com/stasel/WebRTC-iOS
+struct IceCandidate: Codable {
+    let candidate: String
+    let sdpMLineIndex: Int32
+    let sdpMid: String?
+
+    init(from iceCandidate: RTCIceCandidate) {
+        self.sdpMLineIndex = iceCandidate.sdpMLineIndex
+        self.sdpMid = iceCandidate.sdpMid
+        self.candidate = iceCandidate.sdp
+    }
+
+    var rtcIceCandidate: RTCIceCandidate {
+        return RTCIceCandidate(sdp: self.candidate, sdpMLineIndex: self.sdpMLineIndex, sdpMid: self.sdpMid)
+    }
+}
+
+extension WebRTCInternalMessage: Decodable {
 
     // swiftlint:disable function_body_length
     init(from decoder: Decoder) throws {
@@ -42,7 +109,7 @@ extension WebRTCInternalMessage: Codable {
             let workerId = try container.decode(String.self, forKey: .workerId)
             let scopeId = try container.decode(String.self, forKey: .scopeId)
             let toId = try container.decode(String.self, forKey: .toId)
-            let data = try container.decode(String.self, forKey: .data)
+            let data = try container.decode(SessionDescription.self, forKey: .data)
             if let workerUUID = UUID(uuidString: workerId),
                 let scopeUUID = UUID(uuidString: scopeId),
                 let toId =  UUID(uuidString: toId) {
@@ -50,7 +117,7 @@ extension WebRTCInternalMessage: Codable {
                 self = .sdpOffer(workerId: workerUUID,
                                  scopeId: scopeUUID,
                                  toId: toId,
-                                 sdp: RTCSessionDescription(type: .offer, sdp: data))
+                                 sdp: RTCSessionDescription(type: .offer, sdp: data.sdp))
 
             } else {
                 throw EncodingError.invalidValue(type, EncodingError.Context(codingPath: [CodingKeys.type],
@@ -62,7 +129,7 @@ extension WebRTCInternalMessage: Codable {
             let workerId = try container.decode(String.self, forKey: .workerId)
             let scopeId = try container.decode(String.self, forKey: .scopeId)
             let toId = try container.decode(String.self, forKey: .toId)
-            let data = try container.decode(String.self, forKey: .data)
+            let data = try container.decode(SessionDescription.self, forKey: .data)
             if let workerUUID = UUID(uuidString: workerId),
                let scopeUUID = UUID(uuidString: scopeId),
                let toId =  UUID(uuidString: toId) {
@@ -70,7 +137,7 @@ extension WebRTCInternalMessage: Codable {
                 self = .sdpAnswer(workerId: workerUUID,
                                   scopeId: scopeUUID,
                                   toId: toId,
-                                  sdp: RTCSessionDescription(type: .answer, sdp: data))
+                                  sdp: RTCSessionDescription(type: .answer, sdp: data.sdp))
 
             } else {
                 throw EncodingError.invalidValue(type, EncodingError.Context(codingPath: [CodingKeys.type],
@@ -82,12 +149,12 @@ extension WebRTCInternalMessage: Codable {
             let workerId = try container.decode(String.self, forKey: .workerId)
             let scopeId = try container.decode(String.self, forKey: .scopeId)
             let toId = try container.decode(String.self, forKey: .toId)
-            let data = try container.decode(String.self, forKey: .data)
+            let data = try container.decode(IceCandidate.self, forKey: .data)
             if let workerUUID = UUID(uuidString: workerId),
                let scopeUUID = UUID(uuidString: scopeId),
                let toId =  UUID(uuidString: toId) {
 
-                let iceCandidate = RTCIceCandidate(sdp: data, sdpMLineIndex: -1, sdpMid: nil)
+                let iceCandidate = data.rtcIceCandidate
                 self = .iceCandidate(workerId: workerUUID, scopeId: scopeUUID, toId: toId, sdp: iceCandidate)
 
             } else {
@@ -107,22 +174,34 @@ extension WebRTCInternalMessage: Codable {
         switch self {
         case .sdpOffer(let workerUUID, let scopeUUID, let toUUID, let rtcSessionDescription):
             try container.encode("offer", forKey: .type)
-            try container.encode(workerUUID.uuidString, forKey: .workerId)
-            try container.encode(scopeUUID.uuidString, forKey: .scopeId)
-            try container.encode(toUUID.uuidString, forKey: .toId)
-            try container.encode(rtcSessionDescription.sdp, forKey: .data)
+            try container.encode(workerUUID.uuidString.lowercased(), forKey: .workerId)
+            try container.encode(scopeUUID.uuidString.lowercased(), forKey: .scopeId)
+            try container.encode(toUUID.uuidString.lowercased(), forKey: .toId)
+
+            var dataContainer = container.nestedContainer(keyedBy: SessionDescriptionCodingKeys.self, forKey: .data)
+            try dataContainer.encode("offer", forKey: .type)
+            try dataContainer.encode(rtcSessionDescription.sdp, forKey: .sdp)
+
         case .sdpAnswer(let workerUUID, let scopeUUID, let toUUID, let rtcSessionDescription):
             try container.encode("answer", forKey: .type)
-            try container.encode(workerUUID.uuidString, forKey: .workerId)
-            try container.encode(scopeUUID.uuidString, forKey: .scopeId)
-            try container.encode(toUUID.uuidString, forKey: .toId)
-            try container.encode(rtcSessionDescription.sdp, forKey: .data)
+            try container.encode(workerUUID.uuidString.lowercased(), forKey: .workerId)
+            try container.encode(scopeUUID.uuidString.lowercased(), forKey: .scopeId)
+            try container.encode(toUUID.uuidString.lowercased(), forKey: .toId)
+
+            var dataContainer = container.nestedContainer(keyedBy: SessionDescriptionCodingKeys.self, forKey: .data)
+            try dataContainer.encode("answer", forKey: .type)
+            try dataContainer.encode(rtcSessionDescription.sdp, forKey: .sdp)
+
         case .iceCandidate(let workerUUID, let scopeUUID, let toUUID, let iceCandidate):
-            try container.encode("canddidate", forKey: .type)
-            try container.encode(workerUUID.uuidString, forKey: .workerId)
-            try container.encode(scopeUUID.uuidString, forKey: .scopeId)
-            try container.encode(toUUID.uuidString, forKey: .toId)
-            try container.encode(iceCandidate.sdp, forKey: .data)
+            try container.encode("candidate", forKey: .type)
+            try container.encode(workerUUID.uuidString.lowercased(), forKey: .workerId)
+            try container.encode(scopeUUID.uuidString.lowercased(), forKey: .scopeId)
+            try container.encode(toUUID.uuidString.lowercased(), forKey: .toId)
+
+            var dataContainer = container.nestedContainer(keyedBy: IceCandidateCodingKeys.self, forKey: .data)
+            try dataContainer.encode(iceCandidate.sdp, forKey: .candidate)
+            try dataContainer.encode(iceCandidate.sdpMLineIndex, forKey: .sdpMLineIndex)
+            try dataContainer.encode(iceCandidate.sdpMid, forKey: .sdpMid)
         }
     }
     // swiftlint:enable function_body_length
@@ -136,7 +215,11 @@ extension SignallingMessages: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let type = try container.decode(String.self, forKey: .type)
 
-        if type == "webrtc: join-room" {
+        if type == "get-protocol" {
+
+            self = .getProtocolResponse
+
+        } else if type == "webrtc: join-room" {
 
             let dataContainer = try container.nestedContainer(keyedBy: DataPayloadCodingKeys.self, forKey: .data)
             let workerId = try dataContainer.decode(String.self, forKey: .workerId)
@@ -172,19 +255,26 @@ extension SignallingMessages: Codable {
         }
     }
 
+    // swiftlint:disable function_body_length
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         switch self {
+        case .getProtocolRequest(let workerUUID, let scopeUUID, let protocolId):
+            try container.encode("get-protocol", forKey: .type)
+            var dataPayloadContainer = container.nestedContainer(keyedBy: DataPayloadCodingKeys.self, forKey: .data)
+            try dataPayloadContainer.encode(workerUUID.uuidString.lowercased(), forKey: .workerId)
+            try dataPayloadContainer.encode(scopeUUID.uuidString.lowercased(), forKey: .scopeId)
+            try dataPayloadContainer.encode(protocolId, forKey: .protocolId)
         case .joinRoom(let workerUUID, let scopeUUID):
             try container.encode("webrtc: join-room", forKey: .type)
             var dataPayloadContainer = container.nestedContainer(keyedBy: DataPayloadCodingKeys.self, forKey: .data)
-            try dataPayloadContainer.encode(workerUUID.uuidString, forKey: .workerId)
-            try dataPayloadContainer.encode(scopeUUID.uuidString, forKey: .scopeId)
+            try dataPayloadContainer.encode(workerUUID.uuidString.lowercased(), forKey: .workerId)
+            try dataPayloadContainer.encode(scopeUUID.uuidString.lowercased(), forKey: .scopeId)
         case .webRTCPeerLeft(let workerUUID, let scopeUUID):
             try container.encode("webrtc: peer-left", forKey: .type)
             var dataPayloadContainer = container.nestedContainer(keyedBy: DataPayloadCodingKeys.self, forKey: .data)
-            try dataPayloadContainer.encode(workerUUID.uuidString, forKey: .workerId)
-            try dataPayloadContainer.encode(scopeUUID.uuidString, forKey: .scopeId)
+            try dataPayloadContainer.encode(workerUUID.uuidString.lowercased(), forKey: .workerId)
+            try dataPayloadContainer.encode(scopeUUID.uuidString.lowercased(), forKey: .scopeId)
         case .webRTCInternalMessage(let webRTCInternalMessage):
             try container.encode("webrtc: internal-message", forKey: .type)
             var dataPayloadContainer = container.nestedContainer(keyedBy: WebRTCInternalMessage.CodingKeys.self,
@@ -192,23 +282,31 @@ extension SignallingMessages: Codable {
             switch webRTCInternalMessage {
             case .sdpOffer(let workerUUID, let scopeUUID, let toUUID, let sessionDescription):
                 try dataPayloadContainer.encode("offer", forKey: .type)
-                try dataPayloadContainer.encode(workerUUID.uuidString, forKey: .workerId)
-                try dataPayloadContainer.encode(scopeUUID.uuidString, forKey: .scopeId)
-                try dataPayloadContainer.encode(toUUID.uuidString, forKey: .toId)
-                try dataPayloadContainer.encode(sessionDescription.sdp, forKey: .data)
+                try dataPayloadContainer.encode(workerUUID.uuidString.lowercased(), forKey: .workerId)
+                try dataPayloadContainer.encode(scopeUUID.uuidString.lowercased(), forKey: .scopeId)
+                try dataPayloadContainer.encode(toUUID.uuidString.lowercased(), forKey: .toId)
+
+                let wrapperSession = SessionDescription(from: sessionDescription)
+                try dataPayloadContainer.encode(wrapperSession, forKey: .data)
             case .sdpAnswer(let workerUUID, let scopeUUID, let toUUID, let sessionDescription):
                 try dataPayloadContainer.encode("answer", forKey: .type)
-                try dataPayloadContainer.encode(workerUUID.uuidString, forKey: .workerId)
-                try dataPayloadContainer.encode(scopeUUID.uuidString, forKey: .scopeId)
-                try dataPayloadContainer.encode(toUUID.uuidString, forKey: .toId)
-                try dataPayloadContainer.encode(sessionDescription.sdp, forKey: .data)
+                try dataPayloadContainer.encode(workerUUID.uuidString.lowercased(), forKey: .workerId)
+                try dataPayloadContainer.encode(scopeUUID.uuidString.lowercased(), forKey: .scopeId)
+                try dataPayloadContainer.encode(toUUID.uuidString.lowercased(), forKey: .toId)
+
+                let wrapperSession = SessionDescription(from: sessionDescription)
+                try dataPayloadContainer.encode(wrapperSession, forKey: .data)
             case .iceCandidate(let workerUUID, let scopeUUID, let toUUID, let iceCandidate):
                 try dataPayloadContainer.encode("candidate", forKey: .type)
-                try dataPayloadContainer.encode(workerUUID.uuidString, forKey: .workerId)
-                try dataPayloadContainer.encode(scopeUUID.uuidString, forKey: .scopeId)
-                try dataPayloadContainer.encode(toUUID.uuidString, forKey: .toId)
-                try dataPayloadContainer.encode(iceCandidate.sdp, forKey: .data)
+                try dataPayloadContainer.encode(workerUUID.uuidString.lowercased(), forKey: .workerId)
+                try dataPayloadContainer.encode(scopeUUID.uuidString.lowercased(), forKey: .scopeId)
+                try dataPayloadContainer.encode(toUUID.uuidString.lowercased(), forKey: .toId)
+
+                let wrappedCandidate = IceCandidate(from: iceCandidate)
+                try dataPayloadContainer.encode(wrappedCandidate, forKey: .data)
             }
+        default:
+            throw EncodingError.invalidValue(self, EncodingError.Context(codingPath: [], debugDescription: "Invalid type to encode"))
         }
     }
 
