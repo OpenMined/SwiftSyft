@@ -21,7 +21,6 @@ enum StaticHomeScreenStrings {
     static let openMinedKey = "@OpenMined@"
     static let openMinedURL = "https://github.com/OpenMined/grid.js"
     static let socketURL = "ws://127.0.0.1:3000" // "wss://localhost:3000/"
-//    static let socketURL = "ws://192.168.254.112:3000" // "wss://localhost:3000/"
     static let protocolID = "50801316202"
     static let connectButtonText = "Connect to grid.js server"
     static let disconnectButtonText = "Disconnect grid.js server"
@@ -85,6 +84,8 @@ class HomeViewController: UIViewController, UITextViewDelegate {
     }
 
     @IBAction func connectPressed(_ sender: UIButton) {
+
+        // Connect using socket connection
 //        if isConnected {
 //            socket.disconnect()
 //        } else {
@@ -106,6 +107,7 @@ class HomeViewController: UIViewController, UITextViewDelegate {
 //            socket.connect()
 //        }
 
+        // Connect using webrtc connection
         let socketURL = URL(string: StaticHomeScreenStrings.socketURL)!
         self.syftRTCClient = SyftRTCClient(socketURL: socketURL, workerId: UUID(uuidString: "eeb370bc-6a17-4cb3-9644-bde71e1a38a5")!, scopeId: UUID(uuidString: "d54cb968-517a-45b5-891d-4d233bbfa536")!)
         self.syftRTCClient.connect()
