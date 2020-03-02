@@ -28,6 +28,7 @@ enum SignallingMessagesRequest {
 enum SignallingMessagesResponse {
 
     case authRequestResponse(Result<UUID, Error>)
+    case cycleRequestResponse(Result<CycleResponseSuccess, CycleRequestError>)
 
     case getProtocolRequest(workerId: UUID, scopeId: UUID, protocolId: String)
     case getProtocolResponse
@@ -50,10 +51,19 @@ enum SignallingMessagesResponse {
         case workerId = "worker_id"
         case error
     }
+
+    enum CycleCodingKeys: String, CodingKey {
+        case status
+    }
 }
 
 struct AuthenticationError: Error {
     let message: String
+}
+
+struct CycleRequestError: Codable, Error {
+    let status: String
+    let timeout: Int
 }
 
 enum WebRTCInternalMessage {
@@ -338,6 +348,8 @@ extension SignallingMessagesResponse: Codable {
         }
     }
 
+    // swiftlint:disable function_body_length
+    // swiftlint:disable:next cyclomatic_complexity
     init(from decoder: Decoder) throws {
 
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -353,6 +365,18 @@ extension SignallingMessagesResponse: Codable {
                 self = .authRequestResponse(.failure(AuthenticationError(message: errorString)))
             } else {
                 self = .authRequestResponse(.failure(AuthenticationError(message: "Unknown Authentication Error")))
+            }
+
+        } else if type == "federated/cycle-request" {
+
+            let cycleStatusContainer = try container.nestedContainer(keyedBy: CycleCodingKeys.self, forKey: .data)
+            let status = try cycleStatusContainer.decode(String.self, forKey: .status)
+            if status == "accepted" {
+                let cycleSuccess = try container.decode(CycleResponseSuccess.self, forKey: .data)
+                self = .cycleRequestResponse(.success(cycleSuccess))
+            } else {
+                let cycleRequestError = try container.decode(CycleRequestError.self, forKey: .data)
+                self = .cycleRequestResponse(.failure(cycleRequestError))
             }
 
         } else if type == "get-protocol" {
