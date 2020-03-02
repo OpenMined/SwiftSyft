@@ -8,8 +8,8 @@ class SignallingClient {
     private let timerProvider: Timer.Type
     private var timer: Timer?
 
-    private let messageSubject = PassthroughSubject<SignallingMessages, Never>()
-    var messagePublisher: AnyPublisher<SignallingMessages, Never> {
+    private let messageSubject = PassthroughSubject<SignallingMessagesResponse, Never>()
+    var messagePublisher: AnyPublisher<SignallingMessagesResponse, Never> {
         return messageSubject.eraseToAnyPublisher()
     }
 
@@ -36,7 +36,7 @@ extension SignallingClient: SignallingClientProtocol {
         self.socketClient.disconnect()
     }
 
-    func send(_ message: SignallingMessages) {
+    func send(_ message: SignallingMessagesRequest) {
 
         do {
             let encoder = JSONEncoder()
@@ -77,7 +77,7 @@ extension SignallingClient: SocketClientDelegate {
         case .success(let messageData):
             let decoder = JSONDecoder()
             do {
-                let message = try decoder.decode(SignallingMessages.self, from: messageData)
+                let message = try decoder.decode(SignallingMessagesResponse.self, from: messageData)
                 self.messageSubject.send(message)
             } catch let error {
                 debugPrint(error.localizedDescription)

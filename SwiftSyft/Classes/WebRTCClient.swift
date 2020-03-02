@@ -43,7 +43,7 @@ class WebRTCClient {
     private var webRTCPeers: [UUID: WebRTCPeer] = [UUID: WebRTCPeer]()
     private var workerId: UUID?
     private var scopeId: UUID?
-    private let sendSignallingMessage: (SignallingMessages) -> Void
+    private let sendSignallingMessage: (SignallingMessagesRequest) -> Void
     private let webrtcPeerFactory: (_ workerId: UUID, _ rtcPeerConnection: RTCPeerConnection, _ connectionType: WebRTCConnectionType) -> WebRTCPeer
     private let iceServers: [String]
 
@@ -55,7 +55,7 @@ class WebRTCClient {
          "stun:stun3.l.google.com:19302",
          "stun:stun4.l.google.com:19302"],
          webRTCPeerFactory: @escaping (_ workerId: UUID, _ rtcPeerConnection: RTCPeerConnection, _ connectionType: WebRTCConnectionType) -> WebRTCPeer = WebRTCPeer.init,
-         sendSignallingMessage: @escaping (SignallingMessages) -> Void) {
+         sendSignallingMessage: @escaping (SignallingMessagesRequest) -> Void) {
 
         self.workerId = workerId
         self.scopeId = scopeId
@@ -92,7 +92,7 @@ class WebRTCClient {
         self.webRTCPeers[workerUUID] = nil
     }
 
-    func received(_ signallingMessage: SignallingMessages) {
+    func received(_ signallingMessage: SignallingMessagesResponse) {
 
         switch signallingMessage {
 
