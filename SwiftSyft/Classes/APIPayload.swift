@@ -7,6 +7,15 @@ struct CycleRequest: Codable {
     let ping: String
     let download: String
     let upload: String
+
+    enum CodingKeys: String, CodingKey {
+        case workerId = "worker_id"
+        case model
+        case version
+        case ping
+        case download
+        case upload
+    }
 }
 
 struct FederatedClientConfig: Codable {}
