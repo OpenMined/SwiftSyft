@@ -41,6 +41,11 @@ struct CycleResponseSuccess: Codable {
 struct CycleResponseFailed: Codable {
     let status: String
     let timeout: Int
+
+    enum CodingKeys: String, CodingKey {
+        case status
+        case timeout
+    }
 }
 
 // From https://medium.com/@JinwooChoi/passing-parameters-to-restful-api-with-swift-codable-d78eb78f7b1
