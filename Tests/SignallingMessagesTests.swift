@@ -22,7 +22,7 @@ extension JSONTestable where Self: Codable {
     }
 }
 
-extension SignallingMessages: JSONTestable { }
+extension SignallingMessagesResponse: JSONTestable { }
 
 class SignallingMessagesTests: XCTestCase {
 
@@ -48,28 +48,28 @@ class SignallingMessagesTests: XCTestCase {
 
     func testJoinRoomJSON() {
 
-        let joinRoom = SignallingMessages.joinRoom(workerId: UUID(uuidString: "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed")!, scopeId: UUID(uuidString: "f0be538d-e185-47cc-ac68-27ec26088ba6")!)
+        let joinRoom = SignallingMessagesResponse.joinRoom(workerId: UUID(uuidString: "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed")!, scopeId: UUID(uuidString: "f0be538d-e185-47cc-ac68-27ec26088ba6")!)
 
         XCTAssertEqual(joinRoomJSON, joinRoom.json())
     }
 
     func testWebrtcPeerLeftJSON() {
 
-        let peerLeft = SignallingMessages.webRTCPeerLeft(workerId: UUID(uuidString: "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed")!, scopeId: UUID(uuidString: "f0be538d-e185-47cc-ac68-27ec26088ba6")!)
+        let peerLeft = SignallingMessagesResponse.webRTCPeerLeft(workerId: UUID(uuidString: "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed")!, scopeId: UUID(uuidString: "f0be538d-e185-47cc-ac68-27ec26088ba6")!)
 
         XCTAssertEqual(webrtcPeerLeftJSON, peerLeft.json())
     }
 
     func testWebrtcOfferJSON() {
 
-        let offerJSON = SignallingMessages.webRTCInternalMessage(.sdpOffer(workerId: UUID(uuidString: "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed")!, scopeId: UUID(uuidString: "f0be538d-e185-47cc-ac68-27ec26088ba6")!, toId: UUID(uuidString: "5b06f42e-ee96-43e6-a6e7-e24f5a21268b")!, sdp: RTCSessionDescription(type: .offer, sdp: "SDP_OFFER")))
+        let offerJSON = SignallingMessagesResponse.webRTCInternalMessage(.sdpOffer(workerId: UUID(uuidString: "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed")!, scopeId: UUID(uuidString: "f0be538d-e185-47cc-ac68-27ec26088ba6")!, toId: UUID(uuidString: "5b06f42e-ee96-43e6-a6e7-e24f5a21268b")!, sdp: RTCSessionDescription(type: .offer, sdp: "SDP_OFFER")))
 
         XCTAssertEqual(webrtcOfferJSON, offerJSON.json())
 
     }
 
     func testWebrtcAnswerJSON() {
-        let offerJSON = SignallingMessages.webRTCInternalMessage(.sdpAnswer(workerId: UUID(uuidString: "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed")!, scopeId: UUID(uuidString: "f0be538d-e185-47cc-ac68-27ec26088ba6")!, toId: UUID(uuidString: "5b06f42e-ee96-43e6-a6e7-e24f5a21268b")!, sdp: RTCSessionDescription(type: .offer, sdp: "SDP_ANSWER")))
+        let offerJSON = SignallingMessagesResponse.webRTCInternalMessage(.sdpAnswer(workerId: UUID(uuidString: "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed")!, scopeId: UUID(uuidString: "f0be538d-e185-47cc-ac68-27ec26088ba6")!, toId: UUID(uuidString: "5b06f42e-ee96-43e6-a6e7-e24f5a21268b")!, sdp: RTCSessionDescription(type: .offer, sdp: "SDP_ANSWER")))
 
         XCTAssertEqual(webrtcAnswerJSON, offerJSON.json())
 
@@ -77,7 +77,7 @@ class SignallingMessagesTests: XCTestCase {
 
     func testWebrtcIceCandidateJSON() {
 
-        let offerJSON = SignallingMessages.webRTCInternalMessage(.iceCandidate(workerId: UUID(uuidString: "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed")!, scopeId: UUID(uuidString: "f0be538d-e185-47cc-ac68-27ec26088ba6")!, toId: UUID(uuidString: "5b06f42e-ee96-43e6-a6e7-e24f5a21268b")!, sdp: RTCIceCandidate(sdp: "SDP_CANDIDATE", sdpMLineIndex: -1, sdpMid: nil)))
+        let offerJSON = SignallingMessagesResponse.webRTCInternalMessage(.iceCandidate(workerId: UUID(uuidString: "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed")!, scopeId: UUID(uuidString: "f0be538d-e185-47cc-ac68-27ec26088ba6")!, toId: UUID(uuidString: "5b06f42e-ee96-43e6-a6e7-e24f5a21268b")!, sdp: RTCIceCandidate(sdp: "SDP_CANDIDATE", sdpMLineIndex: -1, sdpMid: nil)))
 
         XCTAssertEqual(webrtcIceCandidateJSON, offerJSON.json())
 

@@ -12,6 +12,6 @@ protocol SignallingClientProtocol {
 
     func connect()
     func disconnect()
-    func send(_ message: SignallingMessages) throws
+    func send(_ message: SignallingMessagesRequest) throws
 
 }

@@ -79,8 +79,8 @@ class SignallingClientTests: XCTestCase {
     }
 
     func testSendMessageData() {
-        let message = SignallingMessages.joinRoom(workerId: UUID(), scopeId: UUID())
-        try! self.signallingClient.send(message)
+        let message = SignallingMessagesRequest.joinRoom(workerId: UUID(), scopeId: UUID())
+        self.signallingClient.send(message)
 
         let encoder = JSONEncoder()
         let messageData = try! encoder.encode(message)
@@ -91,12 +91,12 @@ class SignallingClientTests: XCTestCase {
 
     func testDeliverMessage() {
 
-        let message = SignallingMessages.joinRoom(workerId: UUID(), scopeId: UUID())
+        let message = SignallingMessagesResponse.joinRoom(workerId: UUID(), scopeId: UUID())
         let encoder = JSONEncoder()
         let messageData = try! encoder.encode(message)
 
         var didCallMessageSubscription = false
-        var messageReceived: SignallingMessages?
+        var messageReceived: SignallingMessagesResponse?
 
         let subscription = self.signallingClient.messagePublisher.sink { signallingMessage in
             didCallMessageSubscription = true

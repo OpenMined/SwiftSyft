@@ -1,7 +1,26 @@
 import WebRTC
 import Foundation
 
-enum SignallingMessages {
+enum SignallingMessagesRequest {
+    case getProtocolRequest(workerId: UUID, scopeId: UUID, protocolId: String)
+    case getProtocolResponse
+    case joinRoom(workerId: UUID, scopeId: UUID)
+    case webRTCPeerLeft(workerId: UUID, scopeId: UUID)
+    case webRTCInternalMessage(WebRTCInternalMessage)
+
+    enum CodingKeys: String, CodingKey {
+        case type
+        case data
+    }
+
+    enum DataPayloadCodingKeys: String, CodingKey {
+        case workerId
+        case scopeId
+        case protocolId
+    }
+}
+
+enum SignallingMessagesResponse {
     case getProtocolRequest(workerId: UUID, scopeId: UUID, protocolId: String)
     case getProtocolResponse
     case joinRoom(workerId: UUID, scopeId: UUID)
@@ -167,93 +186,69 @@ extension WebRTCInternalMessage: Decodable {
                                                                          debugDescription: "Invalid type value"))
         }
     }
-
-    func encode(to encoder: Encoder) throws {
-
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        switch self {
-        case .sdpOffer(let workerUUID, let scopeUUID, let toUUID, let rtcSessionDescription):
-            try container.encode("offer", forKey: .type)
-            try container.encode(workerUUID.uuidString.lowercased(), forKey: .workerId)
-            try container.encode(scopeUUID.uuidString.lowercased(), forKey: .scopeId)
-            try container.encode(toUUID.uuidString.lowercased(), forKey: .toId)
-
-            var dataContainer = container.nestedContainer(keyedBy: SessionDescriptionCodingKeys.self, forKey: .data)
-            try dataContainer.encode("offer", forKey: .type)
-            try dataContainer.encode(rtcSessionDescription.sdp, forKey: .sdp)
-
-        case .sdpAnswer(let workerUUID, let scopeUUID, let toUUID, let rtcSessionDescription):
-            try container.encode("answer", forKey: .type)
-            try container.encode(workerUUID.uuidString.lowercased(), forKey: .workerId)
-            try container.encode(scopeUUID.uuidString.lowercased(), forKey: .scopeId)
-            try container.encode(toUUID.uuidString.lowercased(), forKey: .toId)
-
-            var dataContainer = container.nestedContainer(keyedBy: SessionDescriptionCodingKeys.self, forKey: .data)
-            try dataContainer.encode("answer", forKey: .type)
-            try dataContainer.encode(rtcSessionDescription.sdp, forKey: .sdp)
-
-        case .iceCandidate(let workerUUID, let scopeUUID, let toUUID, let iceCandidate):
-            try container.encode("candidate", forKey: .type)
-            try container.encode(workerUUID.uuidString.lowercased(), forKey: .workerId)
-            try container.encode(scopeUUID.uuidString.lowercased(), forKey: .scopeId)
-            try container.encode(toUUID.uuidString.lowercased(), forKey: .toId)
-
-            var dataContainer = container.nestedContainer(keyedBy: IceCandidateCodingKeys.self, forKey: .data)
-            try dataContainer.encode(iceCandidate.sdp, forKey: .candidate)
-            try dataContainer.encode(iceCandidate.sdpMLineIndex, forKey: .sdpMLineIndex)
-            try dataContainer.encode(iceCandidate.sdpMid, forKey: .sdpMid)
-        }
-    }
     // swiftlint:enable function_body_length
 
 }
 
-extension SignallingMessages: Codable {
+extension SignallingMessagesRequest: Encodable {
 
-    init(from decoder: Decoder) throws {
+    // swiftlint:disable function_body_length
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case .getProtocolRequest(let workerUUID, let scopeUUID, let protocolId):
+            try container.encode("get-protocol", forKey: .type)
+            var dataPayloadContainer = container.nestedContainer(keyedBy: DataPayloadCodingKeys.self, forKey: .data)
+            try dataPayloadContainer.encode(workerUUID.uuidString.lowercased(), forKey: .workerId)
+            try dataPayloadContainer.encode(scopeUUID.uuidString.lowercased(), forKey: .scopeId)
+            try dataPayloadContainer.encode(protocolId, forKey: .protocolId)
+        case .joinRoom(let workerUUID, let scopeUUID):
+            try container.encode("webrtc: join-room", forKey: .type)
+            var dataPayloadContainer = container.nestedContainer(keyedBy: DataPayloadCodingKeys.self, forKey: .data)
+            try dataPayloadContainer.encode(workerUUID.uuidString.lowercased(), forKey: .workerId)
+            try dataPayloadContainer.encode(scopeUUID.uuidString.lowercased(), forKey: .scopeId)
+        case .webRTCPeerLeft(let workerUUID, let scopeUUID):
+            try container.encode("webrtc: peer-left", forKey: .type)
+            var dataPayloadContainer = container.nestedContainer(keyedBy: DataPayloadCodingKeys.self, forKey: .data)
+            try dataPayloadContainer.encode(workerUUID.uuidString.lowercased(), forKey: .workerId)
+            try dataPayloadContainer.encode(scopeUUID.uuidString.lowercased(), forKey: .scopeId)
+        case .webRTCInternalMessage(let webRTCInternalMessage):
+            try container.encode("webrtc: internal-message", forKey: .type)
+            var dataPayloadContainer = container.nestedContainer(keyedBy: WebRTCInternalMessage.CodingKeys.self,
+                                                                 forKey: .data)
+            switch webRTCInternalMessage {
+            case .sdpOffer(let workerUUID, let scopeUUID, let toUUID, let sessionDescription):
+                try dataPayloadContainer.encode("offer", forKey: .type)
+                try dataPayloadContainer.encode(workerUUID.uuidString.lowercased(), forKey: .workerId)
+                try dataPayloadContainer.encode(scopeUUID.uuidString.lowercased(), forKey: .scopeId)
+                try dataPayloadContainer.encode(toUUID.uuidString.lowercased(), forKey: .toId)
 
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        let type = try container.decode(String.self, forKey: .type)
+                let wrapperSession = SessionDescription(from: sessionDescription)
+                try dataPayloadContainer.encode(wrapperSession, forKey: .data)
+            case .sdpAnswer(let workerUUID, let scopeUUID, let toUUID, let sessionDescription):
+                try dataPayloadContainer.encode("answer", forKey: .type)
+                try dataPayloadContainer.encode(workerUUID.uuidString.lowercased(), forKey: .workerId)
+                try dataPayloadContainer.encode(scopeUUID.uuidString.lowercased(), forKey: .scopeId)
+                try dataPayloadContainer.encode(toUUID.uuidString.lowercased(), forKey: .toId)
 
-        if type == "get-protocol" {
+                let wrapperSession = SessionDescription(from: sessionDescription)
+                try dataPayloadContainer.encode(wrapperSession, forKey: .data)
+            case .iceCandidate(let workerUUID, let scopeUUID, let toUUID, let iceCandidate):
+                try dataPayloadContainer.encode("candidate", forKey: .type)
+                try dataPayloadContainer.encode(workerUUID.uuidString.lowercased(), forKey: .workerId)
+                try dataPayloadContainer.encode(scopeUUID.uuidString.lowercased(), forKey: .scopeId)
+                try dataPayloadContainer.encode(toUUID.uuidString.lowercased(), forKey: .toId)
 
-            self = .getProtocolResponse
-
-        } else if type == "webrtc: join-room" {
-
-            let dataContainer = try container.nestedContainer(keyedBy: DataPayloadCodingKeys.self, forKey: .data)
-            let workerId = try dataContainer.decode(String.self, forKey: .workerId)
-            let scopeId = try dataContainer.decode(String.self, forKey: .scopeId)
-            if let workerUUID = UUID(uuidString: workerId),
-                let scopeUUID = UUID(uuidString: scopeId) {
-                self = .joinRoom(workerId: workerUUID, scopeId: scopeUUID)
-            } else {
-                throw EncodingError.invalidValue(type, EncodingError.Context(codingPath: [CodingKeys.type],
-                                                                             debugDescription: "Invalid payload keys"))
+                let wrappedCandidate = IceCandidate(from: iceCandidate)
+                try dataPayloadContainer.encode(wrappedCandidate, forKey: .data)
             }
-
-        } else if type == "webrtc: peer-left" {
-
-            let dataContainer = try container.nestedContainer(keyedBy: DataPayloadCodingKeys.self, forKey: .data)
-            let workerId = try dataContainer.decode(String.self, forKey: .workerId)
-            let scopeId = try dataContainer.decode(String.self, forKey: .workerId)
-            if let workerUUID = UUID(uuidString: workerId),
-                let scopeUUID = UUID(uuidString: scopeId) {
-                self = .webRTCPeerLeft(workerId: workerUUID, scopeId: scopeUUID)
-            } else {
-                throw EncodingError.invalidValue(type, EncodingError.Context(codingPath: [CodingKeys.type],
-                                                                             debugDescription: "Invalid payload keys"))
-            }
-
-        } else if type == "webrtc: internal-message" {
-
-            self = .webRTCInternalMessage(try container.decode(WebRTCInternalMessage.self, forKey: .data))
-
-        } else {
-            throw EncodingError.invalidValue(type, EncodingError.Context(codingPath: [CodingKeys.type],
-                                                                         debugDescription: "Invalid type value"))
+        default:
+            throw EncodingError.invalidValue(self, EncodingError.Context(codingPath: [], debugDescription: "Invalid type to encode"))
         }
     }
+}
+
+extension SignallingMessagesResponse: Codable {
 
     // swiftlint:disable function_body_length
     func encode(to encoder: Encoder) throws {
@@ -310,6 +305,50 @@ extension SignallingMessages: Codable {
         }
     }
 
+    init(from decoder: Decoder) throws {
+
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let type = try container.decode(String.self, forKey: .type)
+
+        if type == "get-protocol" {
+
+            self = .getProtocolResponse
+
+        } else if type == "webrtc: join-room" {
+
+            let dataContainer = try container.nestedContainer(keyedBy: DataPayloadCodingKeys.self, forKey: .data)
+            let workerId = try dataContainer.decode(String.self, forKey: .workerId)
+            let scopeId = try dataContainer.decode(String.self, forKey: .scopeId)
+            if let workerUUID = UUID(uuidString: workerId),
+                let scopeUUID = UUID(uuidString: scopeId) {
+                self = .joinRoom(workerId: workerUUID, scopeId: scopeUUID)
+            } else {
+                throw EncodingError.invalidValue(type, EncodingError.Context(codingPath: [CodingKeys.type],
+                                                                             debugDescription: "Invalid payload keys"))
+            }
+
+        } else if type == "webrtc: peer-left" {
+
+            let dataContainer = try container.nestedContainer(keyedBy: DataPayloadCodingKeys.self, forKey: .data)
+            let workerId = try dataContainer.decode(String.self, forKey: .workerId)
+            let scopeId = try dataContainer.decode(String.self, forKey: .workerId)
+            if let workerUUID = UUID(uuidString: workerId),
+                let scopeUUID = UUID(uuidString: scopeId) {
+                self = .webRTCPeerLeft(workerId: workerUUID, scopeId: scopeUUID)
+            } else {
+                throw EncodingError.invalidValue(type, EncodingError.Context(codingPath: [CodingKeys.type],
+                                                                             debugDescription: "Invalid payload keys"))
+            }
+
+        } else if type == "webrtc: internal-message" {
+
+            self = .webRTCInternalMessage(try container.decode(WebRTCInternalMessage.self, forKey: .data))
+
+        } else {
+            throw EncodingError.invalidValue(type, EncodingError.Context(codingPath: [CodingKeys.type],
+                                                                         debugDescription: "Invalid type value"))
+        }
+    }
 }
 
 extension WebRTCInternalMessage: Equatable {
@@ -327,8 +366,8 @@ extension WebRTCInternalMessage: Equatable {
     }
 }
 
-extension SignallingMessages: Equatable {
-    static func == (lhs: SignallingMessages, rhs: SignallingMessages) -> Bool {
+extension SignallingMessagesRequest: Equatable {
+    static func == (lhs: SignallingMessagesRequest, rhs: SignallingMessagesRequest) -> Bool {
         switch (lhs, rhs) {
         case (let .webRTCPeerLeft(lhsWorkerUUID, lhsScopeUUID), let .webRTCPeerLeft(rhsWorkerUUID, rhsScopeUUID)):
             return (lhsWorkerUUID, lhsScopeUUID) == (rhsWorkerUUID, rhsScopeUUID)
@@ -336,6 +375,29 @@ extension SignallingMessages: Equatable {
             return (lhsWorkerUUID, lhsScopeUUID) == (rhsWorkerUUID, rhsScopeUUID)
         case (let .webRTCInternalMessage(lhsInternalMessage), let .webRTCInternalMessage(rhsInternalMessage)):
             return lhsInternalMessage == rhsInternalMessage
+        case (.getProtocolResponse, .getProtocolResponse):
+            return true
+        case (let .getProtocolRequest(lhsWorkerUUID, lhsScopeUUID, lhsProtocolID), let .getProtocolRequest(rhsWorkerUUID, rhsScopeUUID, rhsProtocolId)):
+            return (lhsWorkerUUID, lhsScopeUUID, lhsProtocolID) == (rhsWorkerUUID, rhsScopeUUID, rhsProtocolId)
+        default:
+            return false
+        }
+    }
+}
+
+extension SignallingMessagesResponse: Equatable {
+    static func == (lhs: SignallingMessagesResponse, rhs: SignallingMessagesResponse) -> Bool {
+        switch (lhs, rhs) {
+        case (let .webRTCPeerLeft(lhsWorkerUUID, lhsScopeUUID), let .webRTCPeerLeft(rhsWorkerUUID, rhsScopeUUID)):
+            return (lhsWorkerUUID, lhsScopeUUID) == (rhsWorkerUUID, rhsScopeUUID)
+        case (let .joinRoom(lhsWorkerUUID, lhsScopeUUID), let .joinRoom(rhsWorkerUUID, rhsScopeUUID)):
+            return (lhsWorkerUUID, lhsScopeUUID) == (rhsWorkerUUID, rhsScopeUUID)
+        case (let .webRTCInternalMessage(lhsInternalMessage), let .webRTCInternalMessage(rhsInternalMessage)):
+            return lhsInternalMessage == rhsInternalMessage
+        case (.getProtocolResponse, .getProtocolResponse):
+            return true
+        case (let .getProtocolRequest(lhsWorkerUUID, lhsScopeUUID, lhsProtocolID), let .getProtocolRequest(rhsWorkerUUID, rhsScopeUUID, rhsProtocolId)):
+            return (lhsWorkerUUID, lhsScopeUUID, lhsProtocolID) == (rhsWorkerUUID, rhsScopeUUID, rhsProtocolId)
         default:
             return false
         }
