@@ -15,7 +15,3 @@ protocol SignallingClientProtocol {
     func send(_ message: SignallingMessages) throws
 
 }
-
-protocol SignallingClientDelegate: class {
-    func didReceive(_ message: SignallingMessages)
-}

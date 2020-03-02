@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 class SignallingClient {
 
@@ -6,7 +7,11 @@ class SignallingClient {
     private let pingInterval: Double
     private let timerProvider: Timer.Type
     private var timer: Timer?
-    weak var delegate: SignallingClientDelegate?
+
+    private let messageSubject = PassthroughSubject<SignallingMessages, Never>()
+    var messagePublisher: AnyPublisher<SignallingMessages, Never> {
+        return messageSubject.eraseToAnyPublisher()
+    }
 
     init(url: URL,
          pingInterval: Double, timerProvider: Timer.Type = Timer.self, socketClientFactory: (_ url: URL, _ pingInterval: Double) -> SocketClientProtocol  = SignallingClient.defaultSocketClientFactory) {
@@ -73,7 +78,7 @@ extension SignallingClient: SocketClientDelegate {
             let decoder = JSONDecoder()
             do {
                 let message = try decoder.decode(SignallingMessages.self, from: messageData)
-                self.delegate?.didReceive(message)
+                self.messageSubject.send(message)
             } catch let error {
                 debugPrint(error.localizedDescription)
             }

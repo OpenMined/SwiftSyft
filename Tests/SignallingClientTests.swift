@@ -55,25 +55,10 @@ class MockTimer: Timer {
     }
 }
 
-class MockSignallingClientDelegate: SignallingClientDelegate {
-
-    var receivedMesage: SignallingMessages!
-    var didCallReceivedMessage: Bool = false
-
-    func didReceive(_ message: SignallingMessages) {
-        self.didCallReceivedMessage = true
-        self.receivedMesage = message
-    }
-
-}
-
-
 class SignallingClientTests: XCTestCase {
 
     var signallingClient: SignallingClient!
     var mockSocketClient: MockSocketClient!
-    var mockSignallingDelegate: MockSignallingClientDelegate!
-
 
     override func setUp() {
         let url = URL(string: "http://test.com")!
@@ -110,12 +95,18 @@ class SignallingClientTests: XCTestCase {
         let encoder = JSONEncoder()
         let messageData = try! encoder.encode(message)
 
-        let mockSignallingDelegate = MockSignallingClientDelegate()
-        self.signallingClient.delegate = mockSignallingDelegate
-        self.signallingClient.didReceive(socketMessage: .success(messageData))
+        var didCallMessageSubscription = false
+        var messageReceived: SignallingMessages?
 
-        XCTAssertTrue(mockSignallingDelegate.didCallReceivedMessage)
-        XCTAssertEqual(message, mockSignallingDelegate.receivedMesage)
+        let subscription = self.signallingClient.messagePublisher.sink { signallingMessage in
+            didCallMessageSubscription = true
+            messageReceived = signallingMessage
+        }
+        self.signallingClient.didReceive(socketMessage: .success(messageData))
+        subscription.cancel()
+
+        XCTAssertTrue(didCallMessageSubscription)
+        XCTAssertEqual(message, messageReceived)
 
     }
 
