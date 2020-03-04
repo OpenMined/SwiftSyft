@@ -98,7 +98,7 @@ class SignallingClientTests: XCTestCase {
         var didCallMessageSubscription = false
         var messageReceived: SignallingMessagesResponse?
 
-        let subscription = self.signallingClient.messagePublisher.sink { signallingMessage in
+        let subscription = self.signallingClient.incomingMessagePublisher.sink { signallingMessage in
             didCallMessageSubscription = true
             messageReceived = signallingMessage
         }

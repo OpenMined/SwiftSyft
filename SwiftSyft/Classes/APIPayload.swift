@@ -20,7 +20,7 @@ struct CycleRequest: Codable {
 
 struct FederatedClientConfig: Codable {}
 
-struct CycleResponseSuccess: Codable {
+public struct CycleResponseSuccess: Codable {
     let status: String
     let requestKey: String
     let trainingPlan: UUID

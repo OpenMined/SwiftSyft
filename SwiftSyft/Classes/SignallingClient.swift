@@ -8,9 +8,15 @@ class SignallingClient {
     private let timerProvider: Timer.Type
     private var timer: Timer?
 
-    private let messageSubject = PassthroughSubject<SignallingMessagesResponse, Never>()
-    var messagePublisher: AnyPublisher<SignallingMessagesResponse, Never> {
-        return messageSubject.eraseToAnyPublisher()
+    var disposeBag = Set<AnyCancellable>()
+
+    /// Used to let other components send socket messages
+    let sendMessageSubject = PassthroughSubject<SignallingMessagesRequest, Never>()
+
+    /// Used to subscribe to incoming messages
+    private let icomingMessageSubject = PassthroughSubject<SignallingMessagesResponse, Never>()
+    var incomingMessagePublisher: AnyPublisher<SignallingMessagesResponse, Never> {
+        return icomingMessageSubject.eraseToAnyPublisher()
     }
 
     init(url: URL,
@@ -19,6 +25,11 @@ class SignallingClient {
         self.pingInterval = pingInterval
         self.timerProvider = timerProvider
         self.socketClient.delegate = self
+
+        let cancellable = self.sendMessageSubject.sink { [weak self] messageRequest in
+            self?.send(messageRequest)
+        }
+        disposeBag.insert(cancellable)
     }
 
     deinit {
@@ -78,7 +89,7 @@ extension SignallingClient: SocketClientDelegate {
             let decoder = JSONDecoder()
             do {
                 let message = try decoder.decode(SignallingMessagesResponse.self, from: messageData)
-                self.messageSubject.send(message)
+                self.icomingMessageSubject.send(message)
             } catch let error {
                 debugPrint(error.localizedDescription)
             }
