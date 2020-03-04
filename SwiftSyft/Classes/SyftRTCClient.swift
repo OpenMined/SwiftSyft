@@ -26,12 +26,12 @@ public class SyftRTCClient {
 
         self.init(socketURL: socketURL, workerId: workerId, scopeId: scopeId, webRTCClient: webRTClient, signallingClient: signallingClient)
 
-        let subscription = self.signallingClient.messagePublisher.sink { signallingMessage in
+        let subscription = self.signallingClient.incomingMessagePublisher.sink { [weak self] signallingMessage in
             switch signallingMessage {
             case .getProtocolResponse:
-                self.webRTCClient.start(workerId: workerId, scopeId: scopeId)
+                self?.webRTCClient.start(workerId: workerId, scopeId: scopeId)
             default:
-                self.webRTCClient.received(signallingMessage)
+                self?.webRTCClient.received(signallingMessage)
             }
         }
         self.disposeBag.insert(subscription)
