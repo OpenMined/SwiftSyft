@@ -36,7 +36,7 @@ public class SyftJob: SyftJobProtocol {
     let ping: String = ""
     let upload: String = ""
 
-    var onReadyBlock: (CycleResponseSuccess) -> Void = { _ in }
+    var onAcceptedBlock: (CycleResponseSuccess) -> Void = { _ in }
 
     private var disposeBag = Set<AnyCancellable>()
 
@@ -97,7 +97,7 @@ public class SyftJob: SyftJobProtocol {
                 case .cycleRequestResponse(let result):
                     switch result {
                     case .success(let cycleSuccess):
-                        self.onReadyBlock(cycleSuccess)
+                        self.onAcceptedBlock(cycleSuccess)
                     case .failure(let error):
                         print(error.localizedDescription)
                         return
@@ -112,13 +112,13 @@ public class SyftJob: SyftJobProtocol {
 
     }
 
-    public func onReady(execute: @escaping (CycleResponseSuccess) -> Void) {
-        self.onReadyBlock = execute
+    public func onAccepted(execute: @escaping (CycleResponseSuccess) -> Void) {
+        self.onAcceptedBlock = execute
     }
 
     /// Report the results of the learning cycle to PyGrid at "federated
     public func report() {
-        // TODO: Send job report after onReady finishes execution
+        // TODO: Send job report after onAccepted finishes execution
         //
     }
 
