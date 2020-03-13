@@ -10,7 +10,8 @@
 #endif
 #endif
 
-#include "SimplePing.h"
+#include "SwiftSyft.h"
+
 FOUNDATION_EXPORT double SwiftSyftVersionNumber;
 FOUNDATION_EXPORT const unsigned char SwiftSyftVersionString[];
 
