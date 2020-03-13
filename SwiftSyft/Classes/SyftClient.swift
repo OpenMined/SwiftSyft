@@ -1,24 +1,43 @@
 import Foundation
 import Combine
 
+enum SyftConnectionType {
+    case http(URL)
+    case socket(URL)
+}
+
 public class SyftClient: SyftClientProtocol {
     private let url: URL
     private let signallingClient: SignallingClient
+    private let connectionType: SyftConnectionType
 
-    init(url: URL, signallingClient: SignallingClient) {
+    init?(url: URL, signallingClient: SignallingClient) {
+
+        let connectionType: SyftConnectionType
+        if url.scheme == "http://" {
+            connectionType = .http(url)
+        } else if url.scheme == "ws://" {
+            connectionType = .socket(url)
+        } else {
+            return nil
+        }
+
         self.signallingClient = signallingClient
         self.url = url
+        self.connectionType = connectionType
     }
 
-    convenience public init(url: URL) {
+    convenience public init?(url: URL) {
         let signallingClient = SignallingClient(url: url, pingInterval: 30)
         self.init(url: url, signallingClient: signallingClient)
     }
 
     public func newJob(modelName: String, version: String) -> SyftJob {
+
         return SyftJob(url: self.url,
                        modelName: modelName,
                        version: version,
+                       connectionType: self.connectionType,
                        sendMessageSubject: self.signallingClient.sendMessageSubject,
                        receiveMessagePublisher: self.signallingClient.incomingMessagePublisher)
     }
@@ -30,6 +49,7 @@ public class SyftJob: SyftJobProtocol {
     var workerUUID: UUID?
     let modelName: String
     let version: String
+    private let connectionType: SyftConnectionType
 
     // Must be populated on `start`
     let download: String = ""
@@ -48,17 +68,30 @@ public class SyftJob: SyftJobProtocol {
 
     init(url: URL, modelName: String,
          version: String,
+         connectionType: SyftConnectionType,
          sendMessageSubject: PassthroughSubject<SignallingMessagesRequest, Never>,
          receiveMessagePublisher: AnyPublisher<SignallingMessagesResponse, Never>) {
         self.url = url
         self.modelName = modelName
         self.version = version
+        self.connectionType = connectionType
         self.sendMessageSubject = sendMessageSubject
         self.receiveMessagePublisher = receiveMessagePublisher
     }
 
     /// Request to join a federated learning cycle at "federated/cycle-request" endpoint (https://github.com/OpenMined/PyGrid/issues/445)
     public func start() {
+
+        switch self.connectionType {
+        case .http(let url):
+            self.startThroughHTTP(url: url, authToken: nil)
+        case .socket(let url):
+            self.startThroughSocket(url: url, authToken: nil)
+        }
+
+    }
+
+    func startThroughHTTP(url: URL, authToken: String?) {
 
         // TODO: Execute an authentication request to PyGrid:
         // URL endpoint: POST federated/authenticate
@@ -75,7 +108,7 @@ public class SyftJob: SyftJobProtocol {
 
     }
 
-    public func startThroughSocket(authToken: String?) {
+    public func startThroughSocket(url: URL, authToken: String?) {
 
         self.sendMessageSubject.send(.authRequest(authToken: authToken))
         self.receiveMessagePublisher.sink { [weak self] socketMessageResponse in
