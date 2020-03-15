@@ -36,7 +36,7 @@ public class SyftWebSocket: NSObject, SocketClientProtocol, URLSessionWebSocketD
         webSocketTask.cancel(with: .goingAway, reason: nil)
     }
     public func listen() {
-        webSocketTask.receive { result in
+        webSocketTask.receive { [weak self] result in
             switch result {
             case .failure(let error):
                 #if DEBUG
@@ -48,19 +48,19 @@ public class SyftWebSocket: NSObject, SocketClientProtocol, URLSessionWebSocketD
                     guard let data = text.data(using: .utf8) else {
                         break
                     }
-                    self.delegate?.didReceive(socketMessage: .success(data))
+                    self?.delegate?.didReceive(socketMessage: .success(data))
                     #if DEBUG
                     print("Received text: \(text)")
                     #endif
                 case .data(let data):
-                    self.delegate?.didReceive(socketMessage: .success(data))
+                    self?.delegate?.didReceive(socketMessage: .success(data))
                     #if DEBUG
                     print("Received data: \(data.count)")
                     #endif
                 @unknown default:
                     fatalError()
                 }
-                self.listen()
+                self?.listen()
             }
         }
     }
