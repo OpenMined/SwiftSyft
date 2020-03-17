@@ -192,8 +192,8 @@
 		74F899F8241AD9F400D3656E /* PingChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PingChecker.swift; sourceTree = "<group>"; };
 		74F899FB241ADC6300D3656E /* SimplePing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimplePing.h; sourceTree = "<group>"; };
 		74F899FC241ADC6300D3656E /* SimplePing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimplePing.m; sourceTree = "<group>"; };
-		74F89A01241ADE5500D3656E /* SwiftSyft.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftSyft.h; sourceTree = "<group>"; };
-		74F89A0C241AECA200D3656E /* PingCheckerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PingCheckerTests.swift; sourceTree = "<group>"; };
+		74F89A01241ADE5500D3656E /* SwiftSyft.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SwiftSyft.h; path = SwiftSyft/SwiftSyft.h; sourceTree = "<group>"; };
+		74F89A0C241AECA200D3656E /* PingCheckerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PingCheckerTests.swift; path = Tests/PingCheckerTests.swift; sourceTree = "<group>"; };
 		75EC98A1D8DF279FDDC9D29DDDDF828C /* Pods-SwiftSyft_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SwiftSyft_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		7C325E630926A18282E9AF6518A4EF0D /* Compression.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Compression.swift; path = Sources/Compression/Compression.swift; sourceTree = "<group>"; };
 		7CBC2165B43D61995A4A6707425941EF /* LibTorch.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = LibTorch.xcconfig; sourceTree = "<group>"; };
