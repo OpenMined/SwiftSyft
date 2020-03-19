@@ -1,8 +1,8 @@
 import Foundation
 
-public typealias PingCheckerCallback = (UInt16?)->()
+internal typealias PingCheckerCallback = (UInt16?) -> Void
 
-public class PingChecker: NSObject {
+internal class PingChecker: NSObject {
     static let singletonPingChecker = PingChecker()
 
     private var pingResultCallback: PingCheckerCallback?
