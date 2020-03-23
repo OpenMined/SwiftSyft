@@ -1,7 +1,15 @@
 import Foundation
 
+struct AuthRequest: Codable {
+    let authToken: String
+}
+
+struct AuthResponse: Codable {
+    let workerId: String
+}
+
 struct CycleRequest: Codable {
-    let workerId: UUID
+    let workerId: String
     let model: String
     let version: String
     let ping: String
@@ -18,7 +26,24 @@ struct CycleRequest: Codable {
     }
 }
 
-struct FederatedClientConfig: Codable {}
+enum CycleResponse {
+    case success(CycleResponseSuccess)
+    case failure(CycleResponseFailed)
+}
+
+extension CycleResponse: Decodable {
+
+    init(from decoder: Decoder) throws {
+
+        do {
+            self = .success(try CycleResponseSuccess(from: decoder))
+        } catch {
+            self = .failure(try CycleResponseFailed(from: decoder))
+        }
+
+    }
+
+}
 
 public struct CycleResponseSuccess: Codable {
     let status: String
@@ -40,13 +65,31 @@ public struct CycleResponseSuccess: Codable {
 
 struct CycleResponseFailed: Codable {
     let status: String
-    let timeout: Int
+    var timeout: Int?
+    var error: String?
 
     enum CodingKeys: String, CodingKey {
         case status
         case timeout
+        case error
     }
 }
+
+extension CycleResponseFailed {
+
+    init(from decoder: Decoder) throws {
+
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        status = try container.decode(String.self, forKey: .status)
+        timeout = try container.decodeIfPresent(Int.self, forKey: .timeout)
+        error = try container.decodeIfPresent(String.self, forKey: .error)
+
+    }
+
+}
+
+
+struct FederatedClientConfig: Codable {}
 
 // From https://medium.com/@JinwooChoi/passing-parameters-to-restful-api-with-swift-codable-d78eb78f7b1
 protocol DictionaryEncodable: Encodable {}

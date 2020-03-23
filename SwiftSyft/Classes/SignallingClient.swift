@@ -14,9 +14,9 @@ class SignallingClient {
     let sendMessageSubject = PassthroughSubject<SignallingMessagesRequest, Never>()
 
     /// Used to subscribe to incoming messages
-    private let icomingMessageSubject = PassthroughSubject<SignallingMessagesResponse, Never>()
+    private let incomingMessageSubject = PassthroughSubject<SignallingMessagesResponse, Never>()
     var incomingMessagePublisher: AnyPublisher<SignallingMessagesResponse, Never> {
-        return icomingMessageSubject.eraseToAnyPublisher()
+        return incomingMessageSubject.eraseToAnyPublisher()
     }
 
     init(url: URL,
@@ -89,7 +89,7 @@ extension SignallingClient: SocketClientDelegate {
             let decoder = JSONDecoder()
             do {
                 let message = try decoder.decode(SignallingMessagesResponse.self, from: messageData)
-                self.icomingMessageSubject.send(message)
+                self.incomingMessageSubject.send(message)
             } catch let error {
                 debugPrint(error.localizedDescription)
             }

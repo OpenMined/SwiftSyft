@@ -42,6 +42,9 @@ class HomeViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var messageTextView: UITextView!
     @IBOutlet weak var sendButton: UIButton!
 
+    private var syftJob: SyftJob?
+    private var syftClient: SyftClient?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -108,10 +111,16 @@ class HomeViewController: UIViewController, UITextViewDelegate {
 //        }
 
         // Connect using webrtc connection
-        let socketURL = URL(string: StaticHomeScreenStrings.socketURL)!
-        self.syftRTCClient = SyftRTCClient(socketURL: socketURL, workerId: UUID(uuidString: "eeb370bc-6a17-4cb3-9644-bde71e1a38a5")!, scopeId: UUID(uuidString: "d54cb968-517a-45b5-891d-4d233bbfa536")!)
-        self.syftRTCClient.connect()
+//        let socketURL = URL(string: StaticHomeScreenStrings.socketURL)!
+//        self.syftRTCClient = SyftRTCClient(socketURL: socketURL, workerId: UUID(uuidString: "eeb370bc-6a17-4cb3-9644-bde71e1a38a5")!, scopeId: UUID(uuidString: "d54cb968-517a-45b5-891d-4d233bbfa536")!)
+//        self.syftRTCClient.connect()
 
+        // Initate federated cylcle request
+        if let syftClient = SyftClient(url: URL(string: "http://127.0.0.1:5000")!) {
+            self.syftJob = syftClient.newJob(modelName: "mnist", version: "1.0.0")
+            self.syftJob?.start()
+            self.syftClient = syftClient
+        }
     }
 
     @IBAction func sendPressed(_ sender: Any) {
