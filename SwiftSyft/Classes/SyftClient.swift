@@ -151,7 +151,6 @@ public class SyftJob: SyftJobProtocol {
 
         let encoder = JSONEncoder()
         let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
 
         let cycleRequestURL = self.url.appendingPathComponent("federated/cycle-request")
         var cycleRequest = URLRequest(url: cycleRequestURL)
@@ -164,10 +163,7 @@ public class SyftJob: SyftJobProtocol {
         cycleRequest.httpBody = try? encoder.encode(cycleRequestBody)
 
         return URLSession.shared.dataTaskPublisher(for: cycleRequest)
-                .map {
-                    print(String(data: $0.data, encoding: .utf8)!)
-                    return $0.data
-                }
+                .map { $0.data }
                 .decode(type: CycleResponse.self, decoder: decoder)
                 .eraseToAnyPublisher()
     }
