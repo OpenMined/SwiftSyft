@@ -45,21 +45,39 @@ extension CycleResponse: Decodable {
 
 }
 
-public struct CycleResponseSuccess: Codable {
+public struct CycleResponseSuccess: Decodable {
     let status: String
     let requestKey: String
-    let trainingPlan: UUID
+    let model: String
+    let modelId: Int
     let clientConfig: FederatedClientConfig
-    let protocolId: UUID
-    let model: UUID
 
     enum CodingKeys: String, CodingKey {
         case status = "status"
         case requestKey = "request_key"
-        case trainingPlan = "training_plan"
-        case clientConfig = "client_config"
-        case protocolId = "protocol"
+        case modelId = "model_id"
         case model = "model"
+        case clientConfig = "client_config"
+    }
+}
+
+public extension CycleResponseSuccess {
+
+    init(from decoder: Decoder) throws {
+
+        let container = try decoder.container(keyedBy: CycleResponseSuccess.CodingKeys.self)
+        status = try container.decode(String.self, forKey: .status)
+        requestKey = try container.decode(String.self, forKey: .requestKey)
+        model = try container.decode(String.self, forKey: .model)
+        modelId = try container.decode(Int.self, forKey: .modelId)
+
+        let nestedContainer = try container.nestedContainer(keyedBy: FederatedClientConfig.CodingKeys.self, forKey: .clientConfig)
+        let name =  try nestedContainer.decode(String.self, forKey: .name)
+        let version =  try nestedContainer.decode(String.self, forKey: .version)
+        let batchSize =  try nestedContainer.decode(Int.self, forKey: .batchSize)
+        let learningRate =  try nestedContainer.decode(Float.self, forKey: .learningRate)
+        let maxUpdates =  try nestedContainer.decode(Int.self, forKey: .maxUpdates)
+        clientConfig = FederatedClientConfig(name: name, version: version, batchSize: batchSize, learningRate: learningRate, maxUpdates: maxUpdates)
     }
 }
 
@@ -88,8 +106,21 @@ extension CycleResponseFailed {
 
 }
 
+struct FederatedClientConfig: Codable {
+    let name: String
+    let version: String
+    let batchSize: Int
+    let learningRate: Float
+    let maxUpdates: Int
 
-struct FederatedClientConfig: Codable {}
+    enum CodingKeys: String, CodingKey {
+        case name
+        case version
+        case batchSize = "batch_size"
+        case learningRate = "lr"
+        case maxUpdates = "max_updates"
+    }
+}
 
 // From https://medium.com/@JinwooChoi/passing-parameters-to-restful-api-with-swift-codable-d78eb78f7b1
 protocol DictionaryEncodable: Encodable {}
