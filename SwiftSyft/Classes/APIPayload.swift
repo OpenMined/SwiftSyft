@@ -81,7 +81,7 @@ public extension CycleResponseSuccess {
     }
 }
 
-struct CycleResponseFailed: Codable {
+struct CycleResponseFailed: Codable, Error {
     let status: String
     var timeout: Int?
     var error: String?

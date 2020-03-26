@@ -122,8 +122,12 @@ public class SyftJob: SyftJobProtocol {
             .decode(type: AuthResponse.self, decoder: decoder)
             .eraseToAnyPublisher()
             .map({ $0.workerId })
-            .flatMap { [unowned self] workerId in
+            .flatMap { [unowned self] workerId -> AnyPublisher<(CycleResponseSuccess, String), Error> in
                 return self.cycleRequest(forWorkerId: workerId)
+            }
+            .flatMap { (cycleResponse) -> AnyPublisher<Data, Error> in
+                let (cycleResponseSuccess, workerId) = cycleResponse
+                return self.downloadModel(forWorkerId: workerId, modelId: cycleResponseSuccess.modelId, requestKey: cycleResponseSuccess.requestKey)
             }
             .sink(receiveCompletion: { completionResult in
                 switch completionResult {
@@ -133,28 +137,21 @@ public class SyftJob: SyftJobProtocol {
                 case .finished:
                     return
                 }
-            }, receiveValue: { cycleResponse in
-            switch cycleResponse {
-            case .success(_):
-                // TODO: Start federated cycle
-                debugPrint("Cycle request success")
-            case .failure(_):
-                // TODO: Call on error block
-                debugPrint("Cycle response failure")
-                }
+            }, receiveValue: { modelData in
+                print(modelData)
             })
             .store(in: &disposeBag)
 
     }
 
-    func cycleRequest(forWorkerId workerId: String) -> AnyPublisher<CycleResponse, Error> {
+    func cycleRequest(forWorkerId workerId: String) -> AnyPublisher<(CycleResponseSuccess, String), Error> {
 
         let encoder = JSONEncoder()
         let decoder = JSONDecoder()
 
         let cycleRequestURL = self.url.appendingPathComponent("federated/cycle-request")
-        var cycleRequest = URLRequest(url: cycleRequestURL)
-        cycleRequest    .httpMethod = "POST"
+        var cycleRequest: URLRequest = URLRequest(url: cycleRequestURL)
+        cycleRequest.httpMethod = "POST"
         cycleRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
         cycleRequest.addValue("application/json", forHTTPHeaderField: "Accept")
 
@@ -165,7 +162,43 @@ public class SyftJob: SyftJobProtocol {
         return URLSession.shared.dataTaskPublisher(for: cycleRequest)
                 .map { $0.data }
                 .decode(type: CycleResponse.self, decoder: decoder)
+                .tryMap { cycleResponse -> (CycleResponseSuccess, String) in
+                    switch cycleResponse {
+                    case .success(let cycleResponseSuccess):
+                        return (cycleResponseSuccess, workerId)
+                    case .failure(let cycleResponseFailure):
+                        throw cycleResponseFailure
+                    }
+                }
                 .eraseToAnyPublisher()
+    }
+
+    func downloadModel(forWorkerId workerId: String, modelId: Int, requestKey: String) -> AnyPublisher<Data, Error> {
+
+        var urlComponents = URLComponents()
+        urlComponents.scheme = self.url.scheme
+        urlComponents.port = self.url.port
+        urlComponents.host = self.url.host
+        urlComponents.path = "/federated/get-model"
+        urlComponents.queryItems = [
+            URLQueryItem(name: "worker_id", value: workerId),
+            URLQueryItem(name: "model_id", value: String(modelId)),
+            URLQueryItem(name: "request_key", value: requestKey)
+        ]
+
+        guard let downloadModelURL = urlComponents.url else {
+            let urlError = URLError(.badURL)
+            return Fail(error: urlError).eraseToAnyPublisher()
+        }
+
+        var downloadModelRequest = URLRequest(url: downloadModelURL)
+        downloadModelRequest.httpMethod = "GET"
+
+        return URLSession.shared.dataTaskPublisher(for: downloadModelRequest)
+                    .map { $0.data }
+                    .mapError { $0 as Error}
+                    .eraseToAnyPublisher()
+
     }
 
     func startThroughSocket(url: URL,
@@ -181,7 +214,6 @@ public class SyftJob: SyftJobProtocol {
                 case .authRequestResponse(let result):
                     switch result {
                     case .success(let workerId):
-
                         self.workerId = workerId
                         let cycleRequest = CycleRequest(workerId: workerId, model: self.modelName, version: self.version, ping: self.ping, download: self.download, upload: self.upload)
                         print(cycleRequest.workerId)
