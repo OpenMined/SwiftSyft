@@ -117,7 +117,7 @@ public class SyftJob: SyftJobProtocol {
 
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        URLSession.shared.dataTaskPublisher(for: authRequest)
+        let cycleRequestPublisher = URLSession.shared.dataTaskPublisher(for: authRequest)
             .map { $0.data }
             .decode(type: AuthResponse.self, decoder: decoder)
             .eraseToAnyPublisher()
@@ -125,9 +125,31 @@ public class SyftJob: SyftJobProtocol {
             .flatMap { [unowned self] workerId -> AnyPublisher<(CycleResponseSuccess, String), Error> in
                 return self.cycleRequest(forWorkerId: workerId)
             }
+
+        // Download model params
+        cycleRequestPublisher
             .flatMap { (cycleResponse) -> AnyPublisher<Data, Error> in
                 let (cycleResponseSuccess, workerId) = cycleResponse
                 return self.downloadModel(forWorkerId: workerId, modelId: cycleResponseSuccess.modelId, requestKey: cycleResponseSuccess.requestKey)
+            }
+            .sink(receiveCompletion: { completionResult in
+                switch completionResult {
+                case .failure(let error):
+                    // TODO: Call on error block
+                    debugPrint(error.localizedDescription)
+                case .finished:
+                    return
+                }
+            }, receiveValue: { modelData in
+                print(modelData)
+            })
+            .store(in: &disposeBag)
+
+        // Download plan
+        cycleRequestPublisher
+            .flatMap { (cycleResponse) -> AnyPublisher<Data, Error> in
+                let (cycleResponseSuccess, workerId) = cycleResponse
+                return self.downloadPlan(forWorkerId: workerId, planId: cycleResponseSuccess.planConfig.planId, requestKey: cycleResponseSuccess.requestKey)
             }
             .sink(receiveCompletion: { completionResult in
                 switch completionResult {
@@ -160,7 +182,10 @@ public class SyftJob: SyftJobProtocol {
         cycleRequest.httpBody = try? encoder.encode(cycleRequestBody)
 
         return URLSession.shared.dataTaskPublisher(for: cycleRequest)
-                .map { $0.data }
+                .map {
+                    print(String(data: $0.data, encoding: .utf8)!)
+                    return $0.data
+                }
                 .decode(type: CycleResponse.self, decoder: decoder)
                 .tryMap { cycleResponse -> (CycleResponseSuccess, String) in
                     switch cycleResponse {
@@ -183,6 +208,34 @@ public class SyftJob: SyftJobProtocol {
         urlComponents.queryItems = [
             URLQueryItem(name: "worker_id", value: workerId),
             URLQueryItem(name: "model_id", value: String(modelId)),
+            URLQueryItem(name: "request_key", value: requestKey)
+        ]
+
+        guard let downloadModelURL = urlComponents.url else {
+            let urlError = URLError(.badURL)
+            return Fail(error: urlError).eraseToAnyPublisher()
+        }
+
+        var downloadModelRequest = URLRequest(url: downloadModelURL)
+        downloadModelRequest.httpMethod = "GET"
+
+        return URLSession.shared.dataTaskPublisher(for: downloadModelRequest)
+                    .map { $0.data }
+                    .mapError { $0 as Error}
+                    .eraseToAnyPublisher()
+
+    }
+
+    func downloadPlan(forWorkerId workerId: String, planId: Int, requestKey: String) -> AnyPublisher<Data, Error> {
+
+        var urlComponents = URLComponents()
+        urlComponents.scheme = self.url.scheme
+        urlComponents.port = self.url.port
+        urlComponents.host = self.url.host
+        urlComponents.path = "/federated/get-plan"
+        urlComponents.queryItems = [
+            URLQueryItem(name: "worker_id", value: workerId),
+            URLQueryItem(name: "plan_id", value: String(planId)),
             URLQueryItem(name: "request_key", value: requestKey)
         ]
 
