@@ -50,6 +50,7 @@ public struct CycleResponseSuccess: Decodable {
     let requestKey: String
     let model: String
     let modelId: Int
+    let planConfig: PlanConfig
     let clientConfig: FederatedClientConfig
 
     enum CodingKeys: String, CodingKey {
@@ -57,6 +58,7 @@ public struct CycleResponseSuccess: Decodable {
         case requestKey = "request_key"
         case modelId = "model_id"
         case model = "model"
+        case planConfig = "plans"
         case clientConfig = "client_config"
     }
 }
@@ -71,12 +73,16 @@ public extension CycleResponseSuccess {
         model = try container.decode(String.self, forKey: .model)
         modelId = try container.decode(Int.self, forKey: .modelId)
 
-        let nestedContainer = try container.nestedContainer(keyedBy: FederatedClientConfig.CodingKeys.self, forKey: .clientConfig)
-        let name =  try nestedContainer.decode(String.self, forKey: .name)
-        let version =  try nestedContainer.decode(String.self, forKey: .version)
-        let batchSize =  try nestedContainer.decode(Int.self, forKey: .batchSize)
-        let learningRate =  try nestedContainer.decode(Float.self, forKey: .learningRate)
-        let maxUpdates =  try nestedContainer.decode(Int.self, forKey: .maxUpdates)
+        let planContainer = try container.nestedContainer(keyedBy: PlanConfig.CodingKeys.self, forKey: .planConfig)
+        let planId = try planContainer.decode(Int.self, forKey: .planId)
+        planConfig = PlanConfig(planId: planId)
+
+        let clientConfigContainer = try container.nestedContainer(keyedBy: FederatedClientConfig.CodingKeys.self, forKey: .clientConfig)
+        let name =  try clientConfigContainer.decode(String.self, forKey: .name)
+        let version =  try clientConfigContainer.decode(String.self, forKey: .version)
+        let batchSize =  try clientConfigContainer.decode(Int.self, forKey: .batchSize)
+        let learningRate =  try clientConfigContainer.decode(Float.self, forKey: .learningRate)
+        let maxUpdates =  try clientConfigContainer.decode(Int.self, forKey: .maxUpdates)
         clientConfig = FederatedClientConfig(name: name, version: version, batchSize: batchSize, learningRate: learningRate, maxUpdates: maxUpdates)
     }
 }
@@ -119,6 +125,14 @@ struct FederatedClientConfig: Codable {
         case batchSize = "batch_size"
         case learningRate = "lr"
         case maxUpdates = "max_updates"
+    }
+}
+
+struct PlanConfig: Codable {
+    let planId: Int
+
+    enum CodingKeys: String, CodingKey {
+        case planId = "training_plan"
     }
 }
 
