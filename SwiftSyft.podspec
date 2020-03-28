@@ -42,7 +42,6 @@ Pod::Spec.new do |s|
   # s.frameworks = 'UIKit', 'MapKit'
   s.dependency 'LibTorch', '~> 1.3.0'
   s.dependency 'GoogleWebRTC', '~> 1.1.0'
-  s.dependency 'Starscream', '~> 4.0.0'
   
   s.test_spec 'Tests' do |test_spec|
     test_spec.source_files = 'Tests/*.swift'
