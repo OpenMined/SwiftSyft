@@ -23,4 +23,4 @@ jobs:
           pod install
         shell: bash    
       - name: Build SwiftSyft project - ${{ matrix.destination }}
-        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild test -scheme SwiftSyft-Example -workspace Example/SwiftSyft.xcworkspace -destination ${{ matrix.destination }} CODE_SIGNING_ALLOWED=NO IPHONEOS_DEPLOYMENT_TARGET=13.0 | xcpretty
+        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild test -scheme SwiftSyft-Example -workspace Example/SwiftSyft.xcworkspace -destination "${{ matrix.destination }}" CODE_SIGNING_ALLOWED=NO IPHONEOS_DEPLOYMENT_TARGET=13.0 | xcpretty
