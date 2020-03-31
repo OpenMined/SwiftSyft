@@ -163,6 +163,19 @@ public class SyftJob: SyftJobProtocol {
             }
             .map { TorchTrainingModule(fileAtPath: $0) }
 
+        planPublisher.zip(modelParamPublisher)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    print("finshed")
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }, receiveValue: { (trainingModule, modelParam) in
+                print("zipped")
+                print(trainingModule)
+                print(modelParam)
+            }).store(in: &disposeBag)
     }
 
     func cycleRequest(forWorkerId workerId: String) -> AnyPublisher<(CycleResponseSuccess, String), Error> {
