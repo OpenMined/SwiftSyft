@@ -161,6 +161,7 @@ public class SyftJob: SyftJobProtocol {
 
                 return fileURL.path
             }
+            .map { TorchTrainingModule(fileAtPath: $0) }
 
     }
 
