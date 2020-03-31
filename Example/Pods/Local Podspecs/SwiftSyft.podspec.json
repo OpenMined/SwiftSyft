@@ -30,6 +30,9 @@
     ],
     "GoogleWebRTC": [
       "~> 1.1.0"
+    ],
+    "SyftProto": [
+      "0.2.4.a1"
     ]
   },
   "testspecs": [
