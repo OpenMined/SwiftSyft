@@ -20,7 +20,7 @@
     if (self) {
         _torchScriptFilePath = filePath;
     }
-    return filePath;
+    return self;
 }
 
 @end
