@@ -1,11 +1,16 @@
 import Foundation
 import Combine
+import SyftProto
 
 enum SyftConnectionType {
     case http(URL)
     case socket(url: URL,
         sendMessageSubject: PassthroughSubject<SignallingMessagesRequest, Never>,
         receiveMessagePublisher: AnyPublisher<SignallingMessagesResponse, Never>)
+}
+
+struct SyftClientError: Error {
+    let message: String
 }
 
 public class SyftClient: SyftClientProtocol {
@@ -127,42 +132,35 @@ public class SyftJob: SyftJobProtocol {
             }
 
         // Download model params
-        cycleRequestPublisher
+        let modelParamPublisher = cycleRequestPublisher
             .flatMap { (cycleResponse) -> AnyPublisher<Data, Error> in
                 let (cycleResponseSuccess, workerId) = cycleResponse
                 return self.downloadModel(forWorkerId: workerId, modelId: cycleResponseSuccess.modelId, requestKey: cycleResponseSuccess.requestKey)
             }
-            .sink(receiveCompletion: { completionResult in
-                switch completionResult {
-                case .failure(let error):
-                    // TODO: Call on error block
-                    debugPrint(error.localizedDescription)
-                case .finished:
-                    return
-                }
-            }, receiveValue: { modelData in
-                print(modelData)
-            })
-            .store(in: &disposeBag)
+            .tryMap { try SyftProto_Execution_V1_State(serializedData: $0) }
 
         // Download plan
-        cycleRequestPublisher
+        let planPublisher = cycleRequestPublisher
             .flatMap { (cycleResponse) -> AnyPublisher<Data, Error> in
                 let (cycleResponseSuccess, workerId) = cycleResponse
                 return self.downloadPlan(forWorkerId: workerId, planId: cycleResponseSuccess.planConfig.planId, requestKey: cycleResponseSuccess.requestKey)
             }
-            .sink(receiveCompletion: { completionResult in
-                switch completionResult {
-                case .failure(let error):
-                    // TODO: Call on error block
-                    debugPrint(error.localizedDescription)
-                case .finished:
-                    return
+            .tryMap { try SyftProto_Types_Torch_V1_ScriptModule(serializedData: $0) }
+            .tryMap { torchScriptPlan -> String in
+
+                // Save torchscript plan to filesystem before loading
+                let torchscriptData = torchScriptPlan.obj
+
+                let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+                guard let documentDirectory = urls.first else {
+                    throw SyftClientError(message: "Error saving plan. Saving not allowed")
                 }
-            }, receiveValue: { modelData in
-                print(modelData)
-            })
-            .store(in: &disposeBag)
+
+                let fileURL = documentDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("pt")
+                try torchscriptData.write(to: fileURL, options: .atomic)
+
+                return fileURL.path
+            }
 
     }
 
@@ -182,10 +180,7 @@ public class SyftJob: SyftJobProtocol {
         cycleRequest.httpBody = try? encoder.encode(cycleRequestBody)
 
         return URLSession.shared.dataTaskPublisher(for: cycleRequest)
-                .map {
-                    print(String(data: $0.data, encoding: .utf8)!)
-                    return $0.data
-                }
+                .map { $0.data }
                 .decode(type: CycleResponse.self, decoder: decoder)
                 .tryMap { cycleResponse -> (CycleResponseSuccess, String) in
                     switch cycleResponse {
