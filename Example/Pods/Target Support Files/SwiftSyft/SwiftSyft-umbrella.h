@@ -11,6 +11,7 @@
 #endif
 
 #import "SimplePing.h"
+#import "TorchTrainingModule.h"
 #import "SwiftSyft.h"
 
 FOUNDATION_EXPORT double SwiftSyftVersionNumber;
