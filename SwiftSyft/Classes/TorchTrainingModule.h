@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface TorchTrainingModule : NSObject
 
-- (nullable instancetype)initWithFileAtPath:(NSString*)filePath
+- (instancetype)initWithFileAtPath:(NSString*)filePath
 NS_SWIFT_NAME(init(fileAtPath:))NS_DESIGNATED_INITIALIZER;
 
 
