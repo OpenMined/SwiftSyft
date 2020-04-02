@@ -19,22 +19,30 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-public struct SyftProto_Execution_V1_ComputationAction {
+struct SyftProto_Execution_V1_ComputationAction {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var command: String {
+  var command: String {
     get {return _storage._command}
     set {_uniqueStorage()._command = newValue}
   }
 
-  public var target: OneOf_Target? {
+  var target: OneOf_Target? {
     get {return _storage._target}
     set {_uniqueStorage()._target = newValue}
   }
 
-  public var targetPointer: SyftProto_Generic_Pointers_V1_PointerTensor {
+  var targetID: SyftProto_Types_Syft_V1_Id {
+    get {
+      if case .targetID(let v)? = _storage._target {return v}
+      return SyftProto_Types_Syft_V1_Id()
+    }
+    set {_uniqueStorage()._target = .targetID(newValue)}
+  }
+
+  var targetPointer: SyftProto_Generic_Pointers_V1_PointerTensor {
     get {
       if case .targetPointer(let v)? = _storage._target {return v}
       return SyftProto_Generic_Pointers_V1_PointerTensor()
@@ -42,15 +50,15 @@ public struct SyftProto_Execution_V1_ComputationAction {
     set {_uniqueStorage()._target = .targetPointer(newValue)}
   }
 
-  public var targetPlaceholder: SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_Placeholder {
+  var targetPlaceholderID: SyftProto_Execution_V1_PlaceholderId {
     get {
-      if case .targetPlaceholder(let v)? = _storage._target {return v}
-      return SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_Placeholder()
+      if case .targetPlaceholderID(let v)? = _storage._target {return v}
+      return SyftProto_Execution_V1_PlaceholderId()
     }
-    set {_uniqueStorage()._target = .targetPlaceholder(newValue)}
+    set {_uniqueStorage()._target = .targetPlaceholderID(newValue)}
   }
 
-  public var targetTensor: SyftProto_Types_Torch_V1_TorchTensor {
+  var targetTensor: SyftProto_Types_Torch_V1_TorchTensor {
     get {
       if case .targetTensor(let v)? = _storage._target {return v}
       return SyftProto_Types_Torch_V1_TorchTensor()
@@ -58,38 +66,40 @@ public struct SyftProto_Execution_V1_ComputationAction {
     set {_uniqueStorage()._target = .targetTensor(newValue)}
   }
 
-  public var args: [SyftProto_Types_Syft_V1_Arg] {
+  var args: [SyftProto_Types_Syft_V1_Arg] {
     get {return _storage._args}
     set {_uniqueStorage()._args = newValue}
   }
 
-  public var kwargs: Dictionary<String,SyftProto_Types_Syft_V1_Arg> {
+  var kwargs: Dictionary<String,SyftProto_Types_Syft_V1_Arg> {
     get {return _storage._kwargs}
     set {_uniqueStorage()._kwargs = newValue}
   }
 
-  public var returnIds: [SyftProto_Types_Syft_V1_Id] {
+  var returnIds: [SyftProto_Types_Syft_V1_Id] {
     get {return _storage._returnIds}
     set {_uniqueStorage()._returnIds = newValue}
   }
 
-  public var returnPlaceholders: [SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_Placeholder] {
-    get {return _storage._returnPlaceholders}
-    set {_uniqueStorage()._returnPlaceholders = newValue}
+  var returnPlaceholderIds: [SyftProto_Execution_V1_PlaceholderId] {
+    get {return _storage._returnPlaceholderIds}
+    set {_uniqueStorage()._returnPlaceholderIds = newValue}
   }
 
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
+  var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum OneOf_Target: Equatable {
+  enum OneOf_Target: Equatable {
+    case targetID(SyftProto_Types_Syft_V1_Id)
     case targetPointer(SyftProto_Generic_Pointers_V1_PointerTensor)
-    case targetPlaceholder(SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_Placeholder)
+    case targetPlaceholderID(SyftProto_Execution_V1_PlaceholderId)
     case targetTensor(SyftProto_Types_Torch_V1_TorchTensor)
 
   #if !swift(>=4.1)
-    public static func ==(lhs: SyftProto_Execution_V1_ComputationAction.OneOf_Target, rhs: SyftProto_Execution_V1_ComputationAction.OneOf_Target) -> Bool {
+    static func ==(lhs: SyftProto_Execution_V1_ComputationAction.OneOf_Target, rhs: SyftProto_Execution_V1_ComputationAction.OneOf_Target) -> Bool {
       switch (lhs, rhs) {
+      case (.targetID(let l), .targetID(let r)): return l == r
       case (.targetPointer(let l), .targetPointer(let r)): return l == r
-      case (.targetPlaceholder(let l), .targetPlaceholder(let r)): return l == r
+      case (.targetPlaceholderID(let l), .targetPlaceholderID(let r)): return l == r
       case (.targetTensor(let l), .targetTensor(let r)): return l == r
       default: return false
       }
@@ -97,7 +107,7 @@ public struct SyftProto_Execution_V1_ComputationAction {
   #endif
   }
 
-  public init() {}
+  init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
 }
@@ -107,16 +117,17 @@ public struct SyftProto_Execution_V1_ComputationAction {
 fileprivate let _protobuf_package = "syft_proto.execution.v1"
 
 extension SyftProto_Execution_V1_ComputationAction: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".ComputationAction"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  static let protoMessageName: String = _protobuf_package + ".ComputationAction"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "command"),
+    9: .standard(proto: "target_id"),
     2: .standard(proto: "target_pointer"),
-    3: .standard(proto: "target_placeholder"),
+    3: .standard(proto: "target_placeholder_id"),
     4: .standard(proto: "target_tensor"),
     5: .same(proto: "args"),
     6: .same(proto: "kwargs"),
     7: .standard(proto: "return_ids"),
-    8: .standard(proto: "return_placeholders"),
+    8: .standard(proto: "return_placeholder_ids"),
   ]
 
   fileprivate class _StorageClass {
@@ -125,7 +136,7 @@ extension SyftProto_Execution_V1_ComputationAction: SwiftProtobuf.Message, Swift
     var _args: [SyftProto_Types_Syft_V1_Arg] = []
     var _kwargs: Dictionary<String,SyftProto_Types_Syft_V1_Arg> = [:]
     var _returnIds: [SyftProto_Types_Syft_V1_Id] = []
-    var _returnPlaceholders: [SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_Placeholder] = []
+    var _returnPlaceholderIds: [SyftProto_Execution_V1_PlaceholderId] = []
 
     static let defaultInstance = _StorageClass()
 
@@ -137,7 +148,7 @@ extension SyftProto_Execution_V1_ComputationAction: SwiftProtobuf.Message, Swift
       _args = source._args
       _kwargs = source._kwargs
       _returnIds = source._returnIds
-      _returnPlaceholders = source._returnPlaceholders
+      _returnPlaceholderIds = source._returnPlaceholderIds
     }
   }
 
@@ -148,7 +159,7 @@ extension SyftProto_Execution_V1_ComputationAction: SwiftProtobuf.Message, Swift
     return _storage
   }
 
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     _ = _uniqueStorage()
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       while let fieldNumber = try decoder.nextFieldNumber() {
@@ -163,13 +174,13 @@ extension SyftProto_Execution_V1_ComputationAction: SwiftProtobuf.Message, Swift
           try decoder.decodeSingularMessageField(value: &v)
           if let v = v {_storage._target = .targetPointer(v)}
         case 3:
-          var v: SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_Placeholder?
+          var v: SyftProto_Execution_V1_PlaceholderId?
           if let current = _storage._target {
             try decoder.handleConflictingOneOf()
-            if case .targetPlaceholder(let m) = current {v = m}
+            if case .targetPlaceholderID(let m) = current {v = m}
           }
           try decoder.decodeSingularMessageField(value: &v)
-          if let v = v {_storage._target = .targetPlaceholder(v)}
+          if let v = v {_storage._target = .targetPlaceholderID(v)}
         case 4:
           var v: SyftProto_Types_Torch_V1_TorchTensor?
           if let current = _storage._target {
@@ -181,14 +192,22 @@ extension SyftProto_Execution_V1_ComputationAction: SwiftProtobuf.Message, Swift
         case 5: try decoder.decodeRepeatedMessageField(value: &_storage._args)
         case 6: try decoder.decodeMapField(fieldType: SwiftProtobuf._ProtobufMessageMap<SwiftProtobuf.ProtobufString,SyftProto_Types_Syft_V1_Arg>.self, value: &_storage._kwargs)
         case 7: try decoder.decodeRepeatedMessageField(value: &_storage._returnIds)
-        case 8: try decoder.decodeRepeatedMessageField(value: &_storage._returnPlaceholders)
+        case 8: try decoder.decodeRepeatedMessageField(value: &_storage._returnPlaceholderIds)
+        case 9:
+          var v: SyftProto_Types_Syft_V1_Id?
+          if let current = _storage._target {
+            try decoder.handleConflictingOneOf()
+            if case .targetID(let m) = current {v = m}
+          }
+          try decoder.decodeSingularMessageField(value: &v)
+          if let v = v {_storage._target = .targetID(v)}
         default: break
         }
       }
     }
   }
 
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       if !_storage._command.isEmpty {
         try visitor.visitSingularStringField(value: _storage._command, fieldNumber: 1)
@@ -196,11 +215,12 @@ extension SyftProto_Execution_V1_ComputationAction: SwiftProtobuf.Message, Swift
       switch _storage._target {
       case .targetPointer(let v)?:
         try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-      case .targetPlaceholder(let v)?:
+      case .targetPlaceholderID(let v)?:
         try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
       case .targetTensor(let v)?:
         try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
       case nil: break
+      default: break
       }
       if !_storage._args.isEmpty {
         try visitor.visitRepeatedMessageField(value: _storage._args, fieldNumber: 5)
@@ -211,14 +231,17 @@ extension SyftProto_Execution_V1_ComputationAction: SwiftProtobuf.Message, Swift
       if !_storage._returnIds.isEmpty {
         try visitor.visitRepeatedMessageField(value: _storage._returnIds, fieldNumber: 7)
       }
-      if !_storage._returnPlaceholders.isEmpty {
-        try visitor.visitRepeatedMessageField(value: _storage._returnPlaceholders, fieldNumber: 8)
+      if !_storage._returnPlaceholderIds.isEmpty {
+        try visitor.visitRepeatedMessageField(value: _storage._returnPlaceholderIds, fieldNumber: 8)
+      }
+      if case .targetID(let v)? = _storage._target {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
       }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: SyftProto_Execution_V1_ComputationAction, rhs: SyftProto_Execution_V1_ComputationAction) -> Bool {
+  static func ==(lhs: SyftProto_Execution_V1_ComputationAction, rhs: SyftProto_Execution_V1_ComputationAction) -> Bool {
     if lhs._storage !== rhs._storage {
       let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
         let _storage = _args.0
@@ -228,7 +251,7 @@ extension SyftProto_Execution_V1_ComputationAction: SwiftProtobuf.Message, Swift
         if _storage._args != rhs_storage._args {return false}
         if _storage._kwargs != rhs_storage._kwargs {return false}
         if _storage._returnIds != rhs_storage._returnIds {return false}
-        if _storage._returnPlaceholders != rhs_storage._returnPlaceholders {return false}
+        if _storage._returnPlaceholderIds != rhs_storage._returnPlaceholderIds {return false}
         return true
       }
       if !storagesAreEqual {return false}

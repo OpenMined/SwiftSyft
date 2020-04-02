@@ -19,17 +19,17 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-public struct SyftProto_Types_Syft_V1_Arg {
+struct SyftProto_Types_Syft_V1_Arg {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var arg: OneOf_Arg? {
+  var arg: OneOf_Arg? {
     get {return _storage._arg}
     set {_uniqueStorage()._arg = newValue}
   }
 
-  public var argBool: Bool {
+  var argBool: Bool {
     get {
       if case .argBool(let v)? = _storage._arg {return v}
       return false
@@ -37,7 +37,7 @@ public struct SyftProto_Types_Syft_V1_Arg {
     set {_uniqueStorage()._arg = .argBool(newValue)}
   }
 
-  public var argInt: Int32 {
+  var argInt: Int32 {
     get {
       if case .argInt(let v)? = _storage._arg {return v}
       return 0
@@ -45,7 +45,7 @@ public struct SyftProto_Types_Syft_V1_Arg {
     set {_uniqueStorage()._arg = .argInt(newValue)}
   }
 
-  public var argFloat: Float {
+  var argFloat: Float {
     get {
       if case .argFloat(let v)? = _storage._arg {return v}
       return 0
@@ -53,7 +53,7 @@ public struct SyftProto_Types_Syft_V1_Arg {
     set {_uniqueStorage()._arg = .argFloat(newValue)}
   }
 
-  public var argString: String {
+  var argString: String {
     get {
       if case .argString(let v)? = _storage._arg {return v}
       return String()
@@ -61,7 +61,7 @@ public struct SyftProto_Types_Syft_V1_Arg {
     set {_uniqueStorage()._arg = .argString(newValue)}
   }
 
-  public var argShape: SyftProto_Types_Syft_V1_Shape {
+  var argShape: SyftProto_Types_Syft_V1_Shape {
     get {
       if case .argShape(let v)? = _storage._arg {return v}
       return SyftProto_Types_Syft_V1_Shape()
@@ -69,7 +69,7 @@ public struct SyftProto_Types_Syft_V1_Arg {
     set {_uniqueStorage()._arg = .argShape(newValue)}
   }
 
-  public var argTensor: SyftProto_Types_Torch_V1_TorchTensor {
+  var argTensor: SyftProto_Types_Torch_V1_TorchTensor {
     get {
       if case .argTensor(let v)? = _storage._arg {return v}
       return SyftProto_Types_Torch_V1_TorchTensor()
@@ -77,7 +77,7 @@ public struct SyftProto_Types_Syft_V1_Arg {
     set {_uniqueStorage()._arg = .argTensor(newValue)}
   }
 
-  public var argTorchParam: SyftProto_Types_Torch_V1_Parameter {
+  var argTorchParam: SyftProto_Types_Torch_V1_Parameter {
     get {
       if case .argTorchParam(let v)? = _storage._arg {return v}
       return SyftProto_Types_Torch_V1_Parameter()
@@ -85,7 +85,7 @@ public struct SyftProto_Types_Syft_V1_Arg {
     set {_uniqueStorage()._arg = .argTorchParam(newValue)}
   }
 
-  public var argPointerTensor: SyftProto_Generic_Pointers_V1_PointerTensor {
+  var argPointerTensor: SyftProto_Generic_Pointers_V1_PointerTensor {
     get {
       if case .argPointerTensor(let v)? = _storage._arg {return v}
       return SyftProto_Generic_Pointers_V1_PointerTensor()
@@ -93,17 +93,25 @@ public struct SyftProto_Types_Syft_V1_Arg {
     set {_uniqueStorage()._arg = .argPointerTensor(newValue)}
   }
 
-  public var argPlaceholder: SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_Placeholder {
+  var argPlaceholder: SyftProto_Execution_V1_Placeholder {
     get {
       if case .argPlaceholder(let v)? = _storage._arg {return v}
-      return SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_Placeholder()
+      return SyftProto_Execution_V1_Placeholder()
     }
     set {_uniqueStorage()._arg = .argPlaceholder(newValue)}
   }
 
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
+  var argPlaceholderID: SyftProto_Execution_V1_PlaceholderId {
+    get {
+      if case .argPlaceholderID(let v)? = _storage._arg {return v}
+      return SyftProto_Execution_V1_PlaceholderId()
+    }
+    set {_uniqueStorage()._arg = .argPlaceholderID(newValue)}
+  }
 
-  public enum OneOf_Arg: Equatable {
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  enum OneOf_Arg: Equatable {
     case argBool(Bool)
     case argInt(Int32)
     case argFloat(Float)
@@ -112,10 +120,11 @@ public struct SyftProto_Types_Syft_V1_Arg {
     case argTensor(SyftProto_Types_Torch_V1_TorchTensor)
     case argTorchParam(SyftProto_Types_Torch_V1_Parameter)
     case argPointerTensor(SyftProto_Generic_Pointers_V1_PointerTensor)
-    case argPlaceholder(SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_Placeholder)
+    case argPlaceholder(SyftProto_Execution_V1_Placeholder)
+    case argPlaceholderID(SyftProto_Execution_V1_PlaceholderId)
 
   #if !swift(>=4.1)
-    public static func ==(lhs: SyftProto_Types_Syft_V1_Arg.OneOf_Arg, rhs: SyftProto_Types_Syft_V1_Arg.OneOf_Arg) -> Bool {
+    static func ==(lhs: SyftProto_Types_Syft_V1_Arg.OneOf_Arg, rhs: SyftProto_Types_Syft_V1_Arg.OneOf_Arg) -> Bool {
       switch (lhs, rhs) {
       case (.argBool(let l), .argBool(let r)): return l == r
       case (.argInt(let l), .argInt(let r)): return l == r
@@ -126,13 +135,14 @@ public struct SyftProto_Types_Syft_V1_Arg {
       case (.argTorchParam(let l), .argTorchParam(let r)): return l == r
       case (.argPointerTensor(let l), .argPointerTensor(let r)): return l == r
       case (.argPlaceholder(let l), .argPlaceholder(let r)): return l == r
+      case (.argPlaceholderID(let l), .argPlaceholderID(let r)): return l == r
       default: return false
       }
     }
   #endif
   }
 
-  public init() {}
+  init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
 }
@@ -142,8 +152,8 @@ public struct SyftProto_Types_Syft_V1_Arg {
 fileprivate let _protobuf_package = "syft_proto.types.syft.v1"
 
 extension SyftProto_Types_Syft_V1_Arg: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".Arg"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  static let protoMessageName: String = _protobuf_package + ".Arg"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "arg_bool"),
     2: .standard(proto: "arg_int"),
     3: .standard(proto: "arg_float"),
@@ -153,6 +163,7 @@ extension SyftProto_Types_Syft_V1_Arg: SwiftProtobuf.Message, SwiftProtobuf._Mes
     7: .standard(proto: "arg_torch_param"),
     8: .standard(proto: "arg_pointer_tensor"),
     9: .standard(proto: "arg_placeholder"),
+    10: .standard(proto: "arg_placeholder_id"),
   ]
 
   fileprivate class _StorageClass {
@@ -174,7 +185,7 @@ extension SyftProto_Types_Syft_V1_Arg: SwiftProtobuf.Message, SwiftProtobuf._Mes
     return _storage
   }
 
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     _ = _uniqueStorage()
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       while let fieldNumber = try decoder.nextFieldNumber() {
@@ -232,20 +243,28 @@ extension SyftProto_Types_Syft_V1_Arg: SwiftProtobuf.Message, SwiftProtobuf._Mes
           try decoder.decodeSingularMessageField(value: &v)
           if let v = v {_storage._arg = .argPointerTensor(v)}
         case 9:
-          var v: SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_Placeholder?
+          var v: SyftProto_Execution_V1_Placeholder?
           if let current = _storage._arg {
             try decoder.handleConflictingOneOf()
             if case .argPlaceholder(let m) = current {v = m}
           }
           try decoder.decodeSingularMessageField(value: &v)
           if let v = v {_storage._arg = .argPlaceholder(v)}
+        case 10:
+          var v: SyftProto_Execution_V1_PlaceholderId?
+          if let current = _storage._arg {
+            try decoder.handleConflictingOneOf()
+            if case .argPlaceholderID(let m) = current {v = m}
+          }
+          try decoder.decodeSingularMessageField(value: &v)
+          if let v = v {_storage._arg = .argPlaceholderID(v)}
         default: break
         }
       }
     }
   }
 
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       switch _storage._arg {
       case .argBool(let v)?:
@@ -266,13 +285,15 @@ extension SyftProto_Types_Syft_V1_Arg: SwiftProtobuf.Message, SwiftProtobuf._Mes
         try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
       case .argPlaceholder(let v)?:
         try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
+      case .argPlaceholderID(let v)?:
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
       case nil: break
       }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: SyftProto_Types_Syft_V1_Arg, rhs: SyftProto_Types_Syft_V1_Arg) -> Bool {
+  static func ==(lhs: SyftProto_Types_Syft_V1_Arg, rhs: SyftProto_Types_Syft_V1_Arg) -> Bool {
     if lhs._storage !== rhs._storage {
       let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
         let _storage = _args.0

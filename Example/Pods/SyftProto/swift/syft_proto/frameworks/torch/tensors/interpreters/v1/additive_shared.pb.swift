@@ -19,52 +19,88 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-public struct SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_AdditiveSharingTensor {
+struct SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_AdditiveSharingTensor {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var id: SyftProto_Types_Syft_V1_Id {
+  var id: SyftProto_Types_Syft_V1_Id {
     get {return _storage._id ?? SyftProto_Types_Syft_V1_Id()}
     set {_uniqueStorage()._id = newValue}
   }
   /// Returns true if `id` has been explicitly set.
-  public var hasID: Bool {return _storage._id != nil}
+  var hasID: Bool {return _storage._id != nil}
   /// Clears the value of `id`. Subsequent reads from it will return its default value.
-  public mutating func clearID() {_uniqueStorage()._id = nil}
+  mutating func clearID() {_uniqueStorage()._id = nil}
 
-  public var fieldSize: Int64 {
+  var fieldSize: OneOf_FieldSize? {
     get {return _storage._fieldSize}
     set {_uniqueStorage()._fieldSize = newValue}
   }
 
-  public var cryptoProviderID: SyftProto_Types_Syft_V1_Id {
+  var fieldInt: Int64 {
+    get {
+      if case .fieldInt(let v)? = _storage._fieldSize {return v}
+      return 0
+    }
+    set {_uniqueStorage()._fieldSize = .fieldInt(newValue)}
+  }
+
+  var fieldStr: String {
+    get {
+      if case .fieldStr(let v)? = _storage._fieldSize {return v}
+      return String()
+    }
+    set {_uniqueStorage()._fieldSize = .fieldStr(newValue)}
+  }
+
+  var dtype: String {
+    get {return _storage._dtype}
+    set {_uniqueStorage()._dtype = newValue}
+  }
+
+  var cryptoProviderID: SyftProto_Types_Syft_V1_Id {
     get {return _storage._cryptoProviderID ?? SyftProto_Types_Syft_V1_Id()}
     set {_uniqueStorage()._cryptoProviderID = newValue}
   }
   /// Returns true if `cryptoProviderID` has been explicitly set.
-  public var hasCryptoProviderID: Bool {return _storage._cryptoProviderID != nil}
+  var hasCryptoProviderID: Bool {return _storage._cryptoProviderID != nil}
   /// Clears the value of `cryptoProviderID`. Subsequent reads from it will return its default value.
-  public mutating func clearCryptoProviderID() {_uniqueStorage()._cryptoProviderID = nil}
+  mutating func clearCryptoProviderID() {_uniqueStorage()._cryptoProviderID = nil}
 
   /// It would be natural to capture a {location_id->share} dictionary
   /// as a map, but the key types of a map can't be messages. The ids
   /// use the Id type because they can be either integers or strings.
   /// Capturing them as two parallel lists/arrays isn't ideal but ought
   /// to work okay (given that constraint.)
-  public var locationIds: [SyftProto_Types_Syft_V1_Id] {
+  var locationIds: [SyftProto_Types_Syft_V1_Id] {
     get {return _storage._locationIds}
     set {_uniqueStorage()._locationIds = newValue}
   }
 
-  public var shares: [SyftProto_Generic_Pointers_V1_PointerTensor] {
+  var shares: [SyftProto_Generic_Pointers_V1_PointerTensor] {
     get {return _storage._shares}
     set {_uniqueStorage()._shares = newValue}
   }
 
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
+  var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public init() {}
+  enum OneOf_FieldSize: Equatable {
+    case fieldInt(Int64)
+    case fieldStr(String)
+
+  #if !swift(>=4.1)
+    static func ==(lhs: SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_AdditiveSharingTensor.OneOf_FieldSize, rhs: SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_AdditiveSharingTensor.OneOf_FieldSize) -> Bool {
+      switch (lhs, rhs) {
+      case (.fieldInt(let l), .fieldInt(let r)): return l == r
+      case (.fieldStr(let l), .fieldStr(let r)): return l == r
+      default: return false
+      }
+    }
+  #endif
+  }
+
+  init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
 }
@@ -74,18 +110,21 @@ public struct SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_AdditiveSharing
 fileprivate let _protobuf_package = "syft_proto.frameworks.torch.tensors.interpreters.v1"
 
 extension SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_AdditiveSharingTensor: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".AdditiveSharingTensor"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  static let protoMessageName: String = _protobuf_package + ".AdditiveSharingTensor"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "id"),
-    2: .standard(proto: "field_size"),
-    3: .standard(proto: "crypto_provider_id"),
-    4: .standard(proto: "location_ids"),
-    5: .same(proto: "shares"),
+    2: .standard(proto: "field_int"),
+    3: .standard(proto: "field_str"),
+    4: .same(proto: "dtype"),
+    5: .standard(proto: "crypto_provider_id"),
+    6: .standard(proto: "location_ids"),
+    7: .same(proto: "shares"),
   ]
 
   fileprivate class _StorageClass {
     var _id: SyftProto_Types_Syft_V1_Id? = nil
-    var _fieldSize: Int64 = 0
+    var _fieldSize: SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_AdditiveSharingTensor.OneOf_FieldSize?
+    var _dtype: String = String()
     var _cryptoProviderID: SyftProto_Types_Syft_V1_Id? = nil
     var _locationIds: [SyftProto_Types_Syft_V1_Id] = []
     var _shares: [SyftProto_Generic_Pointers_V1_PointerTensor] = []
@@ -97,6 +136,7 @@ extension SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_AdditiveSharingTens
     init(copying source: _StorageClass) {
       _id = source._id
       _fieldSize = source._fieldSize
+      _dtype = source._dtype
       _cryptoProviderID = source._cryptoProviderID
       _locationIds = source._locationIds
       _shares = source._shares
@@ -110,50 +150,68 @@ extension SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_AdditiveSharingTens
     return _storage
   }
 
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     _ = _uniqueStorage()
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       while let fieldNumber = try decoder.nextFieldNumber() {
         switch fieldNumber {
         case 1: try decoder.decodeSingularMessageField(value: &_storage._id)
-        case 2: try decoder.decodeSingularInt64Field(value: &_storage._fieldSize)
-        case 3: try decoder.decodeSingularMessageField(value: &_storage._cryptoProviderID)
-        case 4: try decoder.decodeRepeatedMessageField(value: &_storage._locationIds)
-        case 5: try decoder.decodeRepeatedMessageField(value: &_storage._shares)
+        case 2:
+          if _storage._fieldSize != nil {try decoder.handleConflictingOneOf()}
+          var v: Int64?
+          try decoder.decodeSingularInt64Field(value: &v)
+          if let v = v {_storage._fieldSize = .fieldInt(v)}
+        case 3:
+          if _storage._fieldSize != nil {try decoder.handleConflictingOneOf()}
+          var v: String?
+          try decoder.decodeSingularStringField(value: &v)
+          if let v = v {_storage._fieldSize = .fieldStr(v)}
+        case 4: try decoder.decodeSingularStringField(value: &_storage._dtype)
+        case 5: try decoder.decodeSingularMessageField(value: &_storage._cryptoProviderID)
+        case 6: try decoder.decodeRepeatedMessageField(value: &_storage._locationIds)
+        case 7: try decoder.decodeRepeatedMessageField(value: &_storage._shares)
         default: break
         }
       }
     }
   }
 
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       if let v = _storage._id {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
       }
-      if _storage._fieldSize != 0 {
-        try visitor.visitSingularInt64Field(value: _storage._fieldSize, fieldNumber: 2)
+      switch _storage._fieldSize {
+      case .fieldInt(let v)?:
+        try visitor.visitSingularInt64Field(value: v, fieldNumber: 2)
+      case .fieldStr(let v)?:
+        try visitor.visitSingularStringField(value: v, fieldNumber: 3)
+      case nil: break
+      }
+      if !_storage._dtype.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._dtype, fieldNumber: 4)
       }
       if let v = _storage._cryptoProviderID {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
       }
       if !_storage._locationIds.isEmpty {
-        try visitor.visitRepeatedMessageField(value: _storage._locationIds, fieldNumber: 4)
+        try visitor.visitRepeatedMessageField(value: _storage._locationIds, fieldNumber: 6)
       }
       if !_storage._shares.isEmpty {
-        try visitor.visitRepeatedMessageField(value: _storage._shares, fieldNumber: 5)
+        try visitor.visitRepeatedMessageField(value: _storage._shares, fieldNumber: 7)
       }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_AdditiveSharingTensor, rhs: SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_AdditiveSharingTensor) -> Bool {
+  static func ==(lhs: SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_AdditiveSharingTensor, rhs: SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_AdditiveSharingTensor) -> Bool {
     if lhs._storage !== rhs._storage {
       let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
         let _storage = _args.0
         let rhs_storage = _args.1
         if _storage._id != rhs_storage._id {return false}
         if _storage._fieldSize != rhs_storage._fieldSize {return false}
+        if _storage._dtype != rhs_storage._dtype {return false}
         if _storage._cryptoProviderID != rhs_storage._cryptoProviderID {return false}
         if _storage._locationIds != rhs_storage._locationIds {return false}
         if _storage._shares != rhs_storage._shares {return false}

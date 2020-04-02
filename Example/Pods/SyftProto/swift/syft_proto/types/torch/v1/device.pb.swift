@@ -19,16 +19,16 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-public struct SyftProto_Types_Torch_V1_Device {
+struct SyftProto_Types_Torch_V1_Device {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var type: String = String()
+  var type: String = String()
 
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
+  var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public init() {}
+  init() {}
 }
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -36,12 +36,12 @@ public struct SyftProto_Types_Torch_V1_Device {
 fileprivate let _protobuf_package = "syft_proto.types.torch.v1"
 
 extension SyftProto_Types_Torch_V1_Device: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".Device"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  static let protoMessageName: String = _protobuf_package + ".Device"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "type"),
   ]
 
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
       case 1: try decoder.decodeSingularStringField(value: &self.type)
@@ -50,14 +50,14 @@ extension SyftProto_Types_Torch_V1_Device: SwiftProtobuf.Message, SwiftProtobuf.
     }
   }
 
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.type.isEmpty {
       try visitor.visitSingularStringField(value: self.type, fieldNumber: 1)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: SyftProto_Types_Torch_V1_Device, rhs: SyftProto_Types_Torch_V1_Device) -> Bool {
+  static func ==(lhs: SyftProto_Types_Torch_V1_Device, rhs: SyftProto_Types_Torch_V1_Device) -> Bool {
     if lhs.type != rhs.type {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true

@@ -19,42 +19,42 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-public struct SyftProto_Execution_V1_CommunicationAction {
+struct SyftProto_Execution_V1_CommunicationAction {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var objID: SyftProto_Types_Syft_V1_Id {
+  var objID: SyftProto_Types_Syft_V1_Id {
     get {return _storage._objID ?? SyftProto_Types_Syft_V1_Id()}
     set {_uniqueStorage()._objID = newValue}
   }
   /// Returns true if `objID` has been explicitly set.
-  public var hasObjID: Bool {return _storage._objID != nil}
+  var hasObjID: Bool {return _storage._objID != nil}
   /// Clears the value of `objID`. Subsequent reads from it will return its default value.
-  public mutating func clearObjID() {_uniqueStorage()._objID = nil}
+  mutating func clearObjID() {_uniqueStorage()._objID = nil}
 
-  public var source: SyftProto_Types_Syft_V1_Id {
+  var source: SyftProto_Types_Syft_V1_Id {
     get {return _storage._source ?? SyftProto_Types_Syft_V1_Id()}
     set {_uniqueStorage()._source = newValue}
   }
   /// Returns true if `source` has been explicitly set.
-  public var hasSource: Bool {return _storage._source != nil}
+  var hasSource: Bool {return _storage._source != nil}
   /// Clears the value of `source`. Subsequent reads from it will return its default value.
-  public mutating func clearSource() {_uniqueStorage()._source = nil}
+  mutating func clearSource() {_uniqueStorage()._source = nil}
 
-  public var destinations: [SyftProto_Types_Syft_V1_Id] {
+  var destinations: [SyftProto_Types_Syft_V1_Id] {
     get {return _storage._destinations}
     set {_uniqueStorage()._destinations = newValue}
   }
 
-  public var kwargs: Dictionary<String,SyftProto_Types_Syft_V1_Arg> {
+  var kwargs: Dictionary<String,SyftProto_Types_Syft_V1_Arg> {
     get {return _storage._kwargs}
     set {_uniqueStorage()._kwargs = newValue}
   }
 
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
+  var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public init() {}
+  init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
 }
@@ -64,8 +64,8 @@ public struct SyftProto_Execution_V1_CommunicationAction {
 fileprivate let _protobuf_package = "syft_proto.execution.v1"
 
 extension SyftProto_Execution_V1_CommunicationAction: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".CommunicationAction"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  static let protoMessageName: String = _protobuf_package + ".CommunicationAction"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "obj_id"),
     2: .same(proto: "source"),
     3: .same(proto: "destinations"),
@@ -97,7 +97,7 @@ extension SyftProto_Execution_V1_CommunicationAction: SwiftProtobuf.Message, Swi
     return _storage
   }
 
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     _ = _uniqueStorage()
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       while let fieldNumber = try decoder.nextFieldNumber() {
@@ -112,7 +112,7 @@ extension SyftProto_Execution_V1_CommunicationAction: SwiftProtobuf.Message, Swi
     }
   }
 
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       if let v = _storage._objID {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
@@ -130,7 +130,7 @@ extension SyftProto_Execution_V1_CommunicationAction: SwiftProtobuf.Message, Swi
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: SyftProto_Execution_V1_CommunicationAction, rhs: SyftProto_Execution_V1_CommunicationAction) -> Bool {
+  static func ==(lhs: SyftProto_Execution_V1_CommunicationAction, rhs: SyftProto_Execution_V1_CommunicationAction) -> Bool {
     if lhs._storage !== rhs._storage {
       let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
         let _storage = _args.0

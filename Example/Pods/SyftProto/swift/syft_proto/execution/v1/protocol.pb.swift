@@ -19,73 +19,73 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-public struct SyftProto_Execution_V1_Protocol {
+struct SyftProto_Execution_V1_Protocol {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var id: SyftProto_Types_Syft_V1_Id {
+  var id: SyftProto_Types_Syft_V1_Id {
     get {return _storage._id ?? SyftProto_Types_Syft_V1_Id()}
     set {_uniqueStorage()._id = newValue}
   }
   /// Returns true if `id` has been explicitly set.
-  public var hasID: Bool {return _storage._id != nil}
+  var hasID: Bool {return _storage._id != nil}
   /// Clears the value of `id`. Subsequent reads from it will return its default value.
-  public mutating func clearID() {_uniqueStorage()._id = nil}
+  mutating func clearID() {_uniqueStorage()._id = nil}
 
-  public var tags: [String] {
+  var tags: [String] {
     get {return _storage._tags}
     set {_uniqueStorage()._tags = newValue}
   }
 
-  public var description_p: String {
+  var description_p: String {
     get {return _storage._description_p}
     set {_uniqueStorage()._description_p = newValue}
   }
 
-  public var workersResolved: Bool {
+  var workersResolved: Bool {
     get {return _storage._workersResolved}
     set {_uniqueStorage()._workersResolved = newValue}
   }
 
-  public var planAssignments: [SyftProto_Execution_V1_PlanAssignment] {
+  var planAssignments: [SyftProto_Execution_V1_PlanAssignment] {
     get {return _storage._planAssignments}
     set {_uniqueStorage()._planAssignments = newValue}
   }
 
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
+  var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public init() {}
+  init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
 }
 
-public struct SyftProto_Execution_V1_PlanAssignment {
+struct SyftProto_Execution_V1_PlanAssignment {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var planID: SyftProto_Types_Syft_V1_Id {
+  var planID: SyftProto_Types_Syft_V1_Id {
     get {return _storage._planID ?? SyftProto_Types_Syft_V1_Id()}
     set {_uniqueStorage()._planID = newValue}
   }
   /// Returns true if `planID` has been explicitly set.
-  public var hasPlanID: Bool {return _storage._planID != nil}
+  var hasPlanID: Bool {return _storage._planID != nil}
   /// Clears the value of `planID`. Subsequent reads from it will return its default value.
-  public mutating func clearPlanID() {_uniqueStorage()._planID = nil}
+  mutating func clearPlanID() {_uniqueStorage()._planID = nil}
 
-  public var workerID: SyftProto_Types_Syft_V1_Id {
+  var workerID: SyftProto_Types_Syft_V1_Id {
     get {return _storage._workerID ?? SyftProto_Types_Syft_V1_Id()}
     set {_uniqueStorage()._workerID = newValue}
   }
   /// Returns true if `workerID` has been explicitly set.
-  public var hasWorkerID: Bool {return _storage._workerID != nil}
+  var hasWorkerID: Bool {return _storage._workerID != nil}
   /// Clears the value of `workerID`. Subsequent reads from it will return its default value.
-  public mutating func clearWorkerID() {_uniqueStorage()._workerID = nil}
+  mutating func clearWorkerID() {_uniqueStorage()._workerID = nil}
 
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
+  var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public init() {}
+  init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
 }
@@ -95,8 +95,8 @@ public struct SyftProto_Execution_V1_PlanAssignment {
 fileprivate let _protobuf_package = "syft_proto.execution.v1"
 
 extension SyftProto_Execution_V1_Protocol: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".Protocol"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  static let protoMessageName: String = _protobuf_package + ".Protocol"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "id"),
     2: .same(proto: "tags"),
     3: .same(proto: "description"),
@@ -131,7 +131,7 @@ extension SyftProto_Execution_V1_Protocol: SwiftProtobuf.Message, SwiftProtobuf.
     return _storage
   }
 
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     _ = _uniqueStorage()
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       while let fieldNumber = try decoder.nextFieldNumber() {
@@ -147,7 +147,7 @@ extension SyftProto_Execution_V1_Protocol: SwiftProtobuf.Message, SwiftProtobuf.
     }
   }
 
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       if let v = _storage._id {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
@@ -168,7 +168,7 @@ extension SyftProto_Execution_V1_Protocol: SwiftProtobuf.Message, SwiftProtobuf.
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: SyftProto_Execution_V1_Protocol, rhs: SyftProto_Execution_V1_Protocol) -> Bool {
+  static func ==(lhs: SyftProto_Execution_V1_Protocol, rhs: SyftProto_Execution_V1_Protocol) -> Bool {
     if lhs._storage !== rhs._storage {
       let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
         let _storage = _args.0
@@ -188,8 +188,8 @@ extension SyftProto_Execution_V1_Protocol: SwiftProtobuf.Message, SwiftProtobuf.
 }
 
 extension SyftProto_Execution_V1_PlanAssignment: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".PlanAssignment"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  static let protoMessageName: String = _protobuf_package + ".PlanAssignment"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "plan_id"),
     2: .standard(proto: "worker_id"),
   ]
@@ -215,7 +215,7 @@ extension SyftProto_Execution_V1_PlanAssignment: SwiftProtobuf.Message, SwiftPro
     return _storage
   }
 
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     _ = _uniqueStorage()
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       while let fieldNumber = try decoder.nextFieldNumber() {
@@ -228,7 +228,7 @@ extension SyftProto_Execution_V1_PlanAssignment: SwiftProtobuf.Message, SwiftPro
     }
   }
 
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       if let v = _storage._planID {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
@@ -240,7 +240,7 @@ extension SyftProto_Execution_V1_PlanAssignment: SwiftProtobuf.Message, SwiftPro
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: SyftProto_Execution_V1_PlanAssignment, rhs: SyftProto_Execution_V1_PlanAssignment) -> Bool {
+  static func ==(lhs: SyftProto_Execution_V1_PlanAssignment, rhs: SyftProto_Execution_V1_PlanAssignment) -> Bool {
     if lhs._storage !== rhs._storage {
       let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
         let _storage = _args.0

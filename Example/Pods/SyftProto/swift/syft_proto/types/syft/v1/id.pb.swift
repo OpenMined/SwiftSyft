@@ -19,14 +19,14 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-public struct SyftProto_Types_Syft_V1_Id {
+struct SyftProto_Types_Syft_V1_Id {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var id: SyftProto_Types_Syft_V1_Id.OneOf_ID? = nil
+  var id: SyftProto_Types_Syft_V1_Id.OneOf_ID? = nil
 
-  public var idInt: Int64 {
+  var idInt: Int64 {
     get {
       if case .idInt(let v)? = id {return v}
       return 0
@@ -34,7 +34,7 @@ public struct SyftProto_Types_Syft_V1_Id {
     set {id = .idInt(newValue)}
   }
 
-  public var idStr: String {
+  var idStr: String {
     get {
       if case .idStr(let v)? = id {return v}
       return String()
@@ -42,14 +42,14 @@ public struct SyftProto_Types_Syft_V1_Id {
     set {id = .idStr(newValue)}
   }
 
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
+  var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum OneOf_ID: Equatable {
+  enum OneOf_ID: Equatable {
     case idInt(Int64)
     case idStr(String)
 
   #if !swift(>=4.1)
-    public static func ==(lhs: SyftProto_Types_Syft_V1_Id.OneOf_ID, rhs: SyftProto_Types_Syft_V1_Id.OneOf_ID) -> Bool {
+    static func ==(lhs: SyftProto_Types_Syft_V1_Id.OneOf_ID, rhs: SyftProto_Types_Syft_V1_Id.OneOf_ID) -> Bool {
       switch (lhs, rhs) {
       case (.idInt(let l), .idInt(let r)): return l == r
       case (.idStr(let l), .idStr(let r)): return l == r
@@ -59,7 +59,7 @@ public struct SyftProto_Types_Syft_V1_Id {
   #endif
   }
 
-  public init() {}
+  init() {}
 }
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -67,13 +67,13 @@ public struct SyftProto_Types_Syft_V1_Id {
 fileprivate let _protobuf_package = "syft_proto.types.syft.v1"
 
 extension SyftProto_Types_Syft_V1_Id: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".Id"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  static let protoMessageName: String = _protobuf_package + ".Id"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "id_int"),
     2: .standard(proto: "id_str"),
   ]
 
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
       case 1:
@@ -91,7 +91,7 @@ extension SyftProto_Types_Syft_V1_Id: SwiftProtobuf.Message, SwiftProtobuf._Mess
     }
   }
 
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     switch self.id {
     case .idInt(let v)?:
       try visitor.visitSingularInt64Field(value: v, fieldNumber: 1)
@@ -102,7 +102,7 @@ extension SyftProto_Types_Syft_V1_Id: SwiftProtobuf.Message, SwiftProtobuf._Mess
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: SyftProto_Types_Syft_V1_Id, rhs: SyftProto_Types_Syft_V1_Id) -> Bool {
+  static func ==(lhs: SyftProto_Types_Syft_V1_Id, rhs: SyftProto_Types_Syft_V1_Id) -> Bool {
     if lhs.id != rhs.id {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true

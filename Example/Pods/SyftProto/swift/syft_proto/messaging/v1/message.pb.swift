@@ -19,17 +19,17 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-public struct SyftProto_Messaging_V1_SyftMessage {
+struct SyftProto_Messaging_V1_SyftMessage {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var contents: OneOf_Contents? {
+  var contents: OneOf_Contents? {
     get {return _storage._contents}
     set {_uniqueStorage()._contents = newValue}
   }
 
-  public var contentsEmptyMsg: SwiftProtobuf.Google_Protobuf_Empty {
+  var contentsEmptyMsg: SwiftProtobuf.Google_Protobuf_Empty {
     get {
       if case .contentsEmptyMsg(let v)? = _storage._contents {return v}
       return SwiftProtobuf.Google_Protobuf_Empty()
@@ -40,7 +40,7 @@ public struct SyftProto_Messaging_V1_SyftMessage {
   /// ForceObjectDeleteMessage contents_delete_msg = 2;
   /// GetShapeMessage contents_get_shape_msg = 3;
   /// IsNoneMessage contents_is_none_msg = 4;
-  public var contentsObjectMsg: SyftProto_Messaging_V1_ObjectMessage {
+  var contentsObjectMsg: SyftProto_Messaging_V1_ObjectMessage {
     get {
       if case .contentsObjectMsg(let v)? = _storage._contents {return v}
       return SyftProto_Messaging_V1_ObjectMessage()
@@ -49,7 +49,7 @@ public struct SyftProto_Messaging_V1_SyftMessage {
   }
 
   /// ObjectRequestMessage contents_object_request_msg = 6;
-  public var contentsTensorCmdMsg: SyftProto_Messaging_V1_TensorCommandMessage {
+  var contentsTensorCmdMsg: SyftProto_Messaging_V1_TensorCommandMessage {
     get {
       if case .contentsTensorCmdMsg(let v)? = _storage._contents {return v}
       return SyftProto_Messaging_V1_TensorCommandMessage()
@@ -57,9 +57,9 @@ public struct SyftProto_Messaging_V1_SyftMessage {
     set {_uniqueStorage()._contents = .contentsTensorCmdMsg(newValue)}
   }
 
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
+  var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum OneOf_Contents: Equatable {
+  enum OneOf_Contents: Equatable {
     case contentsEmptyMsg(SwiftProtobuf.Google_Protobuf_Empty)
     /// ForceObjectDeleteMessage contents_delete_msg = 2;
     /// GetShapeMessage contents_get_shape_msg = 3;
@@ -69,7 +69,7 @@ public struct SyftProto_Messaging_V1_SyftMessage {
     case contentsTensorCmdMsg(SyftProto_Messaging_V1_TensorCommandMessage)
 
   #if !swift(>=4.1)
-    public static func ==(lhs: SyftProto_Messaging_V1_SyftMessage.OneOf_Contents, rhs: SyftProto_Messaging_V1_SyftMessage.OneOf_Contents) -> Bool {
+    static func ==(lhs: SyftProto_Messaging_V1_SyftMessage.OneOf_Contents, rhs: SyftProto_Messaging_V1_SyftMessage.OneOf_Contents) -> Bool {
       switch (lhs, rhs) {
       case (.contentsEmptyMsg(let l), .contentsEmptyMsg(let r)): return l == r
       case (.contentsObjectMsg(let l), .contentsObjectMsg(let r)): return l == r
@@ -80,43 +80,43 @@ public struct SyftProto_Messaging_V1_SyftMessage {
   #endif
   }
 
-  public init() {}
+  init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
 }
 
-public struct SyftProto_Messaging_V1_ObjectMessage {
+struct SyftProto_Messaging_V1_ObjectMessage {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var tensor: SyftProto_Types_Torch_V1_TorchTensor {
+  var tensor: SyftProto_Types_Torch_V1_TorchTensor {
     get {return _storage._tensor ?? SyftProto_Types_Torch_V1_TorchTensor()}
     set {_uniqueStorage()._tensor = newValue}
   }
   /// Returns true if `tensor` has been explicitly set.
-  public var hasTensor: Bool {return _storage._tensor != nil}
+  var hasTensor: Bool {return _storage._tensor != nil}
   /// Clears the value of `tensor`. Subsequent reads from it will return its default value.
-  public mutating func clearTensor() {_uniqueStorage()._tensor = nil}
+  mutating func clearTensor() {_uniqueStorage()._tensor = nil}
 
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
+  var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public init() {}
+  init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
 }
 
-public struct SyftProto_Messaging_V1_TensorCommandMessage {
+struct SyftProto_Messaging_V1_TensorCommandMessage {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var action: OneOf_Action? {
+  var action: OneOf_Action? {
     get {return _storage._action}
     set {_uniqueStorage()._action = newValue}
   }
 
-  public var computation: SyftProto_Execution_V1_ComputationAction {
+  var computation: SyftProto_Execution_V1_ComputationAction {
     get {
       if case .computation(let v)? = _storage._action {return v}
       return SyftProto_Execution_V1_ComputationAction()
@@ -124,7 +124,7 @@ public struct SyftProto_Messaging_V1_TensorCommandMessage {
     set {_uniqueStorage()._action = .computation(newValue)}
   }
 
-  public var communication: SyftProto_Execution_V1_CommunicationAction {
+  var communication: SyftProto_Execution_V1_CommunicationAction {
     get {
       if case .communication(let v)? = _storage._action {return v}
       return SyftProto_Execution_V1_CommunicationAction()
@@ -132,14 +132,14 @@ public struct SyftProto_Messaging_V1_TensorCommandMessage {
     set {_uniqueStorage()._action = .communication(newValue)}
   }
 
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
+  var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum OneOf_Action: Equatable {
+  enum OneOf_Action: Equatable {
     case computation(SyftProto_Execution_V1_ComputationAction)
     case communication(SyftProto_Execution_V1_CommunicationAction)
 
   #if !swift(>=4.1)
-    public static func ==(lhs: SyftProto_Messaging_V1_TensorCommandMessage.OneOf_Action, rhs: SyftProto_Messaging_V1_TensorCommandMessage.OneOf_Action) -> Bool {
+    static func ==(lhs: SyftProto_Messaging_V1_TensorCommandMessage.OneOf_Action, rhs: SyftProto_Messaging_V1_TensorCommandMessage.OneOf_Action) -> Bool {
       switch (lhs, rhs) {
       case (.computation(let l), .computation(let r)): return l == r
       case (.communication(let l), .communication(let r)): return l == r
@@ -149,7 +149,7 @@ public struct SyftProto_Messaging_V1_TensorCommandMessage {
   #endif
   }
 
-  public init() {}
+  init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
 }
@@ -159,8 +159,8 @@ public struct SyftProto_Messaging_V1_TensorCommandMessage {
 fileprivate let _protobuf_package = "syft_proto.messaging.v1"
 
 extension SyftProto_Messaging_V1_SyftMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".SyftMessage"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  static let protoMessageName: String = _protobuf_package + ".SyftMessage"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "contents_empty_msg"),
     5: .standard(proto: "contents_object_msg"),
     7: .standard(proto: "contents_tensor_cmd_msg"),
@@ -185,7 +185,7 @@ extension SyftProto_Messaging_V1_SyftMessage: SwiftProtobuf.Message, SwiftProtob
     return _storage
   }
 
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     _ = _uniqueStorage()
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       while let fieldNumber = try decoder.nextFieldNumber() {
@@ -220,7 +220,7 @@ extension SyftProto_Messaging_V1_SyftMessage: SwiftProtobuf.Message, SwiftProtob
     }
   }
 
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       switch _storage._contents {
       case .contentsEmptyMsg(let v)?:
@@ -235,7 +235,7 @@ extension SyftProto_Messaging_V1_SyftMessage: SwiftProtobuf.Message, SwiftProtob
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: SyftProto_Messaging_V1_SyftMessage, rhs: SyftProto_Messaging_V1_SyftMessage) -> Bool {
+  static func ==(lhs: SyftProto_Messaging_V1_SyftMessage, rhs: SyftProto_Messaging_V1_SyftMessage) -> Bool {
     if lhs._storage !== rhs._storage {
       let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
         let _storage = _args.0
@@ -251,8 +251,8 @@ extension SyftProto_Messaging_V1_SyftMessage: SwiftProtobuf.Message, SwiftProtob
 }
 
 extension SyftProto_Messaging_V1_ObjectMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".ObjectMessage"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  static let protoMessageName: String = _protobuf_package + ".ObjectMessage"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "tensor"),
   ]
 
@@ -275,7 +275,7 @@ extension SyftProto_Messaging_V1_ObjectMessage: SwiftProtobuf.Message, SwiftProt
     return _storage
   }
 
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     _ = _uniqueStorage()
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       while let fieldNumber = try decoder.nextFieldNumber() {
@@ -287,7 +287,7 @@ extension SyftProto_Messaging_V1_ObjectMessage: SwiftProtobuf.Message, SwiftProt
     }
   }
 
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       if let v = _storage._tensor {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
@@ -296,7 +296,7 @@ extension SyftProto_Messaging_V1_ObjectMessage: SwiftProtobuf.Message, SwiftProt
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: SyftProto_Messaging_V1_ObjectMessage, rhs: SyftProto_Messaging_V1_ObjectMessage) -> Bool {
+  static func ==(lhs: SyftProto_Messaging_V1_ObjectMessage, rhs: SyftProto_Messaging_V1_ObjectMessage) -> Bool {
     if lhs._storage !== rhs._storage {
       let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
         let _storage = _args.0
@@ -312,8 +312,8 @@ extension SyftProto_Messaging_V1_ObjectMessage: SwiftProtobuf.Message, SwiftProt
 }
 
 extension SyftProto_Messaging_V1_TensorCommandMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".TensorCommandMessage"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  static let protoMessageName: String = _protobuf_package + ".TensorCommandMessage"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "computation"),
     2: .same(proto: "communication"),
   ]
@@ -337,7 +337,7 @@ extension SyftProto_Messaging_V1_TensorCommandMessage: SwiftProtobuf.Message, Sw
     return _storage
   }
 
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     _ = _uniqueStorage()
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       while let fieldNumber = try decoder.nextFieldNumber() {
@@ -364,7 +364,7 @@ extension SyftProto_Messaging_V1_TensorCommandMessage: SwiftProtobuf.Message, Sw
     }
   }
 
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       switch _storage._action {
       case .computation(let v)?:
@@ -377,7 +377,7 @@ extension SyftProto_Messaging_V1_TensorCommandMessage: SwiftProtobuf.Message, Sw
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: SyftProto_Messaging_V1_TensorCommandMessage, rhs: SyftProto_Messaging_V1_TensorCommandMessage) -> Bool {
+  static func ==(lhs: SyftProto_Messaging_V1_TensorCommandMessage, rhs: SyftProto_Messaging_V1_TensorCommandMessage) -> Bool {
     if lhs._storage !== rhs._storage {
       let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
         let _storage = _args.0

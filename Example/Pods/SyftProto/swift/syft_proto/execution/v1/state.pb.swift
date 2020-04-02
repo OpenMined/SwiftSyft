@@ -19,18 +19,18 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-public struct SyftProto_Execution_V1_State {
+struct SyftProto_Execution_V1_State {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var placeholders: [SyftProto_Frameworks_Torch_Tensors_Interpreters_V1_Placeholder] = []
+  var placeholders: [SyftProto_Execution_V1_Placeholder] = []
 
-  public var tensors: [SyftProto_Execution_V1_StateTensor] = []
+  var tensors: [SyftProto_Execution_V1_StateTensor] = []
 
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
+  var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public init() {}
+  init() {}
 }
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -38,13 +38,13 @@ public struct SyftProto_Execution_V1_State {
 fileprivate let _protobuf_package = "syft_proto.execution.v1"
 
 extension SyftProto_Execution_V1_State: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".State"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  static let protoMessageName: String = _protobuf_package + ".State"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "placeholders"),
     2: .same(proto: "tensors"),
   ]
 
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
       case 1: try decoder.decodeRepeatedMessageField(value: &self.placeholders)
@@ -54,7 +54,7 @@ extension SyftProto_Execution_V1_State: SwiftProtobuf.Message, SwiftProtobuf._Me
     }
   }
 
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.placeholders.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.placeholders, fieldNumber: 1)
     }
@@ -64,7 +64,7 @@ extension SyftProto_Execution_V1_State: SwiftProtobuf.Message, SwiftProtobuf._Me
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: SyftProto_Execution_V1_State, rhs: SyftProto_Execution_V1_State) -> Bool {
+  static func ==(lhs: SyftProto_Execution_V1_State, rhs: SyftProto_Execution_V1_State) -> Bool {
     if lhs.placeholders != rhs.placeholders {return false}
     if lhs.tensors != rhs.tensors {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}

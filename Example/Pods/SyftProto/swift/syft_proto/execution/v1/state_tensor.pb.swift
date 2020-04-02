@@ -19,17 +19,17 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-public struct SyftProto_Execution_V1_StateTensor {
+struct SyftProto_Execution_V1_StateTensor {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var tensor: OneOf_Tensor? {
+  var tensor: OneOf_Tensor? {
     get {return _storage._tensor}
     set {_uniqueStorage()._tensor = newValue}
   }
 
-  public var torchTensor: SyftProto_Types_Torch_V1_TorchTensor {
+  var torchTensor: SyftProto_Types_Torch_V1_TorchTensor {
     get {
       if case .torchTensor(let v)? = _storage._tensor {return v}
       return SyftProto_Types_Torch_V1_TorchTensor()
@@ -37,7 +37,7 @@ public struct SyftProto_Execution_V1_StateTensor {
     set {_uniqueStorage()._tensor = .torchTensor(newValue)}
   }
 
-  public var torchParam: SyftProto_Types_Torch_V1_Parameter {
+  var torchParam: SyftProto_Types_Torch_V1_Parameter {
     get {
       if case .torchParam(let v)? = _storage._tensor {return v}
       return SyftProto_Types_Torch_V1_Parameter()
@@ -45,14 +45,14 @@ public struct SyftProto_Execution_V1_StateTensor {
     set {_uniqueStorage()._tensor = .torchParam(newValue)}
   }
 
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
+  var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum OneOf_Tensor: Equatable {
+  enum OneOf_Tensor: Equatable {
     case torchTensor(SyftProto_Types_Torch_V1_TorchTensor)
     case torchParam(SyftProto_Types_Torch_V1_Parameter)
 
   #if !swift(>=4.1)
-    public static func ==(lhs: SyftProto_Execution_V1_StateTensor.OneOf_Tensor, rhs: SyftProto_Execution_V1_StateTensor.OneOf_Tensor) -> Bool {
+    static func ==(lhs: SyftProto_Execution_V1_StateTensor.OneOf_Tensor, rhs: SyftProto_Execution_V1_StateTensor.OneOf_Tensor) -> Bool {
       switch (lhs, rhs) {
       case (.torchTensor(let l), .torchTensor(let r)): return l == r
       case (.torchParam(let l), .torchParam(let r)): return l == r
@@ -62,7 +62,7 @@ public struct SyftProto_Execution_V1_StateTensor {
   #endif
   }
 
-  public init() {}
+  init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
 }
@@ -72,8 +72,8 @@ public struct SyftProto_Execution_V1_StateTensor {
 fileprivate let _protobuf_package = "syft_proto.execution.v1"
 
 extension SyftProto_Execution_V1_StateTensor: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".StateTensor"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  static let protoMessageName: String = _protobuf_package + ".StateTensor"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "torch_tensor"),
     2: .standard(proto: "torch_param"),
   ]
@@ -97,7 +97,7 @@ extension SyftProto_Execution_V1_StateTensor: SwiftProtobuf.Message, SwiftProtob
     return _storage
   }
 
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     _ = _uniqueStorage()
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       while let fieldNumber = try decoder.nextFieldNumber() {
@@ -124,7 +124,7 @@ extension SyftProto_Execution_V1_StateTensor: SwiftProtobuf.Message, SwiftProtob
     }
   }
 
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       switch _storage._tensor {
       case .torchTensor(let v)?:
@@ -137,7 +137,7 @@ extension SyftProto_Execution_V1_StateTensor: SwiftProtobuf.Message, SwiftProtob
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: SyftProto_Execution_V1_StateTensor, rhs: SyftProto_Execution_V1_StateTensor) -> Bool {
+  static func ==(lhs: SyftProto_Execution_V1_StateTensor, rhs: SyftProto_Execution_V1_StateTensor) -> Bool {
     if lhs._storage !== rhs._storage {
       let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
         let _storage = _args.0

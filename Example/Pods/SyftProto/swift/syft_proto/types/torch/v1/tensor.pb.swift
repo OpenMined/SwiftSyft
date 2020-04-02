@@ -19,26 +19,26 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-public struct SyftProto_Types_Torch_V1_TorchTensor {
+struct SyftProto_Types_Torch_V1_TorchTensor {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var id: SyftProto_Types_Syft_V1_Id {
+  var id: SyftProto_Types_Syft_V1_Id {
     get {return _storage._id ?? SyftProto_Types_Syft_V1_Id()}
     set {_uniqueStorage()._id = newValue}
   }
   /// Returns true if `id` has been explicitly set.
-  public var hasID: Bool {return _storage._id != nil}
+  var hasID: Bool {return _storage._id != nil}
   /// Clears the value of `id`. Subsequent reads from it will return its default value.
-  public mutating func clearID() {_uniqueStorage()._id = nil}
+  mutating func clearID() {_uniqueStorage()._id = nil}
 
-  public var contents: OneOf_Contents? {
+  var contents: OneOf_Contents? {
     get {return _storage._contents}
     set {_uniqueStorage()._contents = newValue}
   }
 
-  public var contentsData: SyftProto_Types_Torch_V1_TensorData {
+  var contentsData: SyftProto_Types_Torch_V1_TensorData {
     get {
       if case .contentsData(let v)? = _storage._contents {return v}
       return SyftProto_Types_Torch_V1_TensorData()
@@ -46,7 +46,7 @@ public struct SyftProto_Types_Torch_V1_TorchTensor {
     set {_uniqueStorage()._contents = .contentsData(newValue)}
   }
 
-  public var contentsBin: Data {
+  var contentsBin: Data {
     get {
       if case .contentsBin(let v)? = _storage._contents {return v}
       return SwiftProtobuf.Internal.emptyData
@@ -54,47 +54,47 @@ public struct SyftProto_Types_Torch_V1_TorchTensor {
     set {_uniqueStorage()._contents = .contentsBin(newValue)}
   }
 
-  public var chain: SyftProto_Types_Torch_V1_TorchTensor {
+  var chain: SyftProto_Types_Torch_V1_TorchTensor {
     get {return _storage._chain ?? SyftProto_Types_Torch_V1_TorchTensor()}
     set {_uniqueStorage()._chain = newValue}
   }
   /// Returns true if `chain` has been explicitly set.
-  public var hasChain: Bool {return _storage._chain != nil}
+  var hasChain: Bool {return _storage._chain != nil}
   /// Clears the value of `chain`. Subsequent reads from it will return its default value.
-  public mutating func clearChain() {_uniqueStorage()._chain = nil}
+  mutating func clearChain() {_uniqueStorage()._chain = nil}
 
-  public var gradChain: SyftProto_Types_Torch_V1_TorchTensor {
+  var gradChain: SyftProto_Types_Torch_V1_TorchTensor {
     get {return _storage._gradChain ?? SyftProto_Types_Torch_V1_TorchTensor()}
     set {_uniqueStorage()._gradChain = newValue}
   }
   /// Returns true if `gradChain` has been explicitly set.
-  public var hasGradChain: Bool {return _storage._gradChain != nil}
+  var hasGradChain: Bool {return _storage._gradChain != nil}
   /// Clears the value of `gradChain`. Subsequent reads from it will return its default value.
-  public mutating func clearGradChain() {_uniqueStorage()._gradChain = nil}
+  mutating func clearGradChain() {_uniqueStorage()._gradChain = nil}
 
-  public var tags: [String] {
+  var tags: [String] {
     get {return _storage._tags}
     set {_uniqueStorage()._tags = newValue}
   }
 
-  public var description_p: String {
+  var description_p: String {
     get {return _storage._description_p}
     set {_uniqueStorage()._description_p = newValue}
   }
 
-  public var serializer: SyftProto_Types_Torch_V1_TorchTensor.Serializer {
+  var serializer: SyftProto_Types_Torch_V1_TorchTensor.Serializer {
     get {return _storage._serializer}
     set {_uniqueStorage()._serializer = newValue}
   }
 
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
+  var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum OneOf_Contents: Equatable {
+  enum OneOf_Contents: Equatable {
     case contentsData(SyftProto_Types_Torch_V1_TensorData)
     case contentsBin(Data)
 
   #if !swift(>=4.1)
-    public static func ==(lhs: SyftProto_Types_Torch_V1_TorchTensor.OneOf_Contents, rhs: SyftProto_Types_Torch_V1_TorchTensor.OneOf_Contents) -> Bool {
+    static func ==(lhs: SyftProto_Types_Torch_V1_TorchTensor.OneOf_Contents, rhs: SyftProto_Types_Torch_V1_TorchTensor.OneOf_Contents) -> Bool {
       switch (lhs, rhs) {
       case (.contentsData(let l), .contentsData(let r)): return l == r
       case (.contentsBin(let l), .contentsBin(let r)): return l == r
@@ -104,8 +104,8 @@ public struct SyftProto_Types_Torch_V1_TorchTensor {
   #endif
   }
 
-  public enum Serializer: SwiftProtobuf.Enum {
-    public typealias RawValue = Int
+  enum Serializer: SwiftProtobuf.Enum {
+    typealias RawValue = Int
     case unspecified // = 0
     case torch // = 1
     case numpy // = 2
@@ -113,11 +113,11 @@ public struct SyftProto_Types_Torch_V1_TorchTensor {
     case all // = 4
     case UNRECOGNIZED(Int)
 
-    public init() {
+    init() {
       self = .unspecified
     }
 
-    public init?(rawValue: Int) {
+    init?(rawValue: Int) {
       switch rawValue {
       case 0: self = .unspecified
       case 1: self = .torch
@@ -128,7 +128,7 @@ public struct SyftProto_Types_Torch_V1_TorchTensor {
       }
     }
 
-    public var rawValue: Int {
+    var rawValue: Int {
       switch self {
       case .unspecified: return 0
       case .torch: return 1
@@ -141,7 +141,7 @@ public struct SyftProto_Types_Torch_V1_TorchTensor {
 
   }
 
-  public init() {}
+  init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
 }
@@ -150,7 +150,7 @@ public struct SyftProto_Types_Torch_V1_TorchTensor {
 
 extension SyftProto_Types_Torch_V1_TorchTensor.Serializer: CaseIterable {
   // The compiler won't synthesize support with the UNRECOGNIZED case.
-  public static var allCases: [SyftProto_Types_Torch_V1_TorchTensor.Serializer] = [
+  static var allCases: [SyftProto_Types_Torch_V1_TorchTensor.Serializer] = [
     .unspecified,
     .torch,
     .numpy,
@@ -166,8 +166,8 @@ extension SyftProto_Types_Torch_V1_TorchTensor.Serializer: CaseIterable {
 fileprivate let _protobuf_package = "syft_proto.types.torch.v1"
 
 extension SyftProto_Types_Torch_V1_TorchTensor: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".TorchTensor"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  static let protoMessageName: String = _protobuf_package + ".TorchTensor"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "id"),
     2: .standard(proto: "contents_data"),
     3: .standard(proto: "contents_bin"),
@@ -209,7 +209,7 @@ extension SyftProto_Types_Torch_V1_TorchTensor: SwiftProtobuf.Message, SwiftProt
     return _storage
   }
 
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     _ = _uniqueStorage()
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       while let fieldNumber = try decoder.nextFieldNumber() {
@@ -239,7 +239,7 @@ extension SyftProto_Types_Torch_V1_TorchTensor: SwiftProtobuf.Message, SwiftProt
     }
   }
 
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       if let v = _storage._id {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
@@ -270,7 +270,7 @@ extension SyftProto_Types_Torch_V1_TorchTensor: SwiftProtobuf.Message, SwiftProt
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: SyftProto_Types_Torch_V1_TorchTensor, rhs: SyftProto_Types_Torch_V1_TorchTensor) -> Bool {
+  static func ==(lhs: SyftProto_Types_Torch_V1_TorchTensor, rhs: SyftProto_Types_Torch_V1_TorchTensor) -> Bool {
     if lhs._storage !== rhs._storage {
       let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
         let _storage = _args.0
@@ -292,7 +292,7 @@ extension SyftProto_Types_Torch_V1_TorchTensor: SwiftProtobuf.Message, SwiftProt
 }
 
 extension SyftProto_Types_Torch_V1_TorchTensor.Serializer: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     0: .same(proto: "SERIALIZER_UNSPECIFIED"),
     1: .same(proto: "SERIALIZER_TORCH"),
     2: .same(proto: "SERIALIZER_NUMPY"),
