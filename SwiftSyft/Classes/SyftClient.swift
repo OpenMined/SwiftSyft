@@ -127,12 +127,18 @@ public class SyftJob: SyftJobProtocol {
             .decode(type: AuthResponse.self, decoder: decoder)
             .eraseToAnyPublisher()
             .map({ $0.workerId })
-            .flatMap { [unowned self] workerId -> AnyPublisher<(CycleResponseSuccess, String), Error> in
+            .flatMap { [unowned self] workerId -> AnyPublisher<(cycleResponse: CycleResponseSuccess, workerId: String), Error> in
                 return self.cycleRequest(forWorkerId: workerId)
-            }
+        }.eraseToAnyPublisher()
+
+        self.startPlanAndModelDownload(withCycleResponse: cycleRequestPublisher)
+
+    }
+
+    func startPlanAndModelDownload(withCycleResponse cycleResponsePublisher: AnyPublisher<(cycleResponse: CycleResponseSuccess, workerId: String), Error>) {
 
         // Download model params
-        let modelParamPublisher = cycleRequestPublisher
+        let modelParamPublisher = cycleResponsePublisher
             .flatMap { (cycleResponse) -> AnyPublisher<Data, Error> in
                 let (cycleResponseSuccess, workerId) = cycleResponse
                 return self.downloadModel(forWorkerId: workerId, modelId: cycleResponseSuccess.modelId, requestKey: cycleResponseSuccess.requestKey)
@@ -140,7 +146,7 @@ public class SyftJob: SyftJobProtocol {
             .tryMap { try SyftProto_Execution_V1_State(serializedData: $0) }
 
         // Download plan
-        let planPublisher = cycleRequestPublisher
+        let planPublisher = cycleResponsePublisher
             .flatMap { (cycleResponse) -> AnyPublisher<Data, Error> in
                 let (cycleResponseSuccess, workerId) = cycleResponse
                 return self.downloadPlan(forWorkerId: workerId, planId: cycleResponseSuccess.planConfig.planId, requestKey: cycleResponseSuccess.requestKey)
@@ -176,9 +182,10 @@ public class SyftJob: SyftJobProtocol {
                 print(trainingModule)
                 print(modelParam)
             }).store(in: &disposeBag)
+
     }
 
-    func cycleRequest(forWorkerId workerId: String) -> AnyPublisher<(CycleResponseSuccess, String), Error> {
+    func cycleRequest(forWorkerId workerId: String) -> AnyPublisher<(cycleResponse: CycleResponseSuccess, workerId: String), Error> {
 
         let encoder = JSONEncoder()
         let decoder = JSONDecoder()
@@ -199,7 +206,7 @@ public class SyftJob: SyftJobProtocol {
                 .tryMap { cycleResponse -> (CycleResponseSuccess, String) in
                     switch cycleResponse {
                     case .success(let cycleResponseSuccess):
-                        return (cycleResponseSuccess, workerId)
+                        return (cycleResponse: cycleResponseSuccess, workerId: workerId)
                     case .failure(let cycleResponseFailure):
                         throw cycleResponseFailure
                     }
