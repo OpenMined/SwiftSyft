@@ -1,7 +1,5 @@
 platform :ios, '13.0'
 source 'https://github.com/CocoaPods/Specs.git'
-# This is a temporary podspec repo for syft-proto while an official release isn't out yet.
-source "https://github.com/mjjimenez/SamplePodspecRepo.git"
 
 target 'SwiftSyft_Example' do
   pod 'SwiftSyft', :path => '../', :testspecs => ['Tests'] 
