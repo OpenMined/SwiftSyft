@@ -294,7 +294,10 @@ public class SyftJob: SyftJobProtocol {
                 case .cycleRequestResponse(let result):
                     switch result {
                     case .success(let cycleSuccess):
-                        self.onAcceptedBlock(cycleSuccess)
+                        if let workerId = self.workerId {
+                            let cycleResponsePublisher = CurrentValueSubject<(cycleResponse: CycleResponseSuccess, workerId: String), Error>((cycleResponse: cycleSuccess, workerId: workerId)).eraseToAnyPublisher()
+                            self.startPlanAndModelDownload(withCycleResponse: cycleResponsePublisher)
+                        }
                     case .failure(let error):
                         print(error.localizedDescription)
                         return
