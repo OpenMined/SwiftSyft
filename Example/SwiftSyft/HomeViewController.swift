@@ -118,6 +118,27 @@ class HomeViewController: UIViewController, UITextViewDelegate {
         // Initate federated cylcle request
         if let syftClient = SyftClient(url: URL(string: "http://127.0.0.1:5000")!) {
             self.syftJob = syftClient.newJob(modelName: "mnist", version: "1.0.0")
+            self.syftJob?.onReady(execute: { plan, clientConfig in
+
+                do {
+
+                    let (mnistData, labels) = try MNISTLoader.load(setType: .train, batchSize: clientConfig.batchSize)
+
+                    for case let (batchData, labels) in zip(mnistData, labels) {
+                        let flattenedBatch = MNISTLoader.flattenMNISTData(batchData)
+                        let oneHotLabels = MNISTLoader.oneHotMNISTLabels(labels: labels).compactMap { Float($0)}
+
+                        let trainingData = TrainingData(data: flattenedBatch, shape: [clientConfig.batchSize, 784])
+                        let validationData = ValidationData(data: oneHotLabels, shape: [clientConfig.batchSize, 10])
+
+                        plan.execute(trainingData: trainingData, validationData: validationData)
+                    }
+
+                } catch let error {
+                    debugPrint(error.localizedDescription)
+                }
+
+            })
             self.syftJob?.start()
             self.syftClient = syftClient
         }
