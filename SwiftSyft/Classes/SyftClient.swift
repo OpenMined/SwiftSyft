@@ -65,7 +65,7 @@ public class SyftJob: SyftJobProtocol {
     let ping: String = "8"
     let upload: String = "23"
 
-    var onAcceptedBlock: (SyftPlan, FederatedClientConfig) -> Void = { _, _ in }
+    var onReadyBlock: (SyftPlan, FederatedClientConfig) -> Void = { _, _ in }
 
     private var cyclePublisher: AnyPublisher<(SyftPlan, FederatedClientConfig), Error>?
     private var disposeBag = Set<AnyCancellable>()
@@ -186,7 +186,7 @@ public class SyftJob: SyftJobProtocol {
                 }
             }, receiveValue: { [weak self] (clientConfig, trainingModule, modelParam) in
                 let syftPlan = SyftPlan(trainingModule: trainingModule, modelState: modelParam)
-                self?.onAcceptedBlock(syftPlan, clientConfig)
+                self?.onReadyBlock(syftPlan, clientConfig)
             }).store(in: &disposeBag)
 
     }
@@ -318,8 +318,8 @@ public class SyftJob: SyftJobProtocol {
 
     }
 
-    public func onAccepted(execute: @escaping (SyftPlan, FederatedClientConfig) -> Void) {
-        self.onAcceptedBlock = execute
+    public func onReady(execute: @escaping (SyftPlan, FederatedClientConfig) -> Void) {
+        self.onReadyBlock = execute
     }
 
     /// Report the results of the learning cycle to PyGrid at "federated
