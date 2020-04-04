@@ -112,7 +112,7 @@ extension CycleResponseFailed {
 
 }
 
-struct FederatedClientConfig: Codable {
+public struct FederatedClientConfig: Codable {
     let name: String
     let version: String
     let batchSize: Int
