@@ -3,16 +3,24 @@ import SyftProto
 
 public struct TrainingData {
 
-    let data: [Double]
-    let shape: [Int]
+    public let data: [Float]
+    public let shape: [Int]
 
+    public init(data: [Float], shape: [Int]) {
+        self.data = data
+        self.shape = shape
+    }
 }
 
 public struct ValidationData {
 
-    let data: [Int]
-    let shape: [Int]
+    public let data: [Float]
+    public let shape: [Int]
 
+    public init(data: [Float], shape: [Int]) {
+        self.data = data
+        self.shape = shape
+    }
 }
 
 public class SyftPlan {
