@@ -113,11 +113,11 @@ extension CycleResponseFailed {
 }
 
 public struct FederatedClientConfig: Codable {
-    let name: String
-    let version: String
-    let batchSize: Int
-    let learningRate: Float
-    let maxUpdates: Int
+    public let name: String
+    public let version: String
+    public let batchSize: Int
+    public let learningRate: Float
+    public let maxUpdates: Int
 
     enum CodingKeys: String, CodingKey {
         case name
