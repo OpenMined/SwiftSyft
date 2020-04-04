@@ -17,11 +17,11 @@ public struct ValidationData {
 
 public class SyftPlan {
 
-    private let planScript: SyftProto_Types_Torch_V1_ScriptModule
+    private let trainingModule: TorchTrainingModule
     private let modelState: SyftProto_Execution_V1_State
 
-    init(planScript: SyftProto_Types_Torch_V1_ScriptModule, modelState: SyftProto_Execution_V1_State) {
-        self.planScript = planScript
+    init(trainingModule: TorchTrainingModule, modelState: SyftProto_Execution_V1_State) {
+        self.trainingModule = trainingModule
         self.modelState = modelState
     }
 

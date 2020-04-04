@@ -65,8 +65,9 @@ public class SyftJob: SyftJobProtocol {
     let ping: String = "8"
     let upload: String = "23"
 
-    var onAcceptedBlock: (CycleResponseSuccess) -> Void = { _ in }
+    var onAcceptedBlock: (SyftPlan, FederatedClientConfig) -> Void = { _, _ in }
 
+    private var cyclePublisher: AnyPublisher<(SyftPlan, FederatedClientConfig), Error>?
     private var disposeBag = Set<AnyCancellable>()
 
     // Used to observe incoming socket messages
@@ -122,20 +123,26 @@ public class SyftJob: SyftJobProtocol {
 
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        let cycleRequestPublisher = URLSession.shared.dataTaskPublisher(for: authRequest)
+        let cycleResponsePublisher = URLSession.shared.dataTaskPublisher(for: authRequest)
             .map { $0.data }
             .decode(type: AuthResponse.self, decoder: decoder)
-            .eraseToAnyPublisher()
             .map({ $0.workerId })
             .flatMap { [unowned self] workerId -> AnyPublisher<(cycleResponse: CycleResponseSuccess, workerId: String), Error> in
                 return self.cycleRequest(forWorkerId: workerId)
-        }.eraseToAnyPublisher()
+            }.eraseToAnyPublisher()
 
-        self.startPlanAndModelDownload(withCycleResponse: cycleRequestPublisher)
+        self.startPlanAndModelDownload(withCycleResponse: cycleResponsePublisher)
 
     }
 
     func startPlanAndModelDownload(withCycleResponse cycleResponsePublisher: AnyPublisher<(cycleResponse: CycleResponseSuccess, workerId: String), Error>) {
+
+        // Filter out client config
+        let clientConfigPublisher = cycleResponsePublisher
+            .map { (cycleResponse) -> FederatedClientConfig in
+                let (cycleResponseSuccess, _) = cycleResponse
+                return cycleResponseSuccess.clientConfig
+            }
 
         // Download model params
         let modelParamPublisher = cycleResponsePublisher
@@ -169,18 +176,17 @@ public class SyftJob: SyftJobProtocol {
             }
             .map { TorchTrainingModule(fileAtPath: $0) }
 
-        planPublisher.zip(modelParamPublisher)
+        clientConfigPublisher.zip(planPublisher, modelParamPublisher)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
-                    print("finshed")
+                    print("finished")
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
-            }, receiveValue: { (trainingModule, modelParam) in
-                print("zipped")
-                print(trainingModule)
-                print(modelParam)
+            }, receiveValue: { [weak self] (clientConfig, trainingModule, modelParam) in
+                let syftPlan = SyftPlan(trainingModule: trainingModule, modelState: modelParam)
+                self?.onAcceptedBlock(syftPlan, clientConfig)
             }).store(in: &disposeBag)
 
     }
@@ -312,7 +318,7 @@ public class SyftJob: SyftJobProtocol {
 
     }
 
-    public func onAccepted(execute: @escaping (CycleResponseSuccess) -> Void) {
+    public func onAccepted(execute: @escaping (SyftPlan, FederatedClientConfig) -> Void) {
         self.onAcceptedBlock = execute
     }
 
