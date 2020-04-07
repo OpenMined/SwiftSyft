@@ -88,33 +88,6 @@ class HomeViewController: UIViewController, UITextViewDelegate {
 
     @IBAction func connectPressed(_ sender: UIButton) {
 
-        // Connect using socket connection
-//        if isConnected {
-//            socket.disconnect()
-//        } else {
-//            guard !socketURLTextField.text!.isEmpty else {
-//                print("Socket URL is empty!")
-//                return
-//            }
-//            guard !protocolIDTextField.text!.isEmpty else {
-//                print("Protocol ID is empty!")
-//                return
-//            }
-//
-//            var request = URLRequest(url: URL(string: StaticHomeScreenStrings.socketURL)!)
-//            request.timeoutInterval = 5
-//
-//            socket = SyftWebSocket(url: request.url!,
-//                                       pingInterval: request.timeoutInterval)
-//            socket.delegate = self
-//            socket.connect()
-//        }
-
-        // Connect using webrtc connection
-//        let socketURL = URL(string: StaticHomeScreenStrings.socketURL)!
-//        self.syftRTCClient = SyftRTCClient(socketURL: socketURL, workerId: UUID(uuidString: "eeb370bc-6a17-4cb3-9644-bde71e1a38a5")!, scopeId: UUID(uuidString: "d54cb968-517a-45b5-891d-4d233bbfa536")!)
-//        self.syftRTCClient.connect()
-
         // Initate federated cylcle request
         if let syftClient = SyftClient(url: URL(string: "http://127.0.0.1:5000")!) {
             self.syftJob = syftClient.newJob(modelName: "mnist", version: "1.0.0")
@@ -138,6 +111,9 @@ class HomeViewController: UIViewController, UITextViewDelegate {
                     debugPrint(error.localizedDescription)
                 }
 
+            })
+            self.syftJob?.onError(execute: { error in
+                print(error.localizedDescription)
             })
             self.syftJob?.start()
             self.syftClient = syftClient
