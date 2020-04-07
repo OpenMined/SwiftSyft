@@ -66,6 +66,7 @@ public class SyftJob: SyftJobProtocol {
     let upload: String = "23"
 
     var onReadyBlock: (SyftPlan, FederatedClientConfig) -> Void = { _, _ in }
+    var onErrorBlock: (Error) -> Void = { _ in }
 
     private var cyclePublisher: AnyPublisher<(SyftPlan, FederatedClientConfig), Error>?
     private var disposeBag = Set<AnyCancellable>()
@@ -177,11 +178,12 @@ public class SyftJob: SyftJobProtocol {
             .map { TorchTrainingModule(fileAtPath: $0) }
 
         clientConfigPublisher.zip(planPublisher, modelParamPublisher)
-            .sink(receiveCompletion: { completion in
+            .sink(receiveCompletion: { [weak self] completion in
                 switch completion {
                 case .finished:
                     print("finished")
                 case .failure(let error):
+                    self?.onErrorBlock(error)
                     print(error.localizedDescription)
                 }
             }, receiveValue: { [weak self] (clientConfig, trainingModule, modelParam) in
@@ -320,6 +322,10 @@ public class SyftJob: SyftJobProtocol {
 
     public func onReady(execute: @escaping (SyftPlan, FederatedClientConfig) -> Void) {
         self.onReadyBlock = execute
+    }
+
+    public func onError(execute: @escaping (Error) -> Void) {
+        self.onErrorBlock = execute
     }
 
     /// Report the results of the learning cycle to PyGrid at "federated
