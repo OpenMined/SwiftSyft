@@ -74,6 +74,14 @@ public class SyftPlan {
 
         updatedModelState.tensors = updatedParamTensors
         self.updatedModelState = updatedModelState
+
+        // Free param buffer pointers
+        for pointerValue in paramTensorPointers {
+            if let pointer = pointerValue.pointerValue {
+                pointer.deallocate()
+            }
+        }
+
     }
     // swiftlint:enable force_cast
 
