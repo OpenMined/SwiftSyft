@@ -126,3 +126,26 @@ extension SyftProto_Types_Torch_V1_TensorData {
 
     }
 }
+
+extension SyftProto_Execution_V1_State {
+    func updateWithParams(params: [[Float]]) -> SyftProto_Execution_V1_State {
+
+        var copy = self
+
+        let updatedParamTensors = zip(copy.tensors, params).map { args -> SyftProto_Execution_V1_StateTensor in
+
+                let (stateTensor, paramsArray) = args
+                var tensorData = SyftProto_Types_Torch_V1_TensorData()
+                tensorData.contentsFloat32 = paramsArray as [Float32]
+                var copyStateTensor = stateTensor
+                copyStateTensor.torchTensor.contentsData = tensorData
+                return copyStateTensor
+
+            }
+
+        copy.tensors = updatedParamTensors
+
+        return copy
+
+    }
+}
