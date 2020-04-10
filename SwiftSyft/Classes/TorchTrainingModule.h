@@ -16,8 +16,7 @@ NS_SWIFT_NAME(init(fileAtPath:))NS_DESIGNATED_INITIALIZER;
 + (instancetype)new NS_UNAVAILABLE;
 - (instancetype)init NS_UNAVAILABLE;
 
-- (NSArray<NSArray<NSNumber *> *> *)executeTorchScriptModelWithPath:(NSString *)filepath
-      trainingArray:(void *)trainingDataArray
+- (NSArray<NSArray<NSNumber *> *> *)executeWithTrainingArray:(void *)trainingDataArray
      trainingShapes:(NSArray<NSNumber *> *)trainingDataShapes
      trainingLabels:(void *)trainingLabelArrays
 trainingLabelShapes:(NSArray<NSNumber *> *)trainingLabelShapes
