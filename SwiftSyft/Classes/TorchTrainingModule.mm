@@ -23,7 +23,7 @@
     return self;
 }
 
-- (NSArray<NSArray<NSNumber *> *> *)testTorchScriptModelWithPath:(NSString *)filepath
+- (NSArray<NSArray<NSNumber *> *> *)executeTorchScriptModelWithPath:(NSString *)filepath
                        trainingArray:(void *)trainingDataArray
                       trainingShapes:(NSArray<NSNumber *> *)trainingDataShapes
                       trainingLabels:(void *)trainingLabelArrays
