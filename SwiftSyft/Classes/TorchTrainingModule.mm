@@ -23,7 +23,7 @@
     return self;
 }
 
-- (void)testTorchScriptModelWithPath:(NSString *)filepath
+- (NSArray<NSArray<NSNumber *> *> *)testTorchScriptModelWithPath:(NSString *)filepath
                        trainingArray:(void *)trainingDataArray
                       trainingShapes:(NSArray<NSNumber *> *)trainingDataShapes
                       trainingLabels:(void *)trainingLabelArrays
@@ -91,6 +91,28 @@
 //    auto outputs = planModel.forward(modelArgs);
 //
 //    std::cout << outputs << std::endl;
+
+    // Code to temporarily generate diff to test model reporting
+    NSMutableArray *diffArray = [[NSMutableArray alloc] init];
+    for (int i = 0; i < [paramArrays count]; i++) {
+
+        NSMutableArray *diff = [[NSMutableArray alloc] init];
+        NSArray *shape = paramShapes[i];
+        NSInteger length = 1;
+        for (NSNumber *dim in shape) {
+            length = length * [dim intValue];
+        }
+
+        for (int x = 0; x < length; x++) {
+            float val = ((float)arc4random() / UINT32_MAX);
+            [diff addObject:[NSNumber numberWithFloat:val]];
+        }
+
+        [diffArray addObject:[diff copy]];
+
+    }
+
+    return [diffArray copy];
 
 }
 
