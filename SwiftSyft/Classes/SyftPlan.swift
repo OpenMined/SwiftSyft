@@ -59,21 +59,7 @@ public class SyftPlan {
         }
 
         // Update model state
-        var updatedModelState = self.updatedModelState
-
-        let updatedParamTensors = zip(updatedModelState.tensors, updatedParamsFloatArray).map { args -> SyftProto_Execution_V1_StateTensor in
-
-                let (stateTensor, paramsArray) = args
-                var tensorData = SyftProto_Types_Torch_V1_TensorData()
-                tensorData.contentsFloat32 = paramsArray as [Float32]
-                var copyStateTensor = stateTensor
-                copyStateTensor.torchTensor.contentsData = tensorData
-                return copyStateTensor
-
-            }
-
-        updatedModelState.tensors = updatedParamTensors
-        self.updatedModelState = updatedModelState
+        self.updatedModelState = self.updatedModelState.updateWithParams(params: updatedParamsFloatArray)
 
         // Free param buffer pointers
         for pointerValue in paramTensorPointers {
@@ -84,5 +70,38 @@ public class SyftPlan {
 
     }
     // swiftlint:enable force_cast
+
+    public func generateDiffData() throws -> Data {
+
+        let (originalParamShapes, originalParamTensorPointers, _) = self.updatedModelState.getTensorData()
+        let (_, updatedParamTensorPointers, _) = self.updatedModelState.getTensorData()
+
+        defer {
+            // Free param buffer pointers
+            for pointerValue in originalParamTensorPointers {
+                if let pointer = pointerValue.pointerValue {
+                    pointer.deallocate()
+                }
+            }
+
+            // Free param buffer pointers
+            for pointerValue in originalParamTensorPointers {
+                if let pointer = pointerValue.pointerValue {
+                    pointer.deallocate()
+                }
+            }
+        }
+
+        let diff = self.trainingModule.generateDiff(fromOriginalParamArrays: originalParamTensorPointers, updatedParamArrays: updatedParamTensorPointers, withShapes: originalParamShapes as [[NSNumber]])
+
+        let diffFloatArray = diff.map { diff -> [Float] in
+            return diff.map { Float(truncating: $0) }
+        }
+
+        let diffState = self.updatedModelState.updateWithParams(params: diffFloatArray)
+
+        return try diffState.serializedData()
+
+    }
 
 }

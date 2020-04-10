@@ -25,6 +25,10 @@ trainingLabelShapes:(NSArray<NSNumber *> *)trainingLabelShapes
           batchSize:(void *)batchSize
        learningRate:(void *)learningRate;
 
+- (NSArray<NSArray<NSNumber *> *> *)generateDiffFromOriginalParamArrays:(NSArray<NSValue *> *)originalParamArrays
+                                                     updatedParamArrays:(NSArray<NSValue *> *)updatedParamArrays
+                                                             withShapes:(NSArray<NSArray<NSNumber *> *> *)paramShapes;
+
 
 @end
 

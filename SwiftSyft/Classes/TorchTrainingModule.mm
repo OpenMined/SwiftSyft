@@ -6,6 +6,8 @@
 //
 
 #import "TorchTrainingModule.h"
+#include <iostream>
+#include <vector>
 
 @interface TorchTrainingModule()
 
@@ -112,6 +114,62 @@
     }
 
     return [diffArray copy];
+
+}
+
+- (NSArray<NSArray<NSNumber *> *> *)generateDiffFromOriginalParamArrays:(NSArray<NSValue *> *)originalParamArrays
+                                                     updatedParamArrays:(NSArray<NSValue *> *)updatedParamArrays
+                                                             withShapes:(NSArray<NSArray<NSNumber *> *> *)paramShapes {
+
+
+//    NSMutableArray *diffArray = [[NSMutableArray alloc] init];
+//    NSInteger paramsLength = [originalParamArrays count];
+//
+//    for (NSInteger index=0; index < paramsLength; index++) {
+//        NSValue *originalParamValue = originalParamArrays[index];
+//        void *originalParamPointer = [originalParamValue pointerValue];
+//
+//        NSValue *updatedParamValue = updatedParamArrays[index];
+//        void *updatedParamPointer = [updatedParamValue pointerValue];
+//
+//        NSArray<NSNumber *> *shape = paramShapes[index];
+//        std::vector<int64_t> shapes;
+//        for (NSNumber *dim in shape) {
+//            int dimInt = [dim intValue];
+//            shapes.push_back(dimInt);
+//        }
+//
+//        at::Tensor originalParamsTensor = torch::from_blob(originalParamPointer, shapes, at::kFloat);
+//        at::Tensor updatedParamsTensor = torch::from_blob(updatedParamPointer, shapes, at::kFloat);
+//
+//        auto diffTensor = originalParamsTensor - updatedParamsTensor;
+//        float* floatBuffer = diffTensor.data_ptr<float>();
+//
+//    }
+
+    // Code to temporarily generate diff to test model reporting
+    NSMutableArray *diffArray = [[NSMutableArray alloc] init];
+    for (int i = 0; i < [originalParamArrays count]; i++) {
+
+        NSMutableArray *diff = [[NSMutableArray alloc] init];
+        NSArray *shape = paramShapes[i];
+        NSInteger length = 1;
+        for (NSNumber *dim in shape) {
+            length = length * [dim intValue];
+        }
+
+        for (int x = 0; x < length; x++) {
+            float val = ((float)arc4random() / UINT32_MAX);
+            [diff addObject:[NSNumber numberWithFloat:val]];
+        }
+
+        [diffArray addObject:[diff copy]];
+
+    }
+
+    return [diffArray copy];
+
+
 
 }
 
