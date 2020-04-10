@@ -104,7 +104,7 @@ class HomeViewController: UIViewController, UITextViewDelegate {
                         let trainingData = TrainingData(data: flattenedBatch, shape: [clientConfig.batchSize, 784])
                         let validationData = ValidationData(data: oneHotLabels, shape: [clientConfig.batchSize, 10])
 
-                        plan.execute(trainingData: trainingData, validationData: validationData)
+                        plan.execute(trainingData: trainingData, validationData: validationData, clientConfig: clientConfig)
                     }
 
                 } catch let error {

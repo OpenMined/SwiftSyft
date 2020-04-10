@@ -23,15 +23,14 @@
     return self;
 }
 
-- (NSArray<NSArray<NSNumber *> *> *)executeTorchScriptModelWithPath:(NSString *)filepath
-                       trainingArray:(void *)trainingDataArray
-                      trainingShapes:(NSArray<NSNumber *> *)trainingDataShapes
-                      trainingLabels:(void *)trainingLabelArrays
-                 trainingLabelShapes:(NSArray<NSNumber *> *)trainingLabelShapes
-                         paramArrays:(NSArray<NSValue *> *)paramArrays
-                          withShapes:(NSArray<NSArray<NSNumber *> *> *)paramShapes
-                           batchSize:(void *)batchSize
-                        learningRate:(void *)learningRate {
+- (NSArray<NSArray<NSNumber *> *> *)executeWithTrainingArray:(void *)trainingDataArray
+                                              trainingShapes:(NSArray<NSNumber *> *)trainingDataShapes
+                                              trainingLabels:(void *)trainingLabelArrays
+                                         trainingLabelShapes:(NSArray<NSNumber *> *)trainingLabelShapes
+                                                 paramArrays:(NSArray<NSValue *> *)paramArrays
+                                                  withShapes:(NSArray<NSArray<NSNumber *> *> *)paramShapes
+                                                   batchSize:(void *)batchSize
+                                                learningRate:(void *)learningRate {
 
 //    torch::jit::script::Module planModel = torch::jit::load(filepath.UTF8String);
 //
@@ -92,7 +91,7 @@
 //
 //    std::cout << outputs << std::endl;
 
-    // Code to temporarily generate diff to test model reporting
+    // Code to temporarily generate updated params to test model reporting
     NSMutableArray *diffArray = [[NSMutableArray alloc] init];
     for (int i = 0; i < [paramArrays count]; i++) {
 
