@@ -107,6 +107,8 @@ class HomeViewController: UIViewController, UITextViewDelegate {
                         plan.execute(trainingData: trainingData, validationData: validationData, clientConfig: clientConfig)
                     }
 
+                    let diffStateData = try plan.generateDiffData()
+
                 } catch let error {
                     debugPrint(error.localizedDescription)
                 }
