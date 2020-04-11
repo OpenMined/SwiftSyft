@@ -327,6 +327,8 @@ public class SyftJob: SyftJobProtocol {
             return
         }
 
+        let modelReportBody = FederatedReport(workerId: workerId, requestKey: "", diff: diffData)
+
         switch self.connectionType {
         case .http:
 
@@ -338,7 +340,6 @@ public class SyftJob: SyftJobProtocol {
             reportRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
             reportRequest.addValue("application/json", forHTTPHeaderField: "Accept")
 
-            let modelReportBody = FederatedReport(workerId: workerId, requestKey: "", diff: diffData)
             reportRequest.httpBody = try? jsonEncoder.encode(modelReportBody)
 
             URLSession.shared.dataTask(with: reportRequest) { (responseData, _, _) in
@@ -347,8 +348,10 @@ public class SyftJob: SyftJobProtocol {
                 }
             }.resume()
 
-        case .socket:
-            break
+        case .socket(url: _, let sendMessageSubject, _):
+
+            sendMessageSubject.send(.modelReport(modelReportBody))
+
         }
     }
 
