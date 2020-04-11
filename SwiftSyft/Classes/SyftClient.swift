@@ -52,10 +52,13 @@ public class SyftClient: SyftClientProtocol {
     }
 }
 
+public typealias ModelReport = (Data) -> Void
+
 public class SyftJob: SyftJobProtocol {
 
     let url: URL
     var workerId: String?
+    var requestKey: String?
     let modelName: String
     let version: String
     private let connectionType: SyftConnectionType
@@ -65,7 +68,7 @@ public class SyftJob: SyftJobProtocol {
     let ping: String = "8"
     let upload: String = "23"
 
-    var onReadyBlock: (SyftPlan, FederatedClientConfig) -> Void = { _, _ in }
+    var onReadyBlock: (SyftPlan, FederatedClientConfig, ModelReport) -> Void = { _, _, _ in }
     var onErrorBlock: (Error) -> Void = { _ in }
 
     private var cyclePublisher: AnyPublisher<(SyftPlan, FederatedClientConfig), Error>?
@@ -124,13 +127,28 @@ public class SyftJob: SyftJobProtocol {
 
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        let cycleResponsePublisher = URLSession.shared.dataTaskPublisher(for: authRequest)
-            .map { $0.data }
-            .decode(type: AuthResponse.self, decoder: decoder)
-            .map({ $0.workerId })
-            .flatMap { [unowned self] workerId -> AnyPublisher<(cycleResponse: CycleResponseSuccess, workerId: String), Error> in
-                return self.cycleRequest(forWorkerId: workerId)
-            }.eraseToAnyPublisher()
+
+        let authPublisher = URLSession.shared.dataTaskPublisher(for: authRequest)
+                                .map { $0.data }
+                                .decode(type: AuthResponse.self, decoder: decoder)
+                                .map({ $0.workerId })
+                                .eraseToAnyPublisher()
+
+        // Save workerId
+        authPublisher.sink(receiveCompletion: { _ in },
+                           receiveValue: { [weak self] workerId in
+                                                guard let self = self else {
+                                                    return
+                                                }
+
+                                                self.workerId = workerId
+                                         }).store(in: &disposeBag)
+
+        // Cycle request
+        let cycleResponsePublisher = authPublisher
+                                        .flatMap { [unowned self] workerId -> AnyPublisher<(cycleResponse: CycleResponseSuccess, workerId: String), Error> in
+                                            return self.cycleRequest(forWorkerId: workerId)
+                                        }.eraseToAnyPublisher()
 
         self.startPlanAndModelDownload(withCycleResponse: cycleResponsePublisher)
 
@@ -177,6 +195,17 @@ public class SyftJob: SyftJobProtocol {
             }
             .map { TorchTrainingModule(fileAtPath: $0) }
 
+        // Save request key
+        cycleResponsePublisher.sink(receiveCompletion: { _ in }, receiveValue: { [weak self] (cycleResponse) in
+
+            guard let self = self else {
+                return
+            }
+
+            let (cycleResponseSuccess, _) = cycleResponse
+            self.requestKey = cycleResponseSuccess.requestKey
+        }).store(in: &disposeBag)
+
         clientConfigPublisher.zip(planPublisher, modelParamPublisher)
             .sink(receiveCompletion: { [weak self] completion in
                 switch completion {
@@ -188,7 +217,7 @@ public class SyftJob: SyftJobProtocol {
                 }
             }, receiveValue: { [weak self] (clientConfig, trainingModule, modelParam) in
                 let syftPlan = SyftPlan(trainingModule: trainingModule, modelState: modelParam)
-                self?.onReadyBlock(syftPlan, clientConfig)
+                self?.onReadyBlock(syftPlan, clientConfig, {[weak self] data in self?.reportDiff(diffData: data)})
             }).store(in: &disposeBag)
 
     }
@@ -323,11 +352,11 @@ public class SyftJob: SyftJobProtocol {
 
     public func reportDiff(diffData: Data) {
 
-        guard let workerId = self.workerId else {
+        guard let workerId = self.workerId, let requestKey = self.requestKey else {
             return
         }
 
-        let modelReportBody = FederatedReport(workerId: workerId, requestKey: "", diff: diffData)
+        let modelReportBody = FederatedReport(workerId: workerId, requestKey: requestKey, diff: diffData)
 
         switch self.connectionType {
         case .http:
@@ -355,18 +384,12 @@ public class SyftJob: SyftJobProtocol {
         }
     }
 
-    public func onReady(execute: @escaping (SyftPlan, FederatedClientConfig) -> Void) {
+    public func onReady(execute: @escaping (SyftPlan, FederatedClientConfig, ModelReport) -> Void) {
         self.onReadyBlock = execute
     }
 
     public func onError(execute: @escaping (Error) -> Void) {
         self.onErrorBlock = execute
-    }
-
-    /// Report the results of the learning cycle to PyGrid at "federated
-    public func report() {
-        // TODO: Send job report after onAccepted finishes execution
-        //
     }
 
 }
