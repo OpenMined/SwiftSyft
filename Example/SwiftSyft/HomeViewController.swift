@@ -89,9 +89,9 @@ class HomeViewController: UIViewController, UITextViewDelegate {
     @IBAction func connectPressed(_ sender: UIButton) {
 
         // Initate federated cylcle request
-        if let syftClient = SyftClient(url: URL(string: "http://127.0.0.1:5000")!) {
+        if let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:5000")!) {
             self.syftJob = syftClient.newJob(modelName: "mnist", version: "1.0.0")
-            self.syftJob?.onReady(execute: { plan, clientConfig in
+            self.syftJob?.onReady(execute: { plan, clientConfig, modelReport in
 
                 do {
 
@@ -108,6 +108,7 @@ class HomeViewController: UIViewController, UITextViewDelegate {
                     }
 
                     let diffStateData = try plan.generateDiffData()
+                    modelReport(diffStateData)
 
                 } catch let error {
                     debugPrint(error.localizedDescription)
