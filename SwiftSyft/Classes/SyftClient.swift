@@ -303,7 +303,8 @@ public class SyftJob: SyftJobProtocol {
                     switch result {
                     case .success(let cycleSuccess):
                         if let workerId = self.workerId {
-                            let cycleResponsePublisher = CurrentValueSubject<(cycleResponse: CycleResponseSuccess, workerId: String), Error>((cycleResponse: cycleSuccess, workerId: workerId)).eraseToAnyPublisher()
+                            let cycleResponsePublisher = CurrentValueSubject<(cycleResponse: CycleResponseSuccess,
+                                workerId: String), Error>((cycleResponse: cycleSuccess, workerId: workerId)).eraseToAnyPublisher()
                             self.startPlanAndModelDownload(withCycleResponse: cycleResponsePublisher)
                         }
                     case .failure(let error):
@@ -318,6 +319,37 @@ public class SyftJob: SyftJobProtocol {
 
         }.store(in: &self.disposeBag)
 
+    }
+
+    public func reportDiff(diffData: Data) {
+
+        guard let workerId = self.workerId else {
+            return
+        }
+
+        switch self.connectionType {
+        case .http:
+
+            let jsonEncoder = JSONEncoder()
+
+            let cycleRequestURL = self.url.appendingPathComponent("federated/report")
+            var reportRequest: URLRequest = URLRequest(url: cycleRequestURL)
+            reportRequest.httpMethod = "POST"
+            reportRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            reportRequest.addValue("application/json", forHTTPHeaderField: "Accept")
+
+            let modelReportBody = FederatedReport(workerId: workerId, requestKey: "", diff: diffData)
+            reportRequest.httpBody = try? jsonEncoder.encode(modelReportBody)
+
+            URLSession.shared.dataTask(with: reportRequest) { (responseData, _, _) in
+                if let responseData = responseData {
+                    debugPrint("Model report response: \(String(bytes: responseData, encoding: .utf8)!)")
+                }
+            }.resume()
+
+        case .socket:
+            break
+        }
     }
 
     public func onReady(execute: @escaping (SyftPlan, FederatedClientConfig) -> Void) {
