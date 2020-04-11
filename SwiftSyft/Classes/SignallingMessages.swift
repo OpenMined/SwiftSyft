@@ -5,6 +5,7 @@ enum SignallingMessagesRequest {
     // Federated Learning
     case authRequest(authToken: String?)
     case cycleRequest(CycleRequest)
+    case modelReport(FederatedReport)
 
     case getProtocolRequest(workerId: UUID, scopeId: UUID, protocolId: String)
     case getProtocolResponse
@@ -22,6 +23,7 @@ enum SignallingMessagesRequest {
         case scopeId
         case protocolId
         case authToken = "auth_token"
+        case diff
     }
 }
 
@@ -239,6 +241,11 @@ extension SignallingMessagesRequest: Encodable {
             try dataPayloadContainer.encode(cycleRequest.ping, forKey: .ping)
             try dataPayloadContainer.encode(cycleRequest.download, forKey: .download)
             try dataPayloadContainer.encode(cycleRequest.upload, forKey: .upload)
+        case .modelReport(let federatedReport):
+            try container.encode("federated/report", forKey: .type)
+            var dataPayloadContainer = container.nestedContainer(keyedBy: FederatedReport.CodingKeys.self, forKey: .data)
+            try dataPayloadContainer.encode(federatedReport.workerId, forKey: .workerId)
+            try dataPayloadContainer.encode(federatedReport.diff, forKey: .diff)
         case .getProtocolRequest(let workerUUID, let scopeUUID, let protocolId):
             try container.encode("get-protocol", forKey: .type)
             var dataPayloadContainer = container.nestedContainer(keyedBy: DataPayloadCodingKeys.self, forKey: .data)
