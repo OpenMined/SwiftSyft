@@ -34,6 +34,7 @@ enum SignallingMessagesResponse {
 
     case getProtocolRequest(workerId: UUID, scopeId: UUID, protocolId: String)
     case getProtocolResponse
+    case modelReportResponse
     case joinRoom(workerId: UUID, scopeId: UUID)
     case webRTCPeerLeft(workerId: UUID, scopeId: UUID)
     case webRTCInternalMessage(WebRTCInternalMessage)
@@ -245,6 +246,7 @@ extension SignallingMessagesRequest: Encodable {
             try container.encode("federated/report", forKey: .type)
             var dataPayloadContainer = container.nestedContainer(keyedBy: FederatedReport.CodingKeys.self, forKey: .data)
             try dataPayloadContainer.encode(federatedReport.workerId, forKey: .workerId)
+            try dataPayloadContainer.encode(federatedReport.requestKey, forKey: .requestKey)
             try dataPayloadContainer.encode(federatedReport.diff, forKey: .diff)
         case .getProtocolRequest(let workerUUID, let scopeUUID, let protocolId):
             try container.encode("get-protocol", forKey: .type)
@@ -418,6 +420,10 @@ extension SignallingMessagesResponse: Codable {
         } else if type == "webrtc: internal-message" {
 
             self = .webRTCInternalMessage(try container.decode(WebRTCInternalMessage.self, forKey: .data))
+
+        } else if type == "federated/report" {
+
+            self = .modelReportResponse
 
         } else {
             throw EncodingError.invalidValue(type, EncodingError.Context(codingPath: [CodingKeys.type],
