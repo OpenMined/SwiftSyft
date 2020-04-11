@@ -85,7 +85,7 @@ public class SyftPlan {
             }
 
             // Free param buffer pointers
-            for pointerValue in originalParamTensorPointers {
+            for pointerValue in updatedParamTensorPointers {
                 if let pointer = pointerValue.pointerValue {
                     pointer.deallocate()
                 }
