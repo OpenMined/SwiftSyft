@@ -150,26 +150,14 @@ extension DictionaryEncodable {
     }
 }
 
-struct TrainingPlanDownloadParams: DictionaryEncodable {
-    let workerId: String
-    let requestKey: String
-    let trainingPlan: String
-}
-
-struct ProtocolDownloadParams: DictionaryEncodable {
-    let workerId: String
-    let requestKey: String
-    let protocolId: String
-}
-
-struct ModelDownloadParams: DictionaryEncodable {
-    let workerId: String
-    let requestKey: String
-    let modelId: String
-}
-
 struct FederatedReport: Codable {
     let workerId: String
     let requestKey: String
-    let diff: String
+    let diff: Data
+
+    enum CodingKeys: String, CodingKey {
+        case workerId = "worker_id"
+        case requestKey = "request_key"
+        case diff
+    }
 }
