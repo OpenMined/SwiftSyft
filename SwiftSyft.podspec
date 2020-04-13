@@ -33,6 +33,11 @@ Pod::Spec.new do |s|
 
   s.source_files = 'SwiftSyft/**/*'
   s.static_framework = true
+
+  s.pod_target_xcconfig = {
+    'HEADER_SEARCH_PATHS' => '$(inherited) "${PODS_ROOT}/LibTorch/install/include"',
+    'VALID_ARCHS' => 'x86 arm64'
+  }
   
   # s.resource_bundles = {
   #   'SwiftSyft' => ['SwiftSyft/Assets/*.png']

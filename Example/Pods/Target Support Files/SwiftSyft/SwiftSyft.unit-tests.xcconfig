@@ -1,7 +1,6 @@
-ENABLE_BITCODE = NO
 FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/GoogleWebRTC/Frameworks/frameworks"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/SwiftSyft" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/LibTorch"
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/SwiftSyft" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/LibTorch" $(inherited) "${PODS_ROOT}/LibTorch/install/include"
 LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
 LIBRARY_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/SwiftProtobuf" "${PODS_CONFIGURATION_BUILD_DIR}/SwiftSyft" "${PODS_CONFIGURATION_BUILD_DIR}/SyftProto" "${PODS_ROOT}/LibTorch/install/lib"
 OTHER_CFLAGS = $(inherited) -fmodule-map-file="${PODS_CONFIGURATION_BUILD_DIR}/SwiftProtobuf/SwiftProtobuf.modulemap" -fmodule-map-file="${PODS_CONFIGURATION_BUILD_DIR}/SwiftSyft/SwiftSyft.modulemap" -fmodule-map-file="${PODS_CONFIGURATION_BUILD_DIR}/SyftProto/SyftProto.modulemap"
@@ -15,3 +14,4 @@ PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
 SKIP_INSTALL = YES
 SWIFT_INCLUDE_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/SwiftProtobuf" "${PODS_CONFIGURATION_BUILD_DIR}/SwiftSyft" "${PODS_CONFIGURATION_BUILD_DIR}/SyftProto"
 USE_RECURSIVE_SCRIPT_INPUTS_IN_SCRIPT_PHASES = YES
+VALID_ARCHS = x86 arm64
