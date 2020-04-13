@@ -5,6 +5,7 @@ enum SignallingMessagesRequest {
     // Federated Learning
     case authRequest(authToken: String?)
     case cycleRequest(CycleRequest)
+    case modelReport(FederatedReport)
 
     case getProtocolRequest(workerId: UUID, scopeId: UUID, protocolId: String)
     case getProtocolResponse
@@ -22,16 +23,18 @@ enum SignallingMessagesRequest {
         case scopeId
         case protocolId
         case authToken = "auth_token"
+        case diff
     }
 }
 
 enum SignallingMessagesResponse {
 
-    case authRequestResponse(Result<UUID, Error>)
+    case authRequestResponse(Result<String, Error>)
     case cycleRequestResponse(Result<CycleResponseSuccess, CycleRequestError>)
 
     case getProtocolRequest(workerId: UUID, scopeId: UUID, protocolId: String)
     case getProtocolResponse
+    case modelReportResponse
     case joinRoom(workerId: UUID, scopeId: UUID)
     case webRTCPeerLeft(workerId: UUID, scopeId: UUID)
     case webRTCInternalMessage(WebRTCInternalMessage)
@@ -233,12 +236,18 @@ extension SignallingMessagesRequest: Encodable {
         case .cycleRequest(let cycleRequest):
             try container.encode("federated/cycle-request", forKey: .type)
             var dataPayloadContainer = container.nestedContainer(keyedBy: CycleRequest.CodingKeys.self, forKey: .data)
-            try dataPayloadContainer.encode(cycleRequest.workerId.uuidString.lowercased(), forKey: .workerId)
+            try dataPayloadContainer.encode(cycleRequest.workerId, forKey: .workerId)
             try dataPayloadContainer.encode(cycleRequest.model, forKey: .model)
             try dataPayloadContainer.encode(cycleRequest.version, forKey: .version)
             try dataPayloadContainer.encode(cycleRequest.ping, forKey: .ping)
             try dataPayloadContainer.encode(cycleRequest.download, forKey: .download)
             try dataPayloadContainer.encode(cycleRequest.upload, forKey: .upload)
+        case .modelReport(let federatedReport):
+            try container.encode("federated/report", forKey: .type)
+            var dataPayloadContainer = container.nestedContainer(keyedBy: FederatedReport.CodingKeys.self, forKey: .data)
+            try dataPayloadContainer.encode(federatedReport.workerId, forKey: .workerId)
+            try dataPayloadContainer.encode(federatedReport.requestKey, forKey: .requestKey)
+            try dataPayloadContainer.encode(federatedReport.diff, forKey: .diff)
         case .getProtocolRequest(let workerUUID, let scopeUUID, let protocolId):
             try container.encode("get-protocol", forKey: .type)
             var dataPayloadContainer = container.nestedContainer(keyedBy: DataPayloadCodingKeys.self, forKey: .data)
@@ -358,9 +367,8 @@ extension SignallingMessagesResponse: Codable {
         if type == "federated/authenticate" {
 
             let authenticationContainer = try container.nestedContainer(keyedBy: AuthenticationCodingKeys.self, forKey: .data)
-            if let workerId = try authenticationContainer.decodeIfPresent(String.self, forKey: .workerId),
-                let workerUUID = UUID(uuidString: workerId) {
-                self = .authRequestResponse(.success(workerUUID))
+            if let workerId = try authenticationContainer.decodeIfPresent(String.self, forKey: .workerId) {
+                self = .authRequestResponse(.success(workerId))
             } else if let errorString = try authenticationContainer.decodeIfPresent(String.self, forKey: .error) {
                 self = .authRequestResponse(.failure(AuthenticationError(message: errorString)))
             } else {
@@ -412,6 +420,10 @@ extension SignallingMessagesResponse: Codable {
         } else if type == "webrtc: internal-message" {
 
             self = .webRTCInternalMessage(try container.decode(WebRTCInternalMessage.self, forKey: .data))
+
+        } else if type == "federated/report" {
+
+            self = .modelReportResponse
 
         } else {
             throw EncodingError.invalidValue(type, EncodingError.Context(codingPath: [CodingKeys.type],

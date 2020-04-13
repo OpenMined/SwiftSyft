@@ -10,7 +10,7 @@ jobs:
       DEVELOPER_DIR: /Applications/Xcode_11.3.1.app/Contents/Developer
     strategy:
       matrix:
-        destination: ["generic/platform=iOS"]
+        destination: ["platform=iOS Simulator,OS=13.3,name=iPhone 11"]
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -23,4 +23,4 @@ jobs:
           pod install
         shell: bash    
       - name: Build SwiftSyft project - ${{ matrix.destination }}
-        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme SwiftSyft-Example -workspace Example/SwiftSyft.xcworkspace -destination ${{ matrix.destination }} CODE_SIGNING_ALLOWED=NO IPHONEOS_DEPLOYMENT_TARGET=13.0 | xcpretty
+        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild test -scheme SwiftSyft-Example -workspace Example/SwiftSyft.xcworkspace -destination "${{ matrix.destination }}" CODE_SIGNING_ALLOWED=NO IPHONEOS_DEPLOYMENT_TARGET=13.0 | xcpretty

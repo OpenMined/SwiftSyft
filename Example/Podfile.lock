@@ -5,16 +5,18 @@ PODS:
   - LibTorch/Core (1.3.1):
     - LibTorch/Torch
   - LibTorch/Torch (1.3.1)
-  - Starscream (4.0.0)
   - SwiftLint (0.38.2)
+  - SwiftProtobuf (1.8.0)
   - SwiftSyft (0.1.0):
     - GoogleWebRTC (~> 1.1.0)
     - LibTorch (~> 1.3.0)
-    - Starscream (~> 4.0.0)
+    - SyftProto (= 0.2.9.a1)
   - SwiftSyft/Tests (0.1.0):
     - GoogleWebRTC (~> 1.1.0)
     - LibTorch (~> 1.3.0)
-    - Starscream (~> 4.0.0)
+    - SyftProto (= 0.2.9.a1)
+  - SyftProto (0.2.9.a1):
+    - SwiftProtobuf (~> 1.8.0)
 
 DEPENDENCIES:
   - SwiftLint (~> 0.38.0)
@@ -22,11 +24,12 @@ DEPENDENCIES:
   - SwiftSyft/Tests (from `../`)
 
 SPEC REPOS:
-  trunk:
+  https://github.com/CocoaPods/Specs.git:
     - GoogleWebRTC
     - LibTorch
-    - Starscream
     - SwiftLint
+    - SwiftProtobuf
+    - SyftProto
 
 EXTERNAL SOURCES:
   SwiftSyft:
@@ -35,10 +38,11 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   GoogleWebRTC: cfb83bc346435a17fe06bb05f04ad826b858a7fb
   LibTorch: 0e6ed44fe40c356f891d34f42bf18bd2f4a84234
-  Starscream: 04b26f02727e10a002e6b5d21b188ba0d049910b
   SwiftLint: 8f5d2f903e1c9bcbc832fd16771e80a263ac6cbb
-  SwiftSyft: c2269f70f2ce33aa97e11b299afd32763caaca84
+  SwiftProtobuf: 2cbd9409689b7df170d82a92a33443c8e3e14a70
+  SwiftSyft: 508373341bfce905c2cc3326b94d1b5db6e45114
+  SyftProto: 8430a84e06243500f0e52354db6227eaec7ba8f5
 
-PODFILE CHECKSUM: d57feff56204c9b17e3d724f5f1062d6296a38a3
+PODFILE CHECKSUM: 65a2a0d166af1b022e6a1cdd7d888e466994e894
 
 COCOAPODS: 1.8.4

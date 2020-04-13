@@ -1,4 +1,5 @@
 platform :ios, '13.0'
+source 'https://github.com/CocoaPods/Specs.git'
 
 target 'SwiftSyft_Example' do
   pod 'SwiftSyft', :path => '../', :testspecs => ['Tests'] 

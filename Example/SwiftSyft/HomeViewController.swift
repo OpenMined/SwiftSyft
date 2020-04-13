@@ -42,6 +42,9 @@ class HomeViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var messageTextView: UITextView!
     @IBOutlet weak var sendButton: UIButton!
 
+    private var syftJob: SyftJob?
+    private var syftClient: SyftClient?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -85,33 +88,39 @@ class HomeViewController: UIViewController, UITextViewDelegate {
 
     @IBAction func connectPressed(_ sender: UIButton) {
 
-        // Connect using socket connection
-//        if isConnected {
-//            socket.disconnect()
-//        } else {
-//            guard !socketURLTextField.text!.isEmpty else {
-//                print("Socket URL is empty!")
-//                return
-//            }
-//            guard !protocolIDTextField.text!.isEmpty else {
-//                print("Protocol ID is empty!")
-//                return
-//            }
-//
-//            var request = URLRequest(url: URL(string: StaticHomeScreenStrings.socketURL)!)
-//            request.timeoutInterval = 5
-//
-//            socket = SyftWebSocket(url: request.url!,
-//                                       pingInterval: request.timeoutInterval)
-//            socket.delegate = self
-//            socket.connect()
-//        }
+        // Initate federated cylcle request
+        if let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:5000")!) {
+            self.syftJob = syftClient.newJob(modelName: "mnist", version: "1.0.0")
+            self.syftJob?.onReady(execute: { plan, clientConfig, modelReport in
 
-        // Connect using webrtc connection
-        let socketURL = URL(string: StaticHomeScreenStrings.socketURL)!
-        self.syftRTCClient = SyftRTCClient(socketURL: socketURL, workerId: UUID(uuidString: "eeb370bc-6a17-4cb3-9644-bde71e1a38a5")!, scopeId: UUID(uuidString: "d54cb968-517a-45b5-891d-4d233bbfa536")!)
-        self.syftRTCClient.connect()
+                do {
 
+                    let (mnistData, labels) = try MNISTLoader.load(setType: .train, batchSize: clientConfig.batchSize)
+
+                    for case let (batchData, labels) in zip(mnistData, labels) {
+                        let flattenedBatch = MNISTLoader.flattenMNISTData(batchData)
+                        let oneHotLabels = MNISTLoader.oneHotMNISTLabels(labels: labels).compactMap { Float($0)}
+
+                        let trainingData = TrainingData(data: flattenedBatch, shape: [clientConfig.batchSize, 784])
+                        let validationData = ValidationData(data: oneHotLabels, shape: [clientConfig.batchSize, 10])
+
+                        plan.execute(trainingData: trainingData, validationData: validationData, clientConfig: clientConfig)
+                    }
+
+                    let diffStateData = try plan.generateDiffData()
+                    modelReport(diffStateData)
+
+                } catch let error {
+                    debugPrint(error.localizedDescription)
+                }
+
+            })
+            self.syftJob?.onError(execute: { error in
+                print(error.localizedDescription)
+            })
+            self.syftJob?.start()
+            self.syftClient = syftClient
+        }
     }
 
     @IBAction func sendPressed(_ sender: Any) {

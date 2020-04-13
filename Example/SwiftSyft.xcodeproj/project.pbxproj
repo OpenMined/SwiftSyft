@@ -13,6 +13,11 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
+		BEDCA17B243236FC007747A5 /* train-images-idx3-ubyte in Resources */ = {isa = PBXBuildFile; fileRef = BEDCA177243236FC007747A5 /* train-images-idx3-ubyte */; };
+		BEDCA17C243236FC007747A5 /* t10k-labels-idx1-ubyte in Resources */ = {isa = PBXBuildFile; fileRef = BEDCA178243236FC007747A5 /* t10k-labels-idx1-ubyte */; };
+		BEDCA17D243236FC007747A5 /* t10k-images-idx3-ubyte in Resources */ = {isa = PBXBuildFile; fileRef = BEDCA179243236FC007747A5 /* t10k-images-idx3-ubyte */; };
+		BEDCA17E243236FC007747A5 /* train-labels-idx1-ubyte in Resources */ = {isa = PBXBuildFile; fileRef = BEDCA17A243236FC007747A5 /* train-labels-idx1-ubyte */; };
+		BEDCA180243237C3007747A5 /* MNISTLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDCA17F243237C3007747A5 /* MNISTLoader.swift */; };
 		DD20E60AAA8BED2F7D6173A4 /* libPods-SwiftSyft_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BC01F94C28529D588A96676 /* libPods-SwiftSyft_Example.a */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +46,11 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		7BC01F94C28529D588A96676 /* libPods-SwiftSyft_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SwiftSyft_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BEDCA177243236FC007747A5 /* train-images-idx3-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; path = "train-images-idx3-ubyte"; sourceTree = "<group>"; };
+		BEDCA178243236FC007747A5 /* t10k-labels-idx1-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; path = "t10k-labels-idx1-ubyte"; sourceTree = "<group>"; };
+		BEDCA179243236FC007747A5 /* t10k-images-idx3-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; path = "t10k-images-idx3-ubyte"; sourceTree = "<group>"; };
+		BEDCA17A243236FC007747A5 /* train-labels-idx1-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; path = "train-labels-idx1-ubyte"; sourceTree = "<group>"; };
+		BEDCA17F243237C3007747A5 /* MNISTLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MNISTLoader.swift; sourceTree = "<group>"; };
 		F2D602C0350117516553FD7E /* Pods-SwiftSyft_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftSyft_Example.release.xcconfig"; path = "Target Support Files/Pods-SwiftSyft_Example/Pods-SwiftSyft_Example.release.xcconfig"; sourceTree = "<group>"; };
 		F676614ED0FA91FA2836AEDF /* Pods-SwiftSyft_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftSyft_Example.debug.xcconfig"; path = "Target Support Files/Pods-SwiftSyft_Example/Pods-SwiftSyft_Example.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -99,6 +109,7 @@
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* HomeViewController.swift */,
+				BEDCA176243236D4007747A5 /* MNIST */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
@@ -149,6 +160,18 @@
 				7BC01F94C28529D588A96676 /* libPods-SwiftSyft_Example.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BEDCA176243236D4007747A5 /* MNIST */ = {
+			isa = PBXGroup;
+			children = (
+				BEDCA17F243237C3007747A5 /* MNISTLoader.swift */,
+				BEDCA179243236FC007747A5 /* t10k-images-idx3-ubyte */,
+				BEDCA178243236FC007747A5 /* t10k-labels-idx1-ubyte */,
+				BEDCA177243236FC007747A5 /* train-images-idx3-ubyte */,
+				BEDCA17A243236FC007747A5 /* train-labels-idx1-ubyte */,
+			);
+			name = MNIST;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -240,9 +263,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BEDCA17D243236FC007747A5 /* t10k-images-idx3-ubyte in Resources */,
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
+				BEDCA17C243236FC007747A5 /* t10k-labels-idx1-ubyte in Resources */,
+				BEDCA17E243236FC007747A5 /* train-labels-idx1-ubyte in Resources */,
+				BEDCA17B243236FC007747A5 /* train-images-idx3-ubyte in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,6 +348,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BEDCA180243237C3007747A5 /* MNISTLoader.swift in Sources */,
 				607FACD81AFB9204008FA782 /* HomeViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 			);
