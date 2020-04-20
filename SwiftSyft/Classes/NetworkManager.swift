@@ -8,6 +8,10 @@ class NetworkManager {
     private var endPoint:String
     private static let defaultFileSize:Int = 64000000 // 64Mb
     /// NetworkManager init
+    ///  - important:
+    ///    The download speed is computed by downloading 64Mb of data from PyGrid and measure the time until the download it's finished.
+    ///    The upload speed is computed similar to the download speed. A 64Mb of data is uploaded to PyGrid and measure the time until the upload it's finished.
+    ///         An extra random query string value is added to the request in order to prevent caching from the worker or from the server.
     ///  - parameters:
     ///  url: the base url of PyGrid
     ///  port: the port of PyGrid (It  can be nil if not applicable)
