@@ -13,7 +13,7 @@ class NetworkManagerTests: XCTestCase {
         super.setUp()
     }
     
-    func testSpeed() {
+    func testDownloadSpeed() {
         let expectation = XCTestExpectation(description: "Running download speed test")
         let networkFuture = NetworkManager(url: baseUrl, port: port).downloadSpeedTest(workerId: DummyWorkerID)
         // cInstance is not used but according to the documentation: Deallocation of the result will tear down the subscription stream.
