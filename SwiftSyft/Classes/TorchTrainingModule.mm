@@ -46,8 +46,6 @@
     at::Tensor trainingDataTensor = torch::from_blob(trainingDataArray, trainingDataVectorShape, at::kFloat);
     modelArgs.push_back(trainingDataTensor);
 
-    modelArgs.push_back(torch::randn({10, 784}));
-
     // Push training label vectors
 
     std::vector<int64_t> trainingLabelVectorShape;
@@ -55,13 +53,13 @@
         trainingLabelVectorShape.push_back([dim integerValue]);
     }
 
-    at::Tensor trainingLabelsTensor = torch::from_blob(trainingLabelArrays, trainingLabelVectorShape, at::kInt);
+    at::Tensor trainingLabelsTensor = torch::from_blob(trainingLabelArrays, trainingLabelVectorShape, at::kFloat);
 
     modelArgs.push_back(trainingLabelsTensor);
 
     // Push learning rate and batch size
     auto batchSizeTensor = torch::from_blob(batchSize, {1}, at::kInt);
-    auto learningRateTensor = torch::from_blob(learningRate, {1}, at::kInt);
+    auto learningRateTensor = torch::from_blob(learningRate, {1}, at::kFloat);
     modelArgs.push_back(batchSizeTensor);
     modelArgs.push_back(learningRateTensor);
 
@@ -86,33 +84,53 @@
 
     }
 
-    std::cout << "outputs" << std::endl;
-
     auto outputs = planModel.forward(modelArgs);
 
-    std::cout << outputs << std::endl;
+    auto tupleOutputs = outputs.toTuple();
 
-    // Code to temporarily generate updated params to test model reporting
-    NSMutableArray *diffArray = [[NSMutableArray alloc] init];
-    for (int i = 0; i < [paramArrays count]; i++) {
+    // output is loss, metric, *params
+    NSInteger outputsLength = 2 + [paramArrays count];
 
-        NSMutableArray *diff = [[NSMutableArray alloc] init];
-        NSArray *shape = paramShapes[i];
+    // Array to store new params
+    NSMutableArray *newParamsArray = [[NSMutableArray alloc] init];
+
+    // Copy new params tensor to an NSArray
+    for (NSInteger i = 0; i < outputsLength; i++) {
+
+        // Print loss
+        if (i == 0) {
+            auto loss = tupleOutputs->elements()[i].toTensor();
+            std::cout << loss << std::endl;
+            continue;
+        }
+
+        // Pring metric
+        if (i == 1) {
+            auto metric = tupleOutputs->elements()[i].toTensor();
+            continue;
+        }
+
+        // Add params to array of params
+        NSInteger paramsIndex = i-2;
+        NSArray *paramShape = paramShapes[paramsIndex];
         NSInteger length = 1;
-        for (NSNumber *dim in shape) {
+        for (NSNumber *dim in paramShape) {
             length = length * [dim intValue];
         }
 
+        auto paramTensor = tupleOutputs->elements()[i].toTensor();
+        float *floatBuffer = paramTensor.data_ptr<float>();
+
+        NSMutableArray *newParam = [[NSMutableArray alloc] init];
         for (int x = 0; x < length; x++) {
-            float val = ((float)arc4random() / UINT32_MAX);
-            [diff addObject:[NSNumber numberWithFloat:val]];
+            [newParam addObject:@(floatBuffer[x])];
         }
 
-        [diffArray addObject:[diff copy]];
+        [newParamsArray addObject:[newParam copy]];
 
     }
 
-    return [diffArray copy];
+    return [newParamsArray copy];
 
 }
 
@@ -121,55 +139,48 @@
                                                              withShapes:(NSArray<NSArray<NSNumber *> *> *)paramShapes {
 
 
-//    NSMutableArray *diffArray = [[NSMutableArray alloc] init];
-//    NSInteger paramsLength = [originalParamArrays count];
-//
-//    for (NSInteger index=0; index < paramsLength; index++) {
-//        NSValue *originalParamValue = originalParamArrays[index];
-//        void *originalParamPointer = [originalParamValue pointerValue];
-//
-//        NSValue *updatedParamValue = updatedParamArrays[index];
-//        void *updatedParamPointer = [updatedParamValue pointerValue];
-//
-//        NSArray<NSNumber *> *shape = paramShapes[index];
-//        std::vector<int64_t> shapes;
-//        for (NSNumber *dim in shape) {
-//            int dimInt = [dim intValue];
-//            shapes.push_back(dimInt);
-//        }
-//
-//        at::Tensor originalParamsTensor = torch::from_blob(originalParamPointer, shapes, at::kFloat);
-//        at::Tensor updatedParamsTensor = torch::from_blob(updatedParamPointer, shapes, at::kFloat);
-//
-//        auto diffTensor = originalParamsTensor - updatedParamsTensor;
-//        float* floatBuffer = diffTensor.data_ptr<float>();
-//
-//    }
+    NSMutableArray *diffArrays = [[NSMutableArray alloc] init];
+    NSInteger paramsLength = [originalParamArrays count];
 
-    // Code to temporarily generate diff to test model reporting
-    NSMutableArray *diffArray = [[NSMutableArray alloc] init];
-    for (int i = 0; i < [originalParamArrays count]; i++) {
+    for (NSInteger index=0; index < paramsLength; index++) {
+        NSValue *originalParamValue = originalParamArrays[index];
+        void *originalParamPointer = [originalParamValue pointerValue];
 
-        NSMutableArray *diff = [[NSMutableArray alloc] init];
-        NSArray *shape = paramShapes[i];
+        NSValue *updatedParamValue = updatedParamArrays[index];
+        void *updatedParamPointer = [updatedParamValue pointerValue];
+
+        NSArray<NSNumber *> *shape = paramShapes[index];
+        std::vector<int64_t> shapes;
+        for (NSNumber *dim in shape) {
+            int dimInt = [dim intValue];
+            shapes.push_back(dimInt);
+        }
+
+        at::Tensor originalParamsTensor = torch::from_blob(originalParamPointer, shapes, at::kFloat);
+
+        at::Tensor updatedParamsTensor = torch::from_blob(updatedParamPointer, shapes, at::kFloat);
+
+        auto diffTensor = originalParamsTensor - updatedParamsTensor;
+
+        float* floatBuffer = diffTensor.data_ptr<float>();
+
+        // Get complete length of tensor
         NSInteger length = 1;
         for (NSNumber *dim in shape) {
             length = length * [dim intValue];
         }
 
-        for (int x = 0; x < length; x++) {
-            float val = ((float)arc4random() / UINT32_MAX);
-            [diff addObject:[NSNumber numberWithFloat:val]];
+        // Copy tensor contents to an NSArray
+        NSMutableArray *diffArray = [[NSMutableArray alloc] init];
+        for (int i = 0; i < length; i++) {
+            [diffArray addObject:@(floatBuffer[i])];
         }
 
-        [diffArray addObject:[diff copy]];
+        [diffArrays addObject:[diffArray copy]];
 
     }
 
-    return [diffArray copy];
-
-
-
+    return [diffArrays copy];
 }
 
 
