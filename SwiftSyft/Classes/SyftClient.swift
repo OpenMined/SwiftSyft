@@ -177,11 +177,12 @@ public class SyftJob: SyftJobProtocol {
                 let (cycleResponseSuccess, workerId) = cycleResponse
                 return self.downloadPlan(forWorkerId: workerId, planId: cycleResponseSuccess.planConfig.planId, requestKey: cycleResponseSuccess.requestKey)
             }
-            .tryMap { try SyftProto_Types_Torch_V1_ScriptModule(serializedData: $0) }
+//            .tryMap { try SyftProto_Types_Torch_V1_ScriptModule(serializedData: $0) }
+            .tryMap { try SyftProto_Execution_V1_Plan(serializedData: $0) }
             .tryMap { torchScriptPlan -> String in
 
                 // Save torchscript plan to filesystem before loading
-                let torchscriptData = torchScriptPlan.obj
+                let torchscriptData = torchScriptPlan.torchscript
 
                 let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
                 guard let documentDirectory = urls.first else {
