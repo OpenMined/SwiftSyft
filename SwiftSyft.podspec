@@ -45,7 +45,7 @@ Pod::Spec.new do |s|
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'LibTorch', '~> 1.3.0'
+  s.dependency 'LibTorch', '~> 1.5.0'
   s.dependency 'GoogleWebRTC', '~> 1.1.0'
   s.dependency 'SyftProto', '0.2.9.a1' # TODO: Change this when official syft-proto comes out
 
