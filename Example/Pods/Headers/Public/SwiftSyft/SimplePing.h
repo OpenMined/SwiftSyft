@@ -1,1 +1,0 @@
-../../../../../SwiftSyft/Classes/SimplePing.h
