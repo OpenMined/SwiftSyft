@@ -1,6 +1,0 @@
-module SwiftSyft {
-  umbrella header "SwiftSyft-umbrella.h"
-
-  export *
-  module * { export * }
-}
