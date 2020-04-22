@@ -54,14 +54,14 @@ public class SyftPlan {
                                     withShapes: (paramShapes as NSArray) as! [[NSNumber]],
                                     batchSize: &batchSizeArray, learningRate: &learningRateArray)
 
-        let updatedParamsFloatArray = updatedParams.map { diff -> [Float] in
-            return diff.map { Float(truncating: $0) }
+        let updatedParamsFloatArray = updatedParams.map { diff -> [Float32] in
+            return diff.map { $0.floatValue }
         }
 
         // Update model state
         self.updatedModelState = self.updatedModelState.updateWithParams(params: updatedParamsFloatArray)
 
-        // Free param buffer pointers
+        //         Free param buffer pointers
         for pointerValue in paramTensorPointers {
             if let pointer = pointerValue.pointerValue {
                 pointer.deallocate()
@@ -73,7 +73,7 @@ public class SyftPlan {
 
     public func generateDiffData() throws -> Data {
 
-        let (originalParamShapes, originalParamTensorPointers, _) = self.updatedModelState.getTensorData()
+        let (originalParamShapes, originalParamTensorPointers, _) = self.originalModelState.getTensorData()
         let (_, updatedParamTensorPointers, _) = self.updatedModelState.getTensorData()
 
         defer {
@@ -92,7 +92,8 @@ public class SyftPlan {
             }
         }
 
-        let diff = self.trainingModule.generateDiff(fromOriginalParamArrays: originalParamTensorPointers, updatedParamArrays: updatedParamTensorPointers, withShapes: originalParamShapes as [[NSNumber]])
+        let diff = self.trainingModule.generateDiff(fromOriginalParamArrays: originalParamTensorPointers,
+                                                    updatedParamArrays: updatedParamTensorPointers, withShapes: originalParamShapes as [[NSNumber]])
 
         let diffFloatArray = diff.map { diff -> [Float] in
             return diff.map { Float(truncating: $0) }
