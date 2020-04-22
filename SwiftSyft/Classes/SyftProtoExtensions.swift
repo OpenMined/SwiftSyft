@@ -65,7 +65,7 @@ extension SyftProto_Types_Torch_V1_TensorData {
             let tensorPointer = UnsafeMutablePointer<Int32>.allocate(capacity: copy.count)
             tensorPointer.initialize(from: &copy, count: copy.count)
             return NSValue(pointer: tensorPointer)
-        } else if !contentsInt16.isEmpty{
+        } else if !contentsInt16.isEmpty {
             var copy = contentsInt16
             let tensorPointer = UnsafeMutablePointer<Int32>.allocate(capacity: copy.count)
             tensorPointer.initialize(from: &copy, count: copy.count)
@@ -135,10 +135,10 @@ extension SyftProto_Execution_V1_State {
         let updatedParamTensors = zip(copy.tensors, params).map { args -> SyftProto_Execution_V1_StateTensor in
 
                 let (stateTensor, paramsArray) = args
-                var tensorData = SyftProto_Types_Torch_V1_TensorData()
-                tensorData.contentsFloat32 = paramsArray as [Float32]
                 var copyStateTensor = stateTensor
-                copyStateTensor.torchTensor.contentsData = tensorData
+                var tensorDataCopy = copyStateTensor.torchTensor.contentsData
+                tensorDataCopy.contentsFloat32 = paramsArray as [Float32]
+                copyStateTensor.torchTensor.contentsData = tensorDataCopy
                 return copyStateTensor
 
             }
