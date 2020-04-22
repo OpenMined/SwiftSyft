@@ -289,7 +289,8 @@ public class SyftJob: SyftJobProtocol {
         urlComponents.queryItems = [
             URLQueryItem(name: "worker_id", value: workerId),
             URLQueryItem(name: "plan_id", value: String(planId)),
-            URLQueryItem(name: "request_key", value: requestKey)
+            URLQueryItem(name: "request_key", value: requestKey),
+            URLQueryItem(name: "receive_operations_as", value: "torchscript")
         ]
 
         guard let downloadModelURL = urlComponents.url else {
@@ -297,10 +298,10 @@ public class SyftJob: SyftJobProtocol {
             return Fail(error: urlError).eraseToAnyPublisher()
         }
 
-        var downloadModelRequest = URLRequest(url: downloadModelURL)
-        downloadModelRequest.httpMethod = "GET"
+        var downloadPlanRequest = URLRequest(url: downloadModelURL)
+        downloadPlanRequest.httpMethod = "GET"
 
-        return URLSession.shared.dataTaskPublisher(for: downloadModelRequest)
+        return URLSession.shared.dataTaskPublisher(for: downloadPlanRequest)
                     .map { $0.data }
                     .mapError { $0 as Error}
                     .eraseToAnyPublisher()
