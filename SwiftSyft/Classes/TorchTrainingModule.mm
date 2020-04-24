@@ -8,6 +8,21 @@
 #import "TorchTrainingModule.h"
 #include <LibTorch/LibTorch.h>
 
+@implementation TorchTrainingResult
+
+- (instancetype)initWithLoss:(float)loss
+               updatedParams:(NSArray<NSArray<NSNumber *> *> *)updatedParams {
+
+    self = [self init];
+    if (self) {
+        _loss = loss;
+        _updatedParams = updatedParams;
+    }
+    return self;
+
+}
+@end
+
 @interface TorchTrainingModule()
 
 @property (strong, nonatomic) NSString *torchScriptFilePath;
@@ -24,7 +39,7 @@
     return self;
 }
 
-- (NSArray<NSArray<NSNumber *> *> *)executeWithTrainingArray:(void *)trainingDataArray
+- (TorchTrainingResult *)executeWithTrainingArray:(void *)trainingDataArray
                                               trainingShapes:(NSArray<NSNumber *> *)trainingDataShapes
                                               trainingLabels:(void *)trainingLabelArrays
                                          trainingLabelShapes:(NSArray<NSNumber *> *)trainingLabelShapes
@@ -94,13 +109,14 @@
     // Array to store new params
     NSMutableArray *newParamsArray = [[NSMutableArray alloc] init];
 
+    float loss = 0;
     // Copy new params tensor to an NSArray
     for (NSInteger i = 0; i < outputsLength; i++) {
 
         // Print loss
         if (i == 0) {
-            auto loss = tupleOutputs->elements()[i].toTensor();
-            std::cout << loss << std::endl;
+            auto lossTensor = tupleOutputs->elements()[i].toTensor();
+            loss = lossTensor.item<float>();
             continue;
         }
 
@@ -130,7 +146,9 @@
 
     }
 
-    return [newParamsArray copy];
+    TorchTrainingResult *result = [[TorchTrainingResult alloc] initWithLoss:loss updatedParams:[newParamsArray copy]];
+
+    return result;
 
 }
 

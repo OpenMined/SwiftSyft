@@ -36,7 +36,7 @@ public class SyftPlan {
     }
 
     //  swiftlint:disable force_cast
-    public func execute(trainingData: TrainingData, validationData: ValidationData, clientConfig: FederatedClientConfig) {
+    @discardableResult public func execute(trainingData: TrainingData, validationData: ValidationData, clientConfig: FederatedClientConfig) -> Float {
 
         var trainingDataCopy = trainingData
         var validationDataCopy = validationData
@@ -46,7 +46,7 @@ public class SyftPlan {
         var batchSizeArray = [clientConfig.batchSize]
         var learningRateArray = [clientConfig.learningRate]
 
-        let updatedParams = self.trainingModule.execute(withTrainingArray: &trainingDataCopy.data,
+        let trainingResult = self.trainingModule.execute(withTrainingArray: &trainingDataCopy.data,
                                     trainingShapes: trainingData.shape as [NSNumber],
                                     trainingLabels: &validationDataCopy.data,
                                     trainingLabelShapes: validationDataCopy.shape as [NSNumber],
@@ -54,7 +54,7 @@ public class SyftPlan {
                                     withShapes: (paramShapes as NSArray) as! [[NSNumber]],
                                     batchSize: &batchSizeArray, learningRate: &learningRateArray)
 
-        let updatedParamsFloatArray = updatedParams.map { diff -> [Float32] in
+        let updatedParamsFloatArray = trainingResult.updatedParams.map { diff -> [Float32] in
             return diff.map { $0.floatValue }
         }
 
@@ -67,6 +67,8 @@ public class SyftPlan {
                 pointer.deallocate()
             }
         }
+
+        return trainingResult.loss
 
     }
     // swiftlint:enable force_cast

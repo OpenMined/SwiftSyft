@@ -9,6 +9,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
+@interface TorchTrainingResult: NSObject
+
+@property (nonatomic) float loss;
+@property (nonatomic, strong, nonnull) NSArray<NSArray<NSNumber *> *>* updatedParams;
+
+- (instancetype)initWithLoss:(float)loss updatedParams:(NSArray<NSArray<NSNumber *> *> *)updatedParams;
+
+@end
+
+
 @interface TorchTrainingModule : NSObject
 
 - (instancetype)initWithFileAtPath:(NSString*)filePath
@@ -16,7 +27,7 @@ NS_SWIFT_NAME(init(fileAtPath:))NS_DESIGNATED_INITIALIZER;
 + (instancetype)new NS_UNAVAILABLE;
 - (instancetype)init NS_UNAVAILABLE;
 
-- (NSArray<NSArray<NSNumber *> *> *)executeWithTrainingArray:(void *)trainingDataArray
+- (TorchTrainingResult *)executeWithTrainingArray:(void *)trainingDataArray
      trainingShapes:(NSArray<NSNumber *> *)trainingDataShapes
      trainingLabels:(void *)trainingLabelArrays
 trainingLabelShapes:(NSArray<NSNumber *> *)trainingLabelShapes
