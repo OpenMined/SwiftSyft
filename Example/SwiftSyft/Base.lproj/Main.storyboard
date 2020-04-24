@@ -131,10 +131,10 @@
             </objects>
             <point key="canvasLocation" x="136.80000000000001" y="133.5832083958021"/>
         </scene>
-        <!--View Controller-->
+        <!--Loss Chart View Controller-->
         <scene sceneID="EZ9-hA-5NS">
             <objects>
-                <viewController id="fWx-os-QO7" sceneMemberID="viewController">
+                <viewController id="fWx-os-QO7" customClass="LossChartViewController" customModule="SwiftSyft_Example" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="LxM-JL-opV"/>
                         <viewControllerLayoutGuide type="bottom" id="Oam-y8-RSP"/>
@@ -156,6 +156,9 @@
                             <constraint firstItem="DZx-YL-dP0" firstAttribute="leading" secondItem="kIB-Go-b3D" secondAttribute="leading" constant="8" id="qWa-z3-FhB"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="lineChartView" destination="DZx-YL-dP0" id="Juh-T3-f3S"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Va5-UI-bLa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
