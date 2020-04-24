@@ -1,4 +1,7 @@
 PODS:
+  - Charts (3.5.0):
+    - Charts/Core (= 3.5.0)
+  - Charts/Core (3.5.0)
   - GoogleWebRTC (1.1.29400)
   - LibTorch (1.5.0):
     - LibTorch/Core (= 1.5.0)
@@ -19,12 +22,14 @@ PODS:
     - SwiftProtobuf (~> 1.8.0)
 
 DEPENDENCIES:
+  - Charts
   - SwiftLint (~> 0.38.0)
   - SwiftSyft (from `../`)
   - SwiftSyft/Tests (from `../`)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
+    - Charts
     - GoogleWebRTC
     - LibTorch
     - SwiftLint
@@ -36,6 +41,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
+  Charts: 40a08591df1f8ad5c223ddedfb1a06da92f24f7c
   GoogleWebRTC: cfb83bc346435a17fe06bb05f04ad826b858a7fb
   LibTorch: 6752ffb58ea396b672a2df6f14970bdbc7219de4
   SwiftLint: 8f5d2f903e1c9bcbc832fd16771e80a263ac6cbb
@@ -43,6 +49,6 @@ SPEC CHECKSUMS:
   SwiftSyft: d098e4007e604f8590c8b26e195e72a2000dea28
   SyftProto: 8430a84e06243500f0e52354db6227eaec7ba8f5
 
-PODFILE CHECKSUM: 65a2a0d166af1b022e6a1cdd7d888e466994e894
+PODFILE CHECKSUM: f08e6f31ac8be1635ffd4a90994651fcd9e383a0
 
 COCOAPODS: 1.8.4
