@@ -97,6 +97,16 @@ class HomeViewController: UIViewController, UITextViewDelegate {
 
                     let (mnistData, labels) = try MNISTLoader.load(setType: .train, batchSize: clientConfig.batchSize)
 
+                    DispatchQueue.main.sync {
+
+                        let lineChartViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "LineChart")
+
+                        self.show(lineChartViewController, sender: self)
+
+                    }
+
+
+
                     for case let (batchData, labels) in zip(mnistData, labels) {
                         let flattenedBatch = MNISTLoader.flattenMNISTData(batchData)
                         let oneHotLabels = MNISTLoader.oneHotMNISTLabels(labels: labels).compactMap { Float($0)}

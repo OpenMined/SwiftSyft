@@ -134,7 +134,7 @@
         <!--Loss Chart View Controller-->
         <scene sceneID="EZ9-hA-5NS">
             <objects>
-                <viewController id="fWx-os-QO7" customClass="LossChartViewController" customModule="SwiftSyft_Example" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LineChart" id="fWx-os-QO7" customClass="LossChartViewController" customModule="SwiftSyft_Example" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="LxM-JL-opV"/>
                         <viewControllerLayoutGuide type="bottom" id="Oam-y8-RSP"/>
