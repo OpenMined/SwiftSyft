@@ -4,6 +4,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 target 'SwiftSyft_Example' do
   pod 'SwiftSyft', :path => '../', :testspecs => ['Tests'] 
   pod 'SwiftLint', '~> 0.38.0'
+  pod 'Charts'
   
   # Not included until https://github.com/CocoaPods/CocoaPods/issues/9473 is resolved
 #  target 'SwiftSyft_Tests' do
