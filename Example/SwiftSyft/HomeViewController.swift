@@ -104,7 +104,8 @@ class HomeViewController: UIViewController, UITextViewDelegate {
                         let trainingData = TrainingData(data: flattenedBatch, shape: [clientConfig.batchSize, 784])
                         let validationData = ValidationData(data: oneHotLabels, shape: [clientConfig.batchSize, 10])
 
-                        plan.execute(trainingData: trainingData, validationData: validationData, clientConfig: clientConfig)
+                        let loss = plan.execute(trainingData: trainingData, validationData: validationData, clientConfig: clientConfig)
+                        print("loss: \(loss)")
                     }
 
                     let diffStateData = try plan.generateDiffData()
