@@ -8,13 +8,13 @@
 import Foundation
 
 @available(iOS 13.0, *)
-public class SyftWebSocket: NSObject, SocketClientProtocol, URLSessionWebSocketDelegate {
+class SyftWebSocket: NSObject, SocketClientProtocol, URLSessionWebSocketDelegate {
 
-    public weak var delegate: SocketClientDelegate?
+    weak var delegate: SocketClientDelegate?
     var webSocketTask: URLSessionWebSocketTask!
     var urlSession: URLSession!
     let delegateQueue = OperationQueue()
-    required public init(url: URL, pingInterval: Double) {
+    required init(url: URL, pingInterval: Double) {
         super.init()
         guard url.absoluteString.hasPrefix("wss") else {
             preconditionFailure("Path for socket server shoud start with wss://")
@@ -22,20 +22,20 @@ public class SyftWebSocket: NSObject, SocketClientProtocol, URLSessionWebSocketD
         urlSession = URLSession(configuration: .default, delegate: self, delegateQueue: delegateQueue)
         webSocketTask = urlSession.webSocketTask(with: url)
     }
-    public func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
+    func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
         self.delegate?.didConnect(self)
     }
-    public func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
+    func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
         self.delegate?.didDisconnect(self)
     }
-    public func connect() {
+    func connect() {
         webSocketTask.resume()
         listen()
     }
-    public func disconnect() {
+    func disconnect() {
         webSocketTask.cancel(with: .goingAway, reason: nil)
     }
-    public func listen() {
+    func listen() {
         webSocketTask.receive { [weak self] result in
             switch result {
             case .failure(let error):
@@ -64,7 +64,7 @@ public class SyftWebSocket: NSObject, SocketClientProtocol, URLSessionWebSocketD
             }
         }
     }
-    public func send(text: String) {
+    func send(text: String) {
         webSocketTask.send(URLSessionWebSocketTask.Message.string(text)) { error in
             if let error = error {
                 #if DEBUG
@@ -73,7 +73,7 @@ public class SyftWebSocket: NSObject, SocketClientProtocol, URLSessionWebSocketD
             }
         }
     }
-    public func sendText(text: String) {
+    func sendText(text: String) {
         webSocketTask.send(URLSessionWebSocketTask.Message.string(text)) { error in
             if let error = error {
                 #if DEBUG
@@ -82,7 +82,7 @@ public class SyftWebSocket: NSObject, SocketClientProtocol, URLSessionWebSocketD
             }
         }
     }
-    public func send(data: Data) {
+    func send(data: Data) {
         webSocketTask.send(URLSessionWebSocketTask.Message.data(data)) { error in
             if let error = error {
                 #if DEBUG

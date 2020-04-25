@@ -1,7 +1,7 @@
 import Foundation
 import Combine
 
-public class SyftRTCClient {
+class SyftRTCClient {
 
     let workerId: UUID
     let scopeId: UUID
