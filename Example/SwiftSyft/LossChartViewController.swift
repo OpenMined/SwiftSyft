@@ -62,7 +62,7 @@ class LossChartViewController: UIViewController {
             return ChartDataEntry(x: Double(index), y: Double(loss))
         }
 
-        let set1 = LineChartDataSet(entries: values, label: "Loss chart")
+        let set1 = LineChartDataSet(entries: values, label: "Loss")
         set1.drawIconsEnabled = false
 
         set1.lineDashLengths = [5, 2.5]
