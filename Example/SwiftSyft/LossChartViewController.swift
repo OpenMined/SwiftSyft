@@ -8,25 +8,86 @@
 
 import UIKit
 import Charts
+import Combine
 
 class LossChartViewController: UIViewController {
 
     @IBOutlet weak var lineChartView: LineChartView!
 
+    let lossSubject: PassthroughSubject<Float, Error> = PassthroughSubject<Float, Error>()
+    var lossValues: [Float] = [Float]()
+    var disposeBag: Set<AnyCancellable> = Set<AnyCancellable>()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        // Line chart style from https://github.com/danielgindi/Charts/blob/master/ChartsDemo-iOS/Swift/Demos/LineChart1ViewController.swift
+        self.lineChartView.chartDescription?.enabled = false
+        self.lineChartView.dragEnabled = true
+        self.lineChartView.setScaleEnabled(true)
+        self.lineChartView.pinchZoomEnabled = true
+
+        self.lineChartView.xAxis.gridLineDashLengths = [10, 10]
+        self.lineChartView.xAxis.gridLineDashPhase = 0
+
+        let leftAxis = lineChartView.leftAxis
+        leftAxis.removeAllLimitLines()
+        leftAxis.axisMaximum = 0.25
+        leftAxis.axisMinimum = 0.15
+        leftAxis.gridLineDashLengths = [5, 5]
+        leftAxis.drawLimitLinesBehindDataEnabled = true
+
+        lineChartView.rightAxis.enabled = false
+
+        lineChartView.legend.form = .line
+
+        self.lossSubject.receive(on: DispatchQueue.main).sink(receiveCompletion: { _ in }, receiveValue: { [weak self] loss in
+
+            if let self = self {
+                self.lossValues.append(loss)
+                self.setDataCount(lossValues: self.lossValues)
+            }
+
+        }).store(in: &self.disposeBag)
+
+//        self.setDataCount(lossValues: self.lossValues)
+
+        lineChartView.animate(xAxisDuration: 2.5)
+
     }
 
-    /*
-    // MARK: - Navigation
+    func setDataCount(lossValues: [Float]) {
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        let values = lossValues.enumerated().map { (index, loss) -> ChartDataEntry in
+            return ChartDataEntry(x: Double(index), y: Double(loss))
+        }
+
+        let set1 = LineChartDataSet(entries: values, label: "Loss chart")
+        set1.drawIconsEnabled = false
+
+        set1.lineDashLengths = [5, 2.5]
+        set1.highlightLineDashLengths = [5, 2.5]
+        set1.setColor(.black)
+        set1.setCircleColor(.black)
+        set1.lineWidth = 1
+        set1.circleRadius = 3
+        set1.drawCircleHoleEnabled = false
+        set1.valueFont = .systemFont(ofSize: 9)
+        set1.formLineDashLengths = [5, 2.5]
+        set1.formLineWidth = 1
+        set1.formSize = 15
+
+        let gradientColors = [ChartColorTemplates.colorFromString("#00ff0000").cgColor,
+                              ChartColorTemplates.colorFromString("#ffff0000").cgColor]
+        let gradient = CGGradient(colorsSpace: nil, colors: gradientColors as CFArray, locations: nil)!
+
+        set1.fillAlpha = 1
+        set1.fill = Fill(linearGradient: gradient, angle: 90) //.linearGradient(gradient, angle: 90)
+        set1.drawFilledEnabled = true
+
+        let data = LineChartData(dataSet: set1)
+
+        self.lineChartView.data = data
     }
-    */
 
 }

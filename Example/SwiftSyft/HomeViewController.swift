@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftSyft
+import Combine
 
 enum StaticHomeScreenStrings {
     static let headerDescription = "syft.js/grid.js testing"
@@ -44,6 +45,7 @@ class HomeViewController: UIViewController, UITextViewDelegate {
 
     private var syftJob: SyftJob?
     private var syftClient: SyftClient?
+    private var lossSubject: PassthroughSubject<Float, Error>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -97,15 +99,18 @@ class HomeViewController: UIViewController, UITextViewDelegate {
 
                     let (mnistData, labels) = try MNISTLoader.load(setType: .train, batchSize: clientConfig.batchSize)
 
+
                     DispatchQueue.main.sync {
 
-                        let lineChartViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "LineChart")
+                        // swiftlint:disable force_cast
+                        let lineChartViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "LineChart") as! LossChartViewController
+                        // swiftlint:enable force_cast
 
                         self.show(lineChartViewController, sender: self)
 
+                        self.lossSubject = lineChartViewController.lossSubject
+
                     }
-
-
 
                     for case let (batchData, labels) in zip(mnistData, labels) {
                         let flattenedBatch = MNISTLoader.flattenMNISTData(batchData)
@@ -115,6 +120,7 @@ class HomeViewController: UIViewController, UITextViewDelegate {
                         let validationData = ValidationData(data: oneHotLabels, shape: [clientConfig.batchSize, 10])
 
                         let loss = plan.execute(trainingData: trainingData, validationData: validationData, clientConfig: clientConfig)
+                        self.lossSubject?.send(loss)
                         print("loss: \(loss)")
                     }
 
