@@ -18,7 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yln-Aw-5hs">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yln-Aw-5hs">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="svg0" translatesAutoresizingMaskIntoConstraints="NO" id="LOq-WO-b6W">
@@ -28,7 +28,7 @@
                                             <constraint firstAttribute="height" constant="128" id="Crx-Mb-TZv"/>
                                         </constraints>
                                     </imageView>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" text="This is a demo using SwiftSyft from OpenMined to execute a multi-worker protocol hosted on grid.js" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="KZ3-oQ-Xys">
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" text="This is a demo using SwiftSyft from OpenMined to execute a plan hosted in PyGrid" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="KZ3-oQ-Xys">
                                         <rect key="frame" x="8" y="178" width="359" height="63"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         <constraints>
@@ -44,62 +44,31 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="50801316202" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="B2K-aw-aNC">
-                                        <rect key="frame" x="8" y="291" width="359" height="34"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
-                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="clip" translatesAutoresizingMaskIntoConstraints="NO" id="GPR-Jh-R3g">
-                                        <rect key="frame" x="103" y="333" width="169" height="30"/>
-                                        <state key="normal" title="Connect to grid.js server"/>
-                                        <connections>
-                                            <action selector="connectPressed:" destination="6q4-mS-6Dq" eventType="touchUpInside" id="f4U-9j-xdR"/>
-                                        </connections>
-                                    </button>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" keyboardDismissMode="onDrag" text="Enter your message .." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="scv-YA-voE">
-                                        <rect key="frame" x="8" y="385" width="359" height="128"/>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="128" id="sST-j0-khG"/>
-                                        </constraints>
-                                        <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
-                                    </textView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0l4-is-rLt">
-                                        <rect key="frame" x="137" y="521" width="101" height="30"/>
-                                        <state key="normal" title="Send message"/>
-                                        <connections>
-                                            <action selector="sendPressed:" destination="6q4-mS-6Dq" eventType="touchUpInside" id="4gq-Al-1f9"/>
-                                        </connections>
-                                    </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="syft.js/grid.js testing" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AYj-zD-xeu">
-                                        <rect key="frame" x="84.5" y="144" width="206" height="26"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SwiftSyft/PyGrid testing" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AYj-zD-xeu">
+                                        <rect key="frame" x="66.5" y="144" width="242" height="26"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="clip" translatesAutoresizingMaskIntoConstraints="NO" id="GPR-Jh-R3g">
+                                        <rect key="frame" x="101" y="291" width="173" height="30"/>
+                                        <state key="normal" title="Connect to PyGrid server"/>
+                                        <connections>
+                                            <action selector="connectPressed:" destination="6q4-mS-6Dq" eventType="touchUpInside" id="f4U-9j-xdR"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="LOq-WO-b6W" firstAttribute="centerX" secondItem="GPR-Jh-R3g" secondAttribute="centerX" id="0VZ-iY-5ny"/>
                                     <constraint firstItem="LOq-WO-b6W" firstAttribute="centerX" secondItem="Yln-Aw-5hs" secondAttribute="centerX" id="1gP-Ay-4ca"/>
-                                    <constraint firstItem="KZ3-oQ-Xys" firstAttribute="leading" secondItem="B2K-aw-aNC" secondAttribute="leading" id="BwA-a3-MpC"/>
                                     <constraint firstItem="LOq-WO-b6W" firstAttribute="top" secondItem="Yln-Aw-5hs" secondAttribute="topMargin" id="Dn1-Xn-ezd"/>
-                                    <constraint firstItem="KZ3-oQ-Xys" firstAttribute="trailing" secondItem="B2K-aw-aNC" secondAttribute="trailing" id="FVO-mQ-F4S"/>
-                                    <constraint firstItem="LOq-WO-b6W" firstAttribute="centerX" secondItem="0l4-is-rLt" secondAttribute="centerX" id="JUD-gw-SH5"/>
-                                    <constraint firstItem="KZ3-oQ-Xys" firstAttribute="leading" secondItem="scv-YA-voE" secondAttribute="leading" id="KuH-XJ-2py"/>
                                     <constraint firstItem="AYj-zD-xeu" firstAttribute="centerX" secondItem="Yln-Aw-5hs" secondAttribute="centerX" id="Pma-ZA-2XH"/>
                                     <constraint firstItem="AYj-zD-xeu" firstAttribute="top" secondItem="LOq-WO-b6W" secondAttribute="bottom" constant="8" symbolic="YES" id="Pmw-T1-gfM"/>
                                     <constraint firstItem="KZ3-oQ-Xys" firstAttribute="centerX" secondItem="AYj-zD-xeu" secondAttribute="centerX" id="Utt-ke-Mhj"/>
-                                    <constraint firstItem="KZ3-oQ-Xys" firstAttribute="trailing" secondItem="scv-YA-voE" secondAttribute="trailing" id="VQQ-fI-Pc5"/>
-                                    <constraint firstAttribute="bottom" secondItem="0l4-is-rLt" secondAttribute="bottom" constant="20" symbolic="YES" id="WvI-EY-v1J"/>
-                                    <constraint firstItem="scv-YA-voE" firstAttribute="top" secondItem="GPR-Jh-R3g" secondAttribute="bottom" constant="22" id="ZLR-hv-6M6"/>
-                                    <constraint firstItem="GPR-Jh-R3g" firstAttribute="top" secondItem="B2K-aw-aNC" secondAttribute="bottom" constant="8" id="cMb-KF-hn8"/>
                                     <constraint firstAttribute="trailing" secondItem="KZ3-oQ-Xys" secondAttribute="trailing" constant="9" id="dYg-zE-LeA"/>
                                     <constraint firstItem="2bp-Yt-xFw" firstAttribute="top" secondItem="KZ3-oQ-Xys" secondAttribute="bottom" constant="8" id="gZz-k4-oiM"/>
-                                    <constraint firstItem="B2K-aw-aNC" firstAttribute="top" secondItem="2bp-Yt-xFw" secondAttribute="bottom" constant="8" id="gld-91-p8R"/>
                                     <constraint firstItem="KZ3-oQ-Xys" firstAttribute="trailing" secondItem="2bp-Yt-xFw" secondAttribute="trailing" id="hOx-sQ-VQ4"/>
-                                    <constraint firstItem="0l4-is-rLt" firstAttribute="top" secondItem="scv-YA-voE" secondAttribute="bottom" constant="8" id="jAS-D4-nbj"/>
+                                    <constraint firstItem="GPR-Jh-R3g" firstAttribute="top" secondItem="2bp-Yt-xFw" secondAttribute="bottom" constant="8" id="kB2-D4-cRD"/>
                                     <constraint firstItem="KZ3-oQ-Xys" firstAttribute="leading" secondItem="Yln-Aw-5hs" secondAttribute="leadingMargin" id="r1W-cf-vxz"/>
                                     <constraint firstItem="KZ3-oQ-Xys" firstAttribute="top" secondItem="AYj-zD-xeu" secondAttribute="bottom" constant="8" id="r4V-FW-EQd"/>
                                     <constraint firstItem="KZ3-oQ-Xys" firstAttribute="leading" secondItem="2bp-Yt-xFw" secondAttribute="leading" id="vB1-er-zce"/>
@@ -111,8 +80,12 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="Yln-Aw-5hs" firstAttribute="top" secondItem="431-Mf-KVV" secondAttribute="bottom" id="0qk-rq-mZZ"/>
+                            <constraint firstItem="wYt-oc-dcg" firstAttribute="top" secondItem="Yln-Aw-5hs" secondAttribute="bottom" id="4eH-ov-jHS"/>
                             <constraint firstItem="wYt-oc-dcg" firstAttribute="top" secondItem="Yln-Aw-5hs" secondAttribute="bottom" id="Edi-Bm-unf"/>
+                            <constraint firstAttribute="trailing" secondItem="Yln-Aw-5hs" secondAttribute="trailing" id="GRb-lo-YJq"/>
                             <constraint firstAttribute="trailing" secondItem="Yln-Aw-5hs" secondAttribute="trailing" id="Mua-Mg-ll7"/>
+                            <constraint firstItem="Yln-Aw-5hs" firstAttribute="leading" secondItem="LWa-IC-iuT" secondAttribute="leading" id="RK7-ru-vFK"/>
+                            <constraint firstItem="Yln-Aw-5hs" firstAttribute="top" secondItem="431-Mf-KVV" secondAttribute="bottom" id="Ztm-mL-dw4"/>
                             <constraint firstItem="Yln-Aw-5hs" firstAttribute="leading" secondItem="LWa-IC-iuT" secondAttribute="leading" id="uJR-uz-M7d"/>
                         </constraints>
                     </view>
@@ -120,10 +93,7 @@
                         <outlet property="connectButton" destination="GPR-Jh-R3g" id="Txv-wh-JbA"/>
                         <outlet property="descriptionTextView" destination="KZ3-oQ-Xys" id="PPe-Gv-TWu"/>
                         <outlet property="headerDescriptionLabel" destination="AYj-zD-xeu" id="bvz-ld-dcc"/>
-                        <outlet property="messageTextView" destination="scv-YA-voE" id="mKA-xW-tJx"/>
-                        <outlet property="protocolIDTextField" destination="B2K-aw-aNC" id="o7m-mH-b64"/>
                         <outlet property="scrollView" destination="Yln-Aw-5hs" id="JaO-u1-Bqb"/>
-                        <outlet property="sendButton" destination="0l4-is-rLt" id="tQn-YD-Wpq"/>
                         <outlet property="socketURLTextField" destination="2bp-Yt-xFw" id="TYx-12-e65"/>
                     </connections>
                 </viewController>
