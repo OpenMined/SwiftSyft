@@ -77,7 +77,6 @@ class HomeViewController: UIViewController, UITextViewDelegate {
 
                     let (mnistData, labels) = try MNISTLoader.load(setType: .train, batchSize: clientConfig.batchSize)
 
-
                     DispatchQueue.main.sync {
 
                         // swiftlint:disable force_cast

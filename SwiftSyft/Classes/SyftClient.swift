@@ -159,10 +159,14 @@ public class SyftJob: SyftJobProtocol {
                                                 self.workerId = workerId
                                          }).store(in: &disposeBag)
 
-        // Cycle request
+        // Auth response -> Get Ping/Downoad/Upload Speed -> Cycle Request
         let cycleResponsePublisher = authPublisher
-                                        .flatMap { [unowned self] workerId -> AnyPublisher<(cycleResponse: CycleResponseSuccess, workerId: String), Error> in
-                                            return self.cycleRequest(forWorkerId: workerId)
+                                        .flatMap { [unowned self] workerId -> AnyPublisher<(workerId: String, connectionMetrics: SyftConnectionMetrics), Error> in
+                                            return self.getConnectionMetrics(workerId: workerId)
+                                        }
+                                        .flatMap { [unowned self] (result) -> AnyPublisher<(cycleResponse: CycleResponseSuccess, workerId: String), Error> in
+                                            let (workerId, connectionMetrics) = result
+                                            return self.cycleRequest(forWorkerId: workerId, connectionMetrics: connectionMetrics)
                                         }.eraseToAnyPublisher()
 
         self.startPlanAndModelDownload(withCycleResponse: cycleResponsePublisher)
@@ -176,7 +180,7 @@ public class SyftJob: SyftJobProtocol {
         urlComponents.host = self.url.host
 
         guard let connectionURL = urlComponents.url ,
-              let host = connectionURL.host,
+              let _ = connectionURL.host,
               let port = self.url.port else {
 
             let urlError = URLError(.badURL)
@@ -264,7 +268,7 @@ public class SyftJob: SyftJobProtocol {
 
     }
 
-    func cycleRequest(forWorkerId workerId: String) -> AnyPublisher<(cycleResponse: CycleResponseSuccess, workerId: String), Error> {
+    func cycleRequest(forWorkerId workerId: String, connectionMetrics: SyftConnectionMetrics) -> AnyPublisher<(cycleResponse: CycleResponseSuccess, workerId: String), Error> {
 
         let encoder = JSONEncoder()
         let decoder = JSONDecoder()
@@ -276,7 +280,13 @@ public class SyftJob: SyftJobProtocol {
         cycleRequest.addValue("application/json", forHTTPHeaderField: "Accept")
 
         //Create request body
-        let cycleRequestBody = CycleRequest(workerId: workerId, model: self.modelName, version: self.version, ping: self.ping, download: self.download, upload: self.upload)
+        let cycleRequestBody = CycleRequest(workerId: workerId,
+                                            model: self.modelName,
+                                            version: self.version,
+                                            ping: self.ping,
+                                            download: String(connectionMetrics.downloadSpeed),
+                                            upload: String(connectionMetrics.uploadSpeed))
+
         cycleRequest.httpBody = try? encoder.encode(cycleRequestBody)
 
         return URLSession.shared.dataTaskPublisher(for: cycleRequest)
