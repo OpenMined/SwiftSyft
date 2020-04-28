@@ -5,7 +5,7 @@ class UploadService: NSObject, URLSessionDataDelegate, URLSessionTaskDelegate {
     typealias UploadServiceCompletionHandler = (_ mbps: Double? , _ error: Error?) -> Void
     var uploadCompletionBlock : UploadServiceCompletionHandler?
     var fileSize:Int = 0
-    private static let defaultTimeout: Double = 5
+    private static let defaultTimeout: Double = 60
     private var startTime: CFAbsoluteTime!
     private var stopTime: CFAbsoluteTime!
     func startUploadtest(_ url: URL, fileSize: Int) -> Future<Double, Error> {
