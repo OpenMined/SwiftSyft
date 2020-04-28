@@ -7,7 +7,7 @@ class DownloadService: NSObject, URLSessionDelegate, URLSessionDataDelegate {
     var startTime: CFAbsoluteTime!
     var stopTime: CFAbsoluteTime!
     var bytesReceived: Int!
-    private static let defaultTimeout: Double = 5
+    private static let defaultTimeout: Double = 60
     public override init() {
         super.init()
     }
