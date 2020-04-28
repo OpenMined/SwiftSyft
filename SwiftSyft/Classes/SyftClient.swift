@@ -7,10 +7,25 @@ enum SyftConnectionType {
     case socket(url: URL,
         sendMessageSubject: PassthroughSubject<SignallingMessagesRequest, Never>,
         receiveMessagePublisher: AnyPublisher<SignallingMessagesResponse, Never>)
+
+    var url: URL {
+        switch self {
+        case .http(let url):
+            return url
+        case .socket(url: let url, sendMessageSubject: _, receiveMessagePublisher: _):
+            return url
+        }
+    }
 }
 
 struct SyftClientError: Error {
     let message: String
+}
+
+struct SyftConnectionMetrics {
+    let ping: String
+    let uploadSpeed: Double
+    let downloadSpeed: Double
 }
 
 public class SyftClient: SyftClientProtocol {
@@ -151,6 +166,32 @@ public class SyftJob: SyftJobProtocol {
                                         }.eraseToAnyPublisher()
 
         self.startPlanAndModelDownload(withCycleResponse: cycleResponsePublisher)
+
+    }
+
+    func getConnectionMetrics(workerId: String) -> AnyPublisher<(workerId: String, connectionMetrics: SyftConnectionMetrics), Error> {
+
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "http"
+        urlComponents.host = self.url.host
+
+        guard let connectionURL = urlComponents.url ,
+              let host = connectionURL.host,
+              let port = self.url.port else {
+
+            let urlError = URLError(.badURL)
+            return Fail(error: urlError).eraseToAnyPublisher()
+
+        }
+
+        let networkManager = NetworkManager(url: connectionURL.absoluteString, port: port)
+
+        let connectionMetricsPublisher = networkManager.uploadSpeedTest(workerId: workerId).zip(networkManager.downloadSpeedTest(workerId: workerId))
+
+        return connectionMetricsPublisher.map { (result) -> (workerId: String, connectionMetrics: SyftConnectionMetrics) in
+            let (uploadSpeed, downloadSpeed) = result
+            return (workerId: workerId, connectionMetrics: SyftConnectionMetrics(ping: self.ping, uploadSpeed: uploadSpeed, downloadSpeed: downloadSpeed))
+        }.eraseToAnyPublisher()
 
     }
 
@@ -314,42 +355,60 @@ public class SyftJob: SyftJobProtocol {
                                    receiveMessagePublisher: AnyPublisher<SignallingMessagesResponse, Never>, authToken: String?) {
 
         sendMessageSubject.send(.authRequest(authToken: authToken))
-        receiveMessagePublisher.sink { [weak self] socketMessageResponse in
 
-            if let self = self {
+        // Authentication -> Connection Metrics -> Cycle Request
+        receiveMessagePublisher.filter { socketMessageResponse -> Bool in
+            switch socketMessageResponse {
+            case .authRequestResponse:
+                return true
+            default:
+                return false
+            }
+        }.tryMap { authRequestResponse -> String in
+            switch authRequestResponse {
+            case .authRequestResponse(let result):
+                switch result {
+                case .success(let workerId):
+                    self.workerId = workerId
+                    return workerId
+                case .failure(let error):
+                    throw error
+                }
+            default:
+                throw SyftClientError(message: "Authentication Error Unknown Response")
+            }
+        }.flatMap { [unowned self] workerId -> AnyPublisher<(workerId: String,
+                                     connectionMetrics: SyftConnectionMetrics), Error> in
 
-                switch socketMessageResponse {
-                case .authRequestResponse(let result):
-                    switch result {
-                    case .success(let workerId):
-                        self.workerId = workerId
-                        let cycleRequest = CycleRequest(workerId: workerId, model: self.modelName, version: self.version, ping: self.ping, download: self.download, upload: self.upload)
-                        print(cycleRequest.workerId)
-                        sendMessageSubject.send(.cycleRequest(cycleRequest))
-                    case .failure(let error):
-                        print(error.localizedDescription)
-                        return
+            return self.getConnectionMetrics(workerId: workerId)
+
+        }.sink(receiveCompletion: { _ in }, receiveValue: { (result) in
+            let (workerId, connectionMetrics) = result
+
+            let cycleRequest = CycleRequest(workerId: workerId, model: self.modelName, version: self.version, ping: String(connectionMetrics.ping), download: String(connectionMetrics.downloadSpeed), upload: String(connectionMetrics.uploadSpeed))
+            sendMessageSubject.send(.cycleRequest(cycleRequest))
+
+        }).store(in: &self.disposeBag)
+
+        // Cycle Request Response -> Start Plan and model
+        receiveMessagePublisher.sink(receiveCompletion: { _ in }, receiveValue: { cycleRequestResponse in
+            switch cycleRequestResponse {
+            case .cycleRequestResponse(let result):
+                switch result {
+                case .success(let cycleSuccess):
+                    if let workerId = self.workerId {
+                        let cycleResponsePublisher = CurrentValueSubject<(cycleResponse: CycleResponseSuccess,
+                            workerId: String), Error>((cycleResponse: cycleSuccess, workerId: workerId)).eraseToAnyPublisher()
+                        self.startPlanAndModelDownload(withCycleResponse: cycleResponsePublisher)
                     }
-                case .cycleRequestResponse(let result):
-                    switch result {
-                    case .success(let cycleSuccess):
-                        if let workerId = self.workerId {
-                            let cycleResponsePublisher = CurrentValueSubject<(cycleResponse: CycleResponseSuccess,
-                                workerId: String), Error>((cycleResponse: cycleSuccess, workerId: workerId)).eraseToAnyPublisher()
-                            self.startPlanAndModelDownload(withCycleResponse: cycleResponsePublisher)
-                        }
-                    case .failure(let error):
-                        print(error.localizedDescription)
-                        return
-                    }
-                default:
+                case .failure(let error):
+                    print(error.localizedDescription)
                     return
                 }
-
+            default:
+                break
             }
-
-        }.store(in: &self.disposeBag)
-
+        }).store(in: &disposeBag)
     }
 
     public func reportDiff(diffData: Data) {
