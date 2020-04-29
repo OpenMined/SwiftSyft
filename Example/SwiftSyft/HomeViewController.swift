@@ -34,6 +34,9 @@ class HomeViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var socketURLTextField: UITextField!
     @IBOutlet weak var connectButton: UIButton!
 
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var loadingLabel: UILabel!
+
     private var syftJob: SyftJob?
     private var syftClient: SyftClient?
     private var lossSubject: PassthroughSubject<Float, Error>?
@@ -70,14 +73,27 @@ class HomeViewController: UIViewController, UITextViewDelegate {
 
         // Initate federated cylcle request
         if let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:5000")!) {
+
+            // Show loading UI
+            self.connectButton.isHidden = true
+            self.loadingLabel.isHidden = false
+            self.activityIndicator.startAnimating()
+
             self.syftJob = syftClient.newJob(modelName: "mnist", version: "1.0.0")
             self.syftJob?.onReady(execute: { plan, clientConfig, modelReport in
+
+                DispatchQueue.main.sync {
+                    self.loadingLabel.text = "Loading MNIST Data"
+                }
 
                 do {
 
                     let (mnistData, labels) = try MNISTLoader.load(setType: .train, batchSize: clientConfig.batchSize)
 
                     DispatchQueue.main.sync {
+
+                        self.loadingLabel.isHidden = true
+                        self.activityIndicator.stopAnimating()
 
                         // swiftlint:disable force_cast
                         let lineChartViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "LineChart") as! LossChartViewController

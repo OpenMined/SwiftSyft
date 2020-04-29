@@ -57,6 +57,15 @@
                                             <action selector="connectPressed:" destination="6q4-mS-6Dq" eventType="touchUpInside" id="f4U-9j-xdR"/>
                                         </connections>
                                     </button>
+                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="Aea-TM-xog">
+                                        <rect key="frame" x="177.5" y="329" width="20" height="20"/>
+                                    </activityIndicatorView>
+                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Requesting a cycle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bRX-Q7-N1k">
+                                        <rect key="frame" x="115.5" y="357" width="144" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="LOq-WO-b6W" firstAttribute="centerX" secondItem="GPR-Jh-R3g" secondAttribute="centerX" id="0VZ-iY-5ny"/>
@@ -64,14 +73,18 @@
                                     <constraint firstItem="LOq-WO-b6W" firstAttribute="top" secondItem="Yln-Aw-5hs" secondAttribute="topMargin" id="Dn1-Xn-ezd"/>
                                     <constraint firstItem="AYj-zD-xeu" firstAttribute="centerX" secondItem="Yln-Aw-5hs" secondAttribute="centerX" id="Pma-ZA-2XH"/>
                                     <constraint firstItem="AYj-zD-xeu" firstAttribute="top" secondItem="LOq-WO-b6W" secondAttribute="bottom" constant="8" symbolic="YES" id="Pmw-T1-gfM"/>
+                                    <constraint firstItem="Aea-TM-xog" firstAttribute="top" secondItem="GPR-Jh-R3g" secondAttribute="bottom" constant="8" id="QLF-C8-h6U"/>
+                                    <constraint firstItem="bRX-Q7-N1k" firstAttribute="centerX" secondItem="Yln-Aw-5hs" secondAttribute="centerX" id="TZa-Es-qcx"/>
                                     <constraint firstItem="KZ3-oQ-Xys" firstAttribute="centerX" secondItem="AYj-zD-xeu" secondAttribute="centerX" id="Utt-ke-Mhj"/>
                                     <constraint firstAttribute="trailing" secondItem="KZ3-oQ-Xys" secondAttribute="trailing" constant="9" id="dYg-zE-LeA"/>
+                                    <constraint firstItem="bRX-Q7-N1k" firstAttribute="top" secondItem="Aea-TM-xog" secondAttribute="bottom" constant="8" id="etQ-9v-tE7"/>
                                     <constraint firstItem="2bp-Yt-xFw" firstAttribute="top" secondItem="KZ3-oQ-Xys" secondAttribute="bottom" constant="8" id="gZz-k4-oiM"/>
                                     <constraint firstItem="KZ3-oQ-Xys" firstAttribute="trailing" secondItem="2bp-Yt-xFw" secondAttribute="trailing" id="hOx-sQ-VQ4"/>
                                     <constraint firstItem="GPR-Jh-R3g" firstAttribute="top" secondItem="2bp-Yt-xFw" secondAttribute="bottom" constant="8" id="kB2-D4-cRD"/>
                                     <constraint firstItem="KZ3-oQ-Xys" firstAttribute="leading" secondItem="Yln-Aw-5hs" secondAttribute="leadingMargin" id="r1W-cf-vxz"/>
                                     <constraint firstItem="KZ3-oQ-Xys" firstAttribute="top" secondItem="AYj-zD-xeu" secondAttribute="bottom" constant="8" id="r4V-FW-EQd"/>
                                     <constraint firstItem="KZ3-oQ-Xys" firstAttribute="leading" secondItem="2bp-Yt-xFw" secondAttribute="leading" id="vB1-er-zce"/>
+                                    <constraint firstItem="Aea-TM-xog" firstAttribute="centerX" secondItem="Yln-Aw-5hs" secondAttribute="centerX" id="vaa-Lj-4Zk"/>
                                 </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="X0g-Fg-gKu"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="ok5-BU-yvT"/>
@@ -90,9 +103,11 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="Aea-TM-xog" id="tgi-Ei-dRl"/>
                         <outlet property="connectButton" destination="GPR-Jh-R3g" id="Txv-wh-JbA"/>
                         <outlet property="descriptionTextView" destination="KZ3-oQ-Xys" id="PPe-Gv-TWu"/>
                         <outlet property="headerDescriptionLabel" destination="AYj-zD-xeu" id="bvz-ld-dcc"/>
+                        <outlet property="loadingLabel" destination="bRX-Q7-N1k" id="9Rn-aF-mmq"/>
                         <outlet property="scrollView" destination="Yln-Aw-5hs" id="JaO-u1-Bqb"/>
                         <outlet property="socketURLTextField" destination="2bp-Yt-xFw" id="TYx-12-e65"/>
                     </connections>
