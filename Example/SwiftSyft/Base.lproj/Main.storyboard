@@ -129,19 +129,35 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DZx-YL-dP0" customClass="LineChartView" customModule="Charts">
-                                <rect key="frame" x="8" y="20" width="359" height="627"/>
+                                <rect key="frame" x="8" y="37" width="359" height="610"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I2U-Ee-PCK">
+                                <rect key="frame" x="166" y="6" width="0.0" height="0.0"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Completed Cycle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PFs-dC-Xj3">
+                                <rect key="frame" x="121.5" y="8" width="132" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="Oam-y8-RSP" firstAttribute="top" secondItem="DZx-YL-dP0" secondAttribute="bottom" constant="20" id="KFK-zF-Ha5"/>
-                            <constraint firstItem="DZx-YL-dP0" firstAttribute="top" secondItem="LxM-JL-opV" secondAttribute="bottom" constant="20" id="UOh-x5-cgP"/>
+                            <constraint firstItem="PFs-dC-Xj3" firstAttribute="top" secondItem="LxM-JL-opV" secondAttribute="bottom" constant="8" id="LIp-sP-6rh"/>
                             <constraint firstAttribute="trailing" secondItem="DZx-YL-dP0" secondAttribute="trailing" constant="8" id="hse-7e-PVx"/>
+                            <constraint firstItem="PFs-dC-Xj3" firstAttribute="centerX" secondItem="kIB-Go-b3D" secondAttribute="centerX" id="n68-GY-JK7"/>
                             <constraint firstItem="DZx-YL-dP0" firstAttribute="leading" secondItem="kIB-Go-b3D" secondAttribute="leading" constant="8" id="qWa-z3-FhB"/>
+                            <constraint firstItem="DZx-YL-dP0" firstAttribute="top" secondItem="PFs-dC-Xj3" secondAttribute="bottom" constant="8" id="w12-mQ-pdL"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="cycleCompletedLabel" destination="PFs-dC-Xj3" id="bSl-T9-nLC"/>
                         <outlet property="lineChartView" destination="DZx-YL-dP0" id="Juh-T3-f3S"/>
                     </connections>
                 </viewController>
