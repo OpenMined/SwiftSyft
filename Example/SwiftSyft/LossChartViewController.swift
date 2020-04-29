@@ -13,6 +13,7 @@ import Combine
 class LossChartViewController: UIViewController {
 
     @IBOutlet weak var lineChartView: LineChartView!
+    @IBOutlet weak var cycleCompletedLabel: UILabel!
 
     let lossSubject: PassthroughSubject<Float, Error> = PassthroughSubject<Float, Error>()
     var lossValues: [Float] = [Float]()
@@ -41,7 +42,16 @@ class LossChartViewController: UIViewController {
 
         lineChartView.legend.form = .line
 
-        self.lossSubject.receive(on: DispatchQueue.main).sink(receiveCompletion: { _ in }, receiveValue: { [weak self] loss in
+        self.lossSubject.receive(on: DispatchQueue.main).sink(receiveCompletion: { result in
+
+            switch result {
+            case .finished:
+                self.cycleCompletedLabel.isHidden = false
+            default:
+                break
+            }
+
+        }, receiveValue: { [weak self] loss in
 
             if let self = self {
                 self.lossValues.append(loss)

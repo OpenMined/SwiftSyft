@@ -120,6 +120,8 @@ class HomeViewController: UIViewController, UITextViewDelegate {
                     let diffStateData = try plan.generateDiffData()
                     modelReport(diffStateData)
 
+                    self.lossSubject?.send(completion: .finished)
+
                 } catch let error {
                     debugPrint(error.localizedDescription)
                 }
