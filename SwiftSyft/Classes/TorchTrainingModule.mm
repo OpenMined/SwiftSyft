@@ -8,6 +8,8 @@
 #import "TorchTrainingModule.h"
 #include <LibTorch/LibTorch.h>
 
+std::map<int, at::ScalarType> tensorTypeMap = {{1, at::kInt}, {2, at::kInt}, {3, at::kLong}, {4, at::kFloat}, {5, at::kDouble}};
+
 @implementation TorchTrainingResult
 
 - (instancetype)initWithLoss:(float)loss
