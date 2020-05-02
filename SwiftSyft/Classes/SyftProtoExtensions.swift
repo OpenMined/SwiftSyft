@@ -20,26 +20,10 @@ enum TensorType: Int {
 
 }
 
-@objc class TensorHolder: NSObject {
-    let tensorPointerValues: [NSValue]
-    let tensorData: [Data]
-    let shapes: [[Int32]]
-    let types: [Int]
-
-    init(tensorPointerValues: [NSValue], tensorData: [Data], shapes: [[Int32]], types: [Int]) {
-        self.tensorPointerValues = tensorPointerValues
-        self.tensorData = tensorData
-        self.shapes = shapes
-        self.types = types
-    }
-}
-
 extension SyftProto_Execution_V1_State {
 
-    // swiftlint:disable large_tuple
-    func getTensorData() -> (shapes: [[Int32]],
-                             tensorPointers: [NSValue],
-                             tensorData: [Data]) {
+//     swiftlint:disable large_tuple
+    func getTensorData() -> TensorsHolder {
 
         var torchTensors: [SyftProto_Types_Torch_V1_TorchTensor] = []
         var torchTensorsCount = 0
@@ -79,7 +63,9 @@ extension SyftProto_Execution_V1_State {
             }
         }
 
-        return (shapes, tensorPointerArray, tensorData)
+        let tensorsHolder = TensorsHolder(tensorPointerValues: tensorPointerArray, tensorData: tensorData, tensorShapes: shapes as [[NSNumber]], types: tensorTypes as [NSNumber])
+
+        return tensorsHolder
 
     }
 }
