@@ -10,6 +10,28 @@
 
 std::map<int, at::ScalarType> tensorTypeMap = {{1, at::kInt}, {2, at::kInt}, {3, at::kLong}, {4, at::kFloat}, {5, at::kDouble}};
 
+@implementation TensorsHolder
+
+- (instancetype)initWithTensorPointerValues:(NSArray<NSValue *> *)tensorPointerValues
+                                 tensorData:(NSArray<NSData *> *)tensorData
+                               tensorShapes:(NSArray<NSArray<NSNumber *> *> *)tensorShapes
+                                      types:(NSArray<NSNumber *> *)types {
+
+    self = [super init];
+
+    if (self) {
+        _tensorPointerValues = tensorPointerValues;
+        _tensorData = tensorData;
+        _tensorShapes = tensorShapes;
+        _types = types;
+    }
+
+    return self;
+
+}
+
+@end
+
 @implementation TorchTrainingResult
 
 - (instancetype)initWithLoss:(float)loss
@@ -42,13 +64,12 @@ std::map<int, at::ScalarType> tensorTypeMap = {{1, at::kInt}, {2, at::kInt}, {3,
 }
 
 - (TorchTrainingResult *)executeWithTrainingArray:(void *)trainingDataArray
-                                              trainingShapes:(NSArray<NSNumber *> *)trainingDataShapes
-                                              trainingLabels:(void *)trainingLabelArrays
-                                         trainingLabelShapes:(NSArray<NSNumber *> *)trainingLabelShapes
-                                                 paramArrays:(NSArray<NSValue *> *)paramArrays
-                                                  withShapes:(NSArray<NSArray<NSNumber *> *> *)paramShapes
-                                                   batchSize:(void *)batchSize
-                                                learningRate:(void *)learningRate {
+                                   trainingShapes:(NSArray<NSNumber *> *)trainingDataShapes
+                                   trainingLabels:(void *)trainingLabelArrays
+                              trainingLabelShapes:(NSArray<NSNumber *> *)trainingLabelShapes
+                               paramTensorsHolder:(TensorsHolder *)paramTensorsHolder
+                                        batchSize:(void *)batchSize
+                                     learningRate:(void *)learningRate {
 
     torch::jit::script::Module planModel = torch::jit::load(self.torchScriptFilePath.UTF8String);
 
@@ -82,20 +103,23 @@ std::map<int, at::ScalarType> tensorTypeMap = {{1, at::kInt}, {2, at::kInt}, {3,
 
     // Push model training vectors
 
-    NSInteger paramArrayLength = [paramArrays count];
+    NSInteger paramArrayLength = [paramTensorsHolder.tensorPointerValues count];
 
     for (NSInteger index = 0; index < paramArrayLength; index++) {
-        NSValue *tensorPointerValue = paramArrays[index];
+        NSValue *tensorPointerValue = paramTensorsHolder.tensorPointerValues[index];
         void *tensorPointer = [tensorPointerValue pointerValue];
 
-        NSArray<NSNumber *> *shape = paramShapes[index];
+        NSArray<NSNumber *> *shape = paramTensorsHolder.tensorShapes[index];
         std::vector<int64_t> shapes;
         for (NSNumber *dim in shape) {
             int dimInt = [dim intValue];
             shapes.push_back(dimInt);
         }
 
-        at::Tensor paramsTensor = torch::from_blob(tensorPointer, shapes, at::kFloat);
+        int typeInt = [paramTensorsHolder.types[index] intValue];
+        auto tensorType = tensorTypeMap[typeInt];
+
+        at::Tensor paramsTensor = torch::from_blob(tensorPointer, shapes, tensorType);
 
         modelArgs.push_back(paramsTensor);
 
@@ -106,7 +130,7 @@ std::map<int, at::ScalarType> tensorTypeMap = {{1, at::kInt}, {2, at::kInt}, {3,
     auto tupleOutputs = outputs.toTuple();
 
     // output is loss, metric, *params
-    NSInteger outputsLength = 2 + [paramArrays count];
+    NSInteger outputsLength = 2 + [paramTensorsHolder.tensorPointerValues count];
 
     // Array to store new params
     NSMutableArray *newParamsArray = [[NSMutableArray alloc] init];
@@ -130,7 +154,7 @@ std::map<int, at::ScalarType> tensorTypeMap = {{1, at::kInt}, {2, at::kInt}, {3,
 
         // Add params to array of params
         NSInteger paramsIndex = i-2;
-        NSArray *paramShape = paramShapes[paramsIndex];
+        NSArray *paramShape = paramTensorsHolder.tensorShapes[paramsIndex];
         NSInteger length = 1;
         for (NSNumber *dim in paramShape) {
             length = length * [dim intValue];
@@ -148,7 +172,8 @@ std::map<int, at::ScalarType> tensorTypeMap = {{1, at::kInt}, {2, at::kInt}, {3,
 
     }
 
-    TorchTrainingResult *result = [[TorchTrainingResult alloc] initWithLoss:loss updatedParams:[newParamsArray copy]];
+    TorchTrainingResult *result = [[TorchTrainingResult alloc] initWithLoss:loss
+                                                              updatedParams:[newParamsArray copy]];
 
     return result;
 

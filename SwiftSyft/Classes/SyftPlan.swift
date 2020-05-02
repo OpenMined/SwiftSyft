@@ -35,13 +35,12 @@ public class SyftPlan {
         self.updatedModelState = modelState
     }
 
-    //  swiftlint:disable force_cast
     @discardableResult public func execute(trainingData: TrainingData, validationData: ValidationData, clientConfig: FederatedClientConfig) -> Float {
 
         var trainingDataCopy = trainingData
         var validationDataCopy = validationData
 
-        let (paramShapes, paramTensorPointers, _) = self.updatedModelState.getTensorData()
+        let stateTensorsHolder = self.updatedModelState.getTensorData()
 
         var batchSizeArray = [clientConfig.batchSize]
         var learningRateArray = [clientConfig.learningRate]
@@ -50,9 +49,9 @@ public class SyftPlan {
                                     trainingShapes: trainingData.shape as [NSNumber],
                                     trainingLabels: &validationDataCopy.data,
                                     trainingLabelShapes: validationDataCopy.shape as [NSNumber],
-                                    paramArrays: paramTensorPointers,
-                                    withShapes: (paramShapes as NSArray) as! [[NSNumber]],
-                                    batchSize: &batchSizeArray, learningRate: &learningRateArray)
+                                    paramTensorsHolder: stateTensorsHolder,
+                                    batchSize: &batchSizeArray,
+                                    learningRate: &learningRateArray)
 
         let updatedParamsFloatArray = trainingResult.updatedParams.map { diff -> [Float32] in
             return diff.map { $0.floatValue }
@@ -62,7 +61,7 @@ public class SyftPlan {
         self.updatedModelState = self.updatedModelState.updateWithParams(params: updatedParamsFloatArray)
 
         //         Free param buffer pointers
-        for pointerValue in paramTensorPointers {
+        for pointerValue in stateTensorsHolder.tensorPointerValues {
             if let pointer = pointerValue.pointerValue {
                 pointer.deallocate()
             }
@@ -75,27 +74,27 @@ public class SyftPlan {
 
     public func generateDiffData() throws -> Data {
 
-        let (originalParamShapes, originalParamTensorPointers, _) = self.originalModelState.getTensorData()
-        let (_, updatedParamTensorPointers, _) = self.updatedModelState.getTensorData()
+        let originalParamsHolder = self.originalModelState.getTensorData()
+        let updatedParamsHolder = self.updatedModelState.getTensorData()
 
         defer {
             // Free param buffer pointers
-            for pointerValue in originalParamTensorPointers {
+            for pointerValue in originalParamsHolder.tensorPointerValues {
                 if let pointer = pointerValue.pointerValue {
                     pointer.deallocate()
                 }
             }
 
             // Free param buffer pointers
-            for pointerValue in updatedParamTensorPointers {
+            for pointerValue in updatedParamsHolder.tensorPointerValues {
                 if let pointer = pointerValue.pointerValue {
                     pointer.deallocate()
                 }
             }
         }
 
-        let diff = self.trainingModule.generateDiff(fromOriginalParamArrays: originalParamTensorPointers,
-                                                    updatedParamArrays: updatedParamTensorPointers, withShapes: originalParamShapes as [[NSNumber]])
+        let diff = self.trainingModule.generateDiff(fromOriginalParamArrays: originalParamsHolder.tensorPointerValues,
+                                                    updatedParamArrays: updatedParamsHolder.tensorPointerValues, withShapes: originalParamsHolder.tensorShapes)
 
         let diffFloatArray = diff.map { diff -> [Float] in
             return diff.map { Float(truncating: $0) }
