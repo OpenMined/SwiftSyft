@@ -109,8 +109,8 @@ class HomeViewController: UIViewController, UITextViewDelegate {
                         let flattenedBatch = MNISTLoader.flattenMNISTData(batchData)
                         let oneHotLabels = MNISTLoader.oneHotMNISTLabels(labels: labels).compactMap { Float($0)}
 
-                        let trainingData = TrainingData(data: flattenedBatch, shape: [clientConfig.batchSize, 784])
-                        let validationData = ValidationData(data: oneHotLabels, shape: [clientConfig.batchSize, 10])
+                        let trainingData = try TrainingData(data: flattenedBatch, shape: [clientConfig.batchSize, 784])
+                        let validationData = try ValidationData(data: oneHotLabels, shape: [clientConfig.batchSize, 10])
 
                         let loss = plan.execute(trainingData: trainingData, validationData: validationData, clientConfig: clientConfig)
                         self.lossSubject?.send(loss)
