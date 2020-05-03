@@ -65,8 +65,10 @@ std::map<int, at::ScalarType> tensorTypeMap = {{1, at::kInt}, {2, at::kInt}, {3,
 
 - (TorchTrainingResult *)executeWithTrainingArray:(void *)trainingDataArray
                                    trainingShapes:(NSArray<NSNumber *> *)trainingDataShapes
+                                 trainingDataType:(int)trainingDataTypeInt
                                    trainingLabels:(void *)trainingLabelArrays
                               trainingLabelShapes:(NSArray<NSNumber *> *)trainingLabelShapes
+                                trainingLabelType:(int)trainingLabelTypeInt
                                paramTensorsHolder:(TensorsHolder *)paramTensorsHolder
                                         batchSize:(void *)batchSize
                                      learningRate:(void *)learningRate {
@@ -81,7 +83,7 @@ std::map<int, at::ScalarType> tensorTypeMap = {{1, at::kInt}, {2, at::kInt}, {3,
         trainingDataVectorShape.push_back([dim integerValue]);
     }
 
-    at::Tensor trainingDataTensor = torch::from_blob(trainingDataArray, trainingDataVectorShape, at::kFloat);
+    at::Tensor trainingDataTensor = torch::from_blob(trainingDataArray, trainingDataVectorShape, tensorTypeMap[trainingDataTypeInt]);
     modelArgs.push_back(trainingDataTensor);
 
     // Push training label vectors
@@ -91,7 +93,7 @@ std::map<int, at::ScalarType> tensorTypeMap = {{1, at::kInt}, {2, at::kInt}, {3,
         trainingLabelVectorShape.push_back([dim integerValue]);
     }
 
-    at::Tensor trainingLabelsTensor = torch::from_blob(trainingLabelArrays, trainingLabelVectorShape, at::kFloat);
+    at::Tensor trainingLabelsTensor = torch::from_blob(trainingLabelArrays, trainingLabelVectorShape, tensorTypeMap[trainingLabelTypeInt]);
 
     modelArgs.push_back(trainingLabelsTensor);
 
