@@ -40,22 +40,15 @@ NS_SWIFT_NAME(init(fileAtPath:))NS_DESIGNATED_INITIALIZER;
 + (instancetype)new NS_UNAVAILABLE;
 - (instancetype)init NS_UNAVAILABLE;
 
-//- (TorchTrainingResult *)executeWithTrainingArray:(void *)trainingDataArray
-//     trainingShapes:(NSArray<NSNumber *> *)trainingDataShapes
-//     trainingLabels:(void *)trainingLabelArrays
-//trainingLabelShapes:(NSArray<NSNumber *> *)trainingLabelShapes
-//        paramArrays:(NSArray<NSValue *> *)paramArrays
-//         withShapes:(NSArray<NSArray<NSNumber *> *> *)paramShapes
-//          batchSize:(void *)batchSize
-//       learningRate:(void *)learningRate;
-
 - (TorchTrainingResult *)executeWithTrainingArray:(void *)trainingDataArray
-     trainingShapes:(NSArray<NSNumber *> *)trainingDataShapes
-     trainingLabels:(void *)trainingLabelArrays
-trainingLabelShapes:(NSArray<NSNumber *> *)trainingLabelShapes
- paramTensorsHolder:(TensorsHolder *)paramTensorsHolder
-          batchSize:(void *)batchSize
-       learningRate:(void *)learningRate;
+                                   trainingShapes:(NSArray<NSNumber *> *)trainingDataShapes
+                                 trainingDataType:(NSInteger)trainingDataTypeInt
+                                   trainingLabels:(void *)trainingLabelArrays
+                              trainingLabelShapes:(NSArray<NSNumber *> *)trainingLabelShapes
+                                trainingLabelType:(NSInteger)trainingLabelTypeInt
+                               paramTensorsHolder:(TensorsHolder *)paramTensorsHolder
+                                        batchSize:(void *)batchSize
+                                     learningRate:(void *)learningRate;
 
 
 

@@ -22,7 +22,7 @@ public class TensorData<T> {
     public init(data: [T], shape: [Int]) throws {
         self.data = data
         self.shape = shape
-        if let tensorType = typeMapping[ObjectIdentifier(type(of: shape).Element.self)] {
+        if let tensorType = typeMapping[ObjectIdentifier(type(of: data).Element.self)] {
             self.tensorType = tensorType
         } else {
             throw SwiftSyftError(localizedDescription: "Unsupported type selected for array. Please use Int, Int64, Float or Double")
@@ -56,12 +56,14 @@ public class SyftPlan {
         var learningRateArray = [clientConfig.learningRate]
 
         let trainingResult = self.trainingModule.execute(withTrainingArray: &trainingDataCopy.data,
-                                    trainingShapes: trainingData.shape as [NSNumber],
-                                    trainingLabels: &validationDataCopy.data,
-                                    trainingLabelShapes: validationDataCopy.shape as [NSNumber],
-                                    paramTensorsHolder: stateTensorsHolder,
-                                    batchSize: &batchSizeArray,
-                                    learningRate: &learningRateArray)
+                                                         trainingShapes: trainingDataCopy.shape as [NSNumber],
+                                                         trainingDataType: trainingDataCopy.tensorType.rawValue,
+                                                         trainingLabels: &validationDataCopy.data,
+                                                         trainingLabelShapes: validationDataCopy.shape as [NSNumber],
+                                                         trainingLabelType: validationDataCopy.tensorType.rawValue,
+                                                         paramTensorsHolder: stateTensorsHolder,
+                                                         batchSize: &batchSizeArray,
+                                                         learningRate: &learningRateArray)
 
         let updatedParamsFloatArray = trainingResult.updatedParams.map { diff -> [Float32] in
             return diff.map { $0.floatValue }
