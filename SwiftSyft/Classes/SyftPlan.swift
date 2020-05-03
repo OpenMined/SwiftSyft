@@ -1,27 +1,37 @@
 import Foundation
 import SyftProto
 
-public struct TrainingData {
+struct SwiftSyftError: LocalizedError {
+    var localizedDescription: String
+}
 
-    public var data: [Float]
+public class TensorData<T> {
+
+    public var data: [T]
     public let shape: [Int]
+    let tensorType: TensorType
 
-    public init(data: [Float], shape: [Int]) {
+    let typeMapping: [ObjectIdentifier: TensorType] = [ObjectIdentifier(Int.self): TensorType.int32,
+                                                ObjectIdentifier(Int32.self): TensorType.int32,
+                                                ObjectIdentifier(UInt32.self): TensorType.uint32,
+                                                ObjectIdentifier(Int64.self): TensorType.int64,
+                                                ObjectIdentifier(Float.self): TensorType.float,
+                                                ObjectIdentifier(Double.self): TensorType.double,
+                                                ObjectIdentifier(Bool.self): TensorType.bool]
+
+    public init(data: [T], shape: [Int]) throws {
         self.data = data
         self.shape = shape
+        if let tensorType = typeMapping[ObjectIdentifier(type(of: shape).Element.self)] {
+            self.tensorType = tensorType
+        } else {
+            throw SwiftSyftError(localizedDescription: "Unsupported type selected for array. Please use Int, Int64, Float or Double")
+        }
     }
 }
 
-public struct ValidationData {
-
-    public var data: [Float]
-    public let shape: [Int]
-
-    public init(data: [Float], shape: [Int]) {
-        self.data = data
-        self.shape = shape
-    }
-}
+public class TrainingData<T>: TensorData<T> { }
+public class ValidationData<T>: TensorData<T> { }
 
 public class SyftPlan {
 
@@ -35,7 +45,7 @@ public class SyftPlan {
         self.updatedModelState = modelState
     }
 
-    @discardableResult public func execute(trainingData: TrainingData, validationData: ValidationData, clientConfig: FederatedClientConfig) -> Float {
+    @discardableResult public func execute<T, U>(trainingData: TrainingData<T>, validationData: ValidationData<U>, clientConfig: FederatedClientConfig) -> Float {
 
         var trainingDataCopy = trainingData
         var validationDataCopy = validationData
