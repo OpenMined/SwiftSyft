@@ -102,9 +102,11 @@ extension SignallingClient: SocketClientDelegate {
 extension SignallingClient {
     private class func defaultSocketClientFactory(url: URL, pingInterval: Double) -> SocketClientProtocol {
 
+        #if !DEBUG
         guard url.absoluteString.hasPrefix("wss") else {
             preconditionFailure("Path for socket server shoud start with wss://")
         }
+        #endif
 
         let socketClient = SyftWebSocket(url: url, pingInterval: pingInterval)
         return socketClient
