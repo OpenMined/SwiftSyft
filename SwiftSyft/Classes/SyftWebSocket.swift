@@ -16,9 +16,11 @@ class SyftWebSocket: NSObject, SocketClientProtocol, URLSessionWebSocketDelegate
     let delegateQueue = OperationQueue()
     required init(url: URL, pingInterval: Double) {
         super.init()
+        #if !DEBUG
         guard url.absoluteString.hasPrefix("wss") else {
             preconditionFailure("Path for socket server shoud start with wss://")
         }
+        #endif
         urlSession = URLSession(configuration: .default, delegate: self, delegateQueue: delegateQueue)
         webSocketTask = urlSession.webSocketTask(with: url)
     }
