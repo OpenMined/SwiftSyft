@@ -2,10 +2,10 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:SwiftSyft.xcodeproj">
+      location = "group:Example/SwiftSyft.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:SwiftSyft-Background/SwiftSyft-Background.xcodeproj">
+      location = "group:Example-Background/SwiftSyft-Background.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
