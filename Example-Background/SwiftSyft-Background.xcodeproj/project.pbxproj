@@ -13,9 +13,11 @@
 		BE2D78E9246556A500CBCC9A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE2D78E7246556A500CBCC9A /* Main.storyboard */; };
 		BE2D78EB246556A700CBCC9A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE2D78EA246556A700CBCC9A /* Assets.xcassets */; };
 		BE2D78EE246556A700CBCC9A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE2D78EC246556A700CBCC9A /* LaunchScreen.storyboard */; };
+		ED2F16AE7AA535967FA66EB5 /* libPods-SwiftSyft-Background.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B0A4C8E597007DE7E58FEBB9 /* libPods-SwiftSyft-Background.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B0A4C8E597007DE7E58FEBB9 /* libPods-SwiftSyft-Background.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SwiftSyft-Background.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE2D78DE246556A500CBCC9A /* SwiftSyft-Background.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftSyft-Background.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE2D78E1246556A500CBCC9A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BE2D78E3246556A500CBCC9A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -24,6 +26,8 @@
 		BE2D78EA246556A700CBCC9A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BE2D78ED246556A700CBCC9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BE2D78EF246556A700CBCC9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EE87355EF82A7E3557B508E3 /* Pods-SwiftSyft-Background.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftSyft-Background.release.xcconfig"; path = "Target Support Files/Pods-SwiftSyft-Background/Pods-SwiftSyft-Background.release.xcconfig"; sourceTree = "<group>"; };
+		FB23A710EE2A54E5A3697F64 /* Pods-SwiftSyft-Background.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftSyft-Background.debug.xcconfig"; path = "Target Support Files/Pods-SwiftSyft-Background/Pods-SwiftSyft-Background.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +35,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ED2F16AE7AA535967FA66EB5 /* libPods-SwiftSyft-Background.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +47,8 @@
 			children = (
 				BE2D78E0246556A500CBCC9A /* SwiftSyft-Background */,
 				BE2D78DF246556A500CBCC9A /* Products */,
+				D59EC540E14E22C90B3EC753 /* Pods */,
+				C8B55A352CB0C6410DC5C645 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -67,6 +74,24 @@
 			path = "SwiftSyft-Background";
 			sourceTree = "<group>";
 		};
+		C8B55A352CB0C6410DC5C645 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B0A4C8E597007DE7E58FEBB9 /* libPods-SwiftSyft-Background.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D59EC540E14E22C90B3EC753 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				FB23A710EE2A54E5A3697F64 /* Pods-SwiftSyft-Background.debug.xcconfig */,
+				EE87355EF82A7E3557B508E3 /* Pods-SwiftSyft-Background.release.xcconfig */,
+			);
+			name = Pods;
+			path = ../Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -74,9 +99,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BE2D78F2246556A700CBCC9A /* Build configuration list for PBXNativeTarget "SwiftSyft-Background" */;
 			buildPhases = (
+				D4440E0B96E634BD6C7BB24F /* [CP] Check Pods Manifest.lock */,
 				BE2D78DA246556A500CBCC9A /* Sources */,
 				BE2D78DB246556A500CBCC9A /* Frameworks */,
 				BE2D78DC246556A500CBCC9A /* Resources */,
+				81525026492747433F366230 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -132,6 +159,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		81525026492747433F366230 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SwiftSyft-Background/Pods-SwiftSyft-Background-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SwiftSyft-Background/Pods-SwiftSyft-Background-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SwiftSyft-Background/Pods-SwiftSyft-Background-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D4440E0B96E634BD6C7BB24F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SwiftSyft-Background-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		BE2D78DA246556A500CBCC9A /* Sources */ = {
@@ -282,6 +351,7 @@
 		};
 		BE2D78F3246556A700CBCC9A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FB23A710EE2A54E5A3697F64 /* Pods-SwiftSyft-Background.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -300,6 +370,7 @@
 		};
 		BE2D78F4246556A700CBCC9A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EE87355EF82A7E3557B508E3 /* Pods-SwiftSyft-Background.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

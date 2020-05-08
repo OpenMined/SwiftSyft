@@ -45,7 +45,7 @@
                BlueprintIdentifier = "7A7F2EE98B0DF16CF0A3FD5DE5FECB4A"
                BuildableName = "SwiftSyft-Unit-Tests.xctest"
                BlueprintName = "SwiftSyft-Unit-Tests"
-               ReferencedContainer = "container:Pods/Pods.xcodeproj">
+               ReferencedContainer = "container:../Pods/Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -82,7 +82,7 @@
                BlueprintIdentifier = "7A7F2EE98B0DF16CF0A3FD5DE5FECB4A"
                BuildableName = "SwiftSyft-Unit-Tests.xctest"
                BlueprintName = "SwiftSyft-Unit-Tests"
-               ReferencedContainer = "container:Pods/Pods.xcodeproj">
+               ReferencedContainer = "container:../Pods/Pods.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>

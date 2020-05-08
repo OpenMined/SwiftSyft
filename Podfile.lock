@@ -24,8 +24,8 @@ PODS:
 DEPENDENCIES:
   - Charts
   - SwiftLint (~> 0.38.0)
-  - SwiftSyft (from `../`)
-  - SwiftSyft/Tests (from `../`)
+  - SwiftSyft (from `.`)
+  - SwiftSyft/Tests (from `.`)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -38,7 +38,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   SwiftSyft:
-    :path: "../"
+    :path: "."
 
 SPEC CHECKSUMS:
   Charts: 40a08591df1f8ad5c223ddedfb1a06da92f24f7c
@@ -49,6 +49,6 @@ SPEC CHECKSUMS:
   SwiftSyft: d098e4007e604f8590c8b26e195e72a2000dea28
   SyftProto: 8430a84e06243500f0e52354db6227eaec7ba8f5
 
-PODFILE CHECKSUM: f08e6f31ac8be1635ffd4a90994651fcd9e383a0
+PODFILE CHECKSUM: c230b5a22b496f49d6d35334a75d3894e9b16f70
 
 COCOAPODS: 1.8.4
