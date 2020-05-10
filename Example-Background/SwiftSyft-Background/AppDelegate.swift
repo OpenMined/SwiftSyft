@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 
-        BGTaskScheduler.shared.register(forTaskWithIdentifier: "", using: DispatchQueue.global()) { task in
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.openmined.background", using: DispatchQueue.global()) { task in
 
             self.executeSyftJob(backgroundTask: task)
 
@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func scheduleTrainingJob() {
         do {
-            let processingTaskRequest = BGProcessingTaskRequest(identifier: "")
+            let processingTaskRequest = BGProcessingTaskRequest(identifier: "com.openmined.background")
             processingTaskRequest.requiresExternalPower = true
             processingTaskRequest.requiresNetworkConnectivity = true
             try BGTaskScheduler.shared.submit(processingTaskRequest)
