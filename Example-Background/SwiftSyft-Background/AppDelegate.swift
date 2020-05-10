@@ -37,6 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             processingTaskRequest.requiresExternalPower = true
             processingTaskRequest.requiresNetworkConnectivity = true
             try BGTaskScheduler.shared.submit(processingTaskRequest)
+
         } catch {
             print(error.localizedDescription)
         }
@@ -57,7 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
                 let (mnistData, labels) = try MNISTLoader.load(setType: .train, batchSize: clientConfig.batchSize)
 
-                for case let (batchData, labels) in zip(mnistData, labels) {
+                for case let (batchData, labels) in zip(mnistData, labels).prefix(10) {
 
                     guard !self.backgroundTaskCancelled else {
                         return
