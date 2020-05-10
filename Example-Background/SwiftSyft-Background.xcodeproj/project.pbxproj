@@ -384,6 +384,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = L937FJ9Y4F;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "SwiftSyft-Background/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -403,6 +404,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = L937FJ9Y4F;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "SwiftSyft-Background/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
