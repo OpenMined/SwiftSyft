@@ -26,7 +26,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         }
 
+        self.scheduleTrainingJob()
+
         return true
+    }
+
+    func scheduleTrainingJob() {
+        do {
+            let processingTaskRequest = BGProcessingTaskRequest(identifier: "")
+            processingTaskRequest.requiresExternalPower = true
+            processingTaskRequest.requiresNetworkConnectivity = true
+            try BGTaskScheduler.shared.submit(processingTaskRequest)
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 
     func executeSyftJob(backgroundTask: BGTask) {
