@@ -106,15 +106,21 @@ class HomeViewController: UIViewController, UITextViewDelegate {
                     }
 
                     for case let (batchData, labels) in zip(mnistData, labels) {
-                        let flattenedBatch = MNISTLoader.flattenMNISTData(batchData)
-                        let oneHotLabels = MNISTLoader.oneHotMNISTLabels(labels: labels).compactMap { Float($0)}
 
-                        let trainingData = try TrainingData(data: flattenedBatch, shape: [clientConfig.batchSize, 784])
-                        let validationData = try ValidationData(data: oneHotLabels, shape: [clientConfig.batchSize, 10])
+                        try autoreleasepool {
 
-                        let loss = plan.execute(trainingData: trainingData, validationData: validationData, clientConfig: clientConfig)
-                        self.lossSubject?.send(loss)
-                        print("loss: \(loss)")
+                            let flattenedBatch = MNISTLoader.flattenMNISTData(batchData)
+                            let oneHotLabels = MNISTLoader.oneHotMNISTLabels(labels: labels).compactMap { Float($0)}
+
+                            let trainingData = try TrainingData(data: flattenedBatch, shape: [clientConfig.batchSize, 784])
+                            let validationData = try ValidationData(data: oneHotLabels, shape: [clientConfig.batchSize, 10])
+
+                            let loss = plan.execute(trainingData: trainingData, validationData: validationData, clientConfig: clientConfig)
+                            self.lossSubject?.send(loss)
+                            print("loss: \(loss)")
+
+                        }
+
                     }
 
                     let diffStateData = try plan.generateDiffData()
