@@ -6,7 +6,7 @@ SwiftSyft's library structure was made using `pod lib create`. If you're not fam
 
 ## Set-up
 
-You can work on the project by running `pod install` in the `Example` folder. Then open the file `Example/SwiftSyft.xcworkspace`. When the project is open on Xcode, you can work on the `SwiftSyft` pod itself in `Pods/Development Pods/SwiftSyft/Classes/*`
+You can work on the project by running `pod install` in the root directory. Then open the file `SwiftSyft.xcworkspace` in Xcode. When the project is open on Xcode, you can work on the `SwiftSyft` pod itself in `Pods/Development Pods/SwiftSyft/Classes/*`
 
 The example works by first downloading a training plan from a PyGrid server, running that plan on MNIST data then uploading the model parameter diffs back up to PyGrid.
 
