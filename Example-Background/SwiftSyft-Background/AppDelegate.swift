@@ -58,19 +58,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
                 let (mnistData, labels) = try MNISTLoader.load(setType: .train, batchSize: clientConfig.batchSize)
 
-                for case let (batchData, labels) in zip(mnistData, labels).prefix(10) {
+                for case let (batchData, labels) in zip(mnistData, labels) {
 
                     guard !self.backgroundTaskCancelled else {
                         return
                     }
 
-                    let flattenedBatch = MNISTLoader.flattenMNISTData(batchData)
-                    let oneHotLabels = MNISTLoader.oneHotMNISTLabels(labels: labels).compactMap { Float($0)}
+                    try autoreleasepool {
 
-                    let trainingData = try TrainingData(data: flattenedBatch, shape: [clientConfig.batchSize, 784])
-                    let validationData = try ValidationData(data: oneHotLabels, shape: [clientConfig.batchSize, 10])
+                        let flattenedBatch = MNISTLoader.flattenMNISTData(batchData)
+                        let oneHotLabels = MNISTLoader.oneHotMNISTLabels(labels: labels).compactMap { Float($0)}
 
-                    plan.execute(trainingData: trainingData, validationData: validationData, clientConfig: clientConfig)
+                        let trainingData = try TrainingData(data: flattenedBatch, shape: [clientConfig.batchSize, 784])
+                        let validationData = try ValidationData(data: oneHotLabels, shape: [clientConfig.batchSize, 10])
+
+                        plan.execute(trainingData: trainingData, validationData: validationData, clientConfig: clientConfig)
+
+                    }
+
                 }
 
                 let diffStateData = try plan.generateDiffData()
