@@ -20,6 +20,10 @@ enum SyftConnectionType {
 
 struct SyftClientError: Error {
     let message: String
+
+    var localizedDescription: String {
+        return message
+    }
 }
 
 struct SyftConnectionMetrics {
@@ -109,8 +113,30 @@ public class SyftJob: SyftJobProtocol {
 
     }
 
+    func isBatteryCharging() -> Bool {
+
+        // Remember current batter monitoring setting to reset it after checking.
+        let userBatteryMonitoringSetting = UIDevice.current.isBatteryMonitoringEnabled
+
+        defer {
+            UIDevice.current.isBatteryMonitoringEnabled = userBatteryMonitoringSetting
+        }
+
+        UIDevice.current.isBatteryMonitoringEnabled = true
+
+        return UIDevice.current.batteryState == .charging
+
+    }
+
     /// Request to join a federated learning cycle at "federated/cycle-request" endpoint (https://github.com/OpenMined/PyGrid/issues/445)
-    public func start() {
+    public func start(chargeDetection: Bool = false) {
+
+        // Continue if battery charging check is false or if true, check that the device is indeed charging
+        if chargeDetection && !self.isBatteryCharging() {
+            let error = SyftClientError(message: "User requested that device should be charging when executing.")
+            self.onErrorBlock(error)
+            return
+        }
 
         switch self.connectionType {
         case .http(let url):

@@ -134,7 +134,7 @@ class HomeViewController: UIViewController, UITextViewDelegate {
 
             })
             self.syftJob?.onError(execute: { error in
-                print(error.localizedDescription)
+                print(error)
             })
             self.syftJob?.start()
             self.syftClient = syftClient
