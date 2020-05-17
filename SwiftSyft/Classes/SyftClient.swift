@@ -1,6 +1,7 @@
 import Foundation
 import Combine
 import SyftProto
+import Network
 
 enum SyftConnectionType {
     case http(URL)
@@ -18,10 +19,10 @@ enum SyftConnectionType {
     }
 }
 
-struct SyftClientError: Error {
+public struct SyftClientError: Error {
     let message: String
 
-    var localizedDescription: String {
+    public var localizedDescription: String {
         return message
     }
 }
@@ -93,11 +94,7 @@ public class SyftJob: SyftJobProtocol {
     private var cyclePublisher: AnyPublisher<(SyftPlan, FederatedClientConfig), Error>?
     private var disposeBag = Set<AnyCancellable>()
 
-    // Used to observe incoming socket messages
-//    private let receiveMessagePublisher: AnyPublisher<SignallingMessagesResponse, Never>
-
-    /// Used to send message subject
-//    private let sendMessageSubject: PassthroughSubject<SignallingMessagesRequest, Never>
+    private let monitor = NWPathMonitor()
 
     init(connectionType: SyftConnectionType, modelName: String, version: String) {
         self.modelName = modelName
@@ -128,8 +125,29 @@ public class SyftJob: SyftJobProtocol {
 
     }
 
+    func validateWifiNetwork(isOnWifi: Bool) -> Future<Bool, Never> {
+
+        if !isOnWifi {
+            return Future { $0(.success(true)) }
+        } else {
+
+            return Future { promise in
+                self.monitor.pathUpdateHandler = { path in
+                    if path.usesInterfaceType(.wifi) {
+                        promise(.success(true))
+                    } else {
+                        promise(.success(false))
+                    }
+                }
+                self.monitor.start(queue: .global())
+            }
+
+        }
+
+    }
+
     /// Request to join a federated learning cycle at "federated/cycle-request" endpoint (https://github.com/OpenMined/PyGrid/issues/445)
-    public func start(chargeDetection: Bool = false) {
+    public func start(chargeDetection: Bool = true, wifiDetection: Bool = true) {
 
         // Continue if battery charging check is false or if true, check that the device is indeed charging
         if chargeDetection && !self.isBatteryCharging() {
@@ -138,14 +156,29 @@ public class SyftJob: SyftJobProtocol {
             return
         }
 
-        switch self.connectionType {
-        case .http(let url):
-            self.startThroughHTTP(url: url, authToken: nil)
-        case let .socket(url, sendMessageSubject, receiveMessagePublisher):
-            self.startThroughSocket(url: url,
-                                    sendMessageSubject: sendMessageSubject,
-                                    receiveMessagePublisher: receiveMessagePublisher, authToken: nil)
-        }
+        self.validateWifiNetwork(isOnWifi: wifiDetection).sink(receiveCompletion: { _ in }) { [weak self] networkIntefaceValid in
+
+            guard let self = self else {
+                return
+            }
+
+            if networkIntefaceValid {
+
+                switch self.connectionType {
+                case .http(let url):
+                    self.startThroughHTTP(url: url, authToken: nil)
+                case let .socket(url, sendMessageSubject, receiveMessagePublisher):
+                    self.startThroughSocket(url: url,
+                                            sendMessageSubject: sendMessageSubject,
+                                            receiveMessagePublisher: receiveMessagePublisher, authToken: nil)
+                }
+
+            } else {
+
+                self.onErrorBlock(SyftClientError(message: "Device not on wifi"))
+
+            }
+        }.store(in: &self.disposeBag)
 
     }
 
