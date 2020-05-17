@@ -73,7 +73,6 @@ class HomeViewController: UIViewController, UITextViewDelegate {
 
         // Initate federated cycle request
         if let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:5000")!) {
-        if let syftClient = SyftClient(url: URL(string: "ws://192.168.1.18:5000")!) {
 
             // Show loading UI
             self.connectButton.isHidden = true
