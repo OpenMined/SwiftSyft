@@ -24,8 +24,9 @@ If you're having any trouble, try updating `grid-gateway` in `docker-compose.yml
 
 The training plan can be created using the notebooks here: https://github.com/OpenMined/PySyft/tree/master/examples/experimental/FL%20Training%20Plan particularly the `Create Plan` and `Host Plan` notebooks.
 
-You are going to need to install PySyft on your Python environment to run them so follow the instructions here:
-https://github.com/OpenMined/PySyft/blob/dev/INSTALLATION.md
+You are going to need to install PySyft on your Python environment to run them so follow the instructions here: https://github.com/OpenMined/PySyft/blob/dev/INSTALLATION.md
+
+`SwiftSyft` currently supports version `0.2.5` of PySyft.
 
 ## Example App
 
