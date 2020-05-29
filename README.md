@@ -25,6 +25,9 @@ There are a variety of additional privacy-preserving protections that may be app
 
 If you want to know how scalable federated systems are built, [Towards Federated Learning at Scale](https://arxiv.org/pdf/1902.01046.pdf) is a fantastic introduction!
 
+## Installation
+We have not currently made our initial release. SwiftSyft would soon be available on Cocoapods.
+
 ## Development
 
 SwiftSyft's library structure was made using `pod lib create`. If you're not familiar with it, you can check out https://guides.cocoapods.org/making/using-pod-lib-create.
