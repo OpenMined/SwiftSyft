@@ -2,7 +2,7 @@
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
-![CI](https://img.shields.io/github/workflow/status/openmined/swiftsyft/SwiftSyft CI)
+![CI](https://img.shields.io/github/workflow/status/openmined/swiftsyft/SwiftSyft%CI)
 ![Licence](https://img.shields.io/github/license/openmined/swiftsyft)
 ![Contributors](https://img.shields.io/opencollective/all/openmined)
 
