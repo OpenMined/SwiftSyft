@@ -1,3 +1,8 @@
+
+![CI](https://img.shields.io/github/workflow/status/openmined/swiftsyft/SwiftSyft CI)
+![Licence](https://img.shields.io/github/license/openmined/swiftsyft)
+![Contributors](https://img.shields.io/opencollective/all/openmined)
+
 # SwiftSyft
 
 ## Development
