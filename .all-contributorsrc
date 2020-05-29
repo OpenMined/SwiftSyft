@@ -19,6 +19,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "mamuleanu",
+      "name": "Madalin Mamuleanu",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/10297451?v=4",
+      "profile": "https://github.com/mamuleanu",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
