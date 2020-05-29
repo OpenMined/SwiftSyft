@@ -40,71 +40,125 @@ As a developer, there are few steps to building your own secure federated learni
 You can use SwiftSyft as a front-end or as a background service. The following is a quick start example usage:
 
 ```swift
-        // Create a client with a PyGrid server URL
-        if let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:5000")!) {
 
-            // Create a new federated learning job with the model name and version
-            self.syftJob = syftClient.newJob(modelName: "mnist", version: "1.0.0")
+// This is a demonstration of how to use SwiftSyft with PyGrid to train a plan on local data on an iOS device
 
-            // This function is called when SwiftSyft has downloaded the plans and model parameters from PyGrid
-            // You are ready to train your model on your data
-            // plan - Use this to generate diffs using our training data
-            // clientConfig - contains the configuration for the training cycle (batchSize, learning rate) and metadata for the model (name, version)
-            // modelReport - Used as a completion block and reports the diffs to PyGrid.
-            self.syftJob?.onReady(execute: { plan, clientConfig, modelReport in
+// Create a client with a PyGrid server URL
+if let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:5000")!) {
 
-                do {
+    // Store the client as a property so it doesn't get deallocated during training.
+    self.syftClient = syftClient
 
-                    // This returns a lazily evaluated sequence for each MNIST image and the corresponding label
-                    // It divides the training data and the label by batches
-                    let (mnistData, labels) = try MNISTLoader.load(setType: .train, batchSize: clientConfig.batchSize)
+    // Create a new federated learning job with the model name and version
+    self.syftJob = syftClient.newJob(modelName: "mnist", version: "1.0.0")
 
-                    // Iterate through each batch of MNIST data and label
-                    for case let (batchData, labels) in zip(mnistData, labels) {
+    // This function is called when SwiftSyft has downloaded the plans and model parameters from PyGrid
+    // You are ready to train your model on your data
+    // plan - Use this to generate diffs using our training data
+    // clientConfig - contains the configuration for the training cycle (batchSize, learning rate) and metadata for the model (name, version)
+    // modelReport - Used as a completion block and reports the diffs to PyGrid.
+    self.syftJob?.onReady(execute: { plan, clientConfig, modelReport in
 
-                        // We need to create an autorelease pool to release the training data from memory after each loop
-                        try autoreleasepool {
+        do {
 
-                            // Preprocess MNIST data by flattening all of the MNIST batch data as a single array
-                            let flattenedBatch = MNISTLoader.flattenMNISTData(batchData)
-                            // Preprocess the label ( 0 to 9 ) by creating one-hot features and then flattening the entire thing
-                            let oneHotLabels = MNISTLoader.oneHotMNISTLabels(labels: labels).compactMap { Float($0)}
+            // This returns a lazily evaluated sequence for each MNIST image and the corresponding label
+            // It divides the training data and the label by batches
+            let (mnistData, labels) = try MNISTLoader.load(setType: .train, batchSize: clientConfig.batchSize)
 
-                            // Since we don't have native tensor wrappers in Swift yet, we use `TrainingData` and `ValidationData`
-                            // classes to store the data and shape.
-                            let trainingData = try TrainingData(data: flattenedBatch, shape: [clientConfig.batchSize, 784])
-                            let validationData = try ValidationData(data: oneHotLabels, shape: [clientConfig.batchSize, 10])
+            // Iterate through each batch of MNIST data and label
+            for case let (batchData, labels) in zip(mnistData, labels) {
 
-                            // Execute the plan with the training data and validation data. `plan.execute()` returns the loss and you can use
-                            // it if you want to (plan.execute() has the @discardableResult attribute)
-                            let loss = plan.execute(trainingData: trainingData, validationData: validationData, clientConfig: clientConfig)
+                // We need to create an autorelease pool to release the training data from memory after each loop
+                try autoreleasepool {
 
-                        }
+                    // Preprocess MNIST data by flattening all of the MNIST batch data as a single array
+                    let flattenedBatch = MNISTLoader.flattenMNISTData(batchData)
+                    // Preprocess the label ( 0 to 9 ) by creating one-hot features and then flattening the entire thing
+                    let oneHotLabels = MNISTLoader.oneHotMNISTLabels(labels: labels).compactMap { Float($0)}
 
-                    }
+                    // Since we don't have native tensor wrappers in Swift yet, we use `TrainingData` and `ValidationData`
+                    // classes to store the data and shape.
+                    let trainingData = try TrainingData(data: flattenedBatch, shape: [clientConfig.batchSize, 784])
+                    let validationData = try ValidationData(data: oneHotLabels, shape: [clientConfig.batchSize, 10])
 
-                    // Generate diff data and report the final diffs as 
-                    let diffStateData = try plan.generateDiffData()
-                    modelReport(diffStateData)
+                    // Execute the plan with the training data and validation data. `plan.execute()` returns the loss and you can use
+                    // it if you want to (plan.execute() has the @discardableResult attribute)
+                    let loss = plan.execute(trainingData: trainingData, validationData: validationData, clientConfig: clientConfig)
 
-                } catch let error {
-                    // Handle any error from the training cycle
-                    debugPrint(error.localizedDescription)
                 }
 
-            })
+            }
 
-            // This is the error handler for any job exeuction errors like connecting to PyGrid 
-            self.syftJob?.onError(execute: { error in
-                print(error)
-            })
+            // Generate diff data and report the final diffs as 
+            let diffStateData = try plan.generateDiffData()
+            modelReport(diffStateData)
 
-            // Start the job. You can set that the job should only execute if the device is being charge and there is a WiFi connection.
-            // These options are on by default if you don't specify them.
-            self.syftJob?.start(chargeDetection: true, wifiDetection: true)
-            self.syftClient = syftClient
+        } catch let error {
+            // Handle any error from the training cycle
+            debugPrint(error.localizedDescription)
         }
+
+    })
+
+    // This is the error handler for any job exeuction errors like connecting to PyGrid 
+    self.syftJob?.onError(execute: { error in
+        print(error)
+    })
+
+    // Start the job. You can set that the job should only execute if the device is being charge and there is a WiFi connection.
+    // These options are on by default if you don't specify them.
+    self.syftJob?.start(chargeDetection: true, wifiDetection: true)
+}
 ```
+
+### Running the Demo App
+The demo app fetches the plans, protocols and model weights from PyGrid server hosted locally. The plans are then deserialized and executed using libtorch.
+
+Follow these steps to setup an environment to run the demo app:
+
+- Clone the repo [PyGrid](https://github.com/OpenMined/PyGrid) and change directory to it
+```bash
+git clone https://github.com/OpenMined/PyGrid
+cd PyGrid
+```
+- Install [docker](https://github.com/OpenMined/PyGrid/#getting-started)
+- Install docker-compose.
+- Execute `docker-compose` in the command line to start pygrid server.
+```bash
+docker-compose up
+```
+
+- Install [PySyft](https://github.com/OpenMined/PySyft) `v0.2.5` in the virtual environment.
+```bash
+virtualenv -p python3 venv
+source venv/bin/activate
+pip install syft==0.2.5, jupyter==1.0.0, notebook==5.7.8
+```
+
+- Host Jupyter Notebook 
+```bash
+jupyter notebook
+```
+- Open a browser and navigate to [localhost:8888](http://localhost:8888/). You should be able to see the pysyft notebook console.
+- In the Jupyter Notebook, navigate to `examples/experimental/FL Training Plan`
+- Run the notebooks `Create Plan`. It should save three files in the `FL Training Plan` folder
+- Run the notebook `Host Plan`. Now PyGrid is setup and the model is hosted over it.
+
+```
+syft.base_url="<IP_address_from_step_16>:5000"
+```
+
+- Set-up demo project using Cocoapods
+- Install [Cocoapods](https://cocoapods.org/) 
+```bash
+gem install cocoapods
+```
+- Install the dependencies of the project.
+```bash
+pod install # On the root directory of this project
+```
+- Open the file `SwiftSyft.xcworkspace` in Xcode.
+- Run the `SwiftSyft` project. It automatically uses `127.0.0.1:5000` as the PyGrid URL.
 
 ## Development
 
