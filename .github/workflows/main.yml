@@ -21,6 +21,7 @@ jobs:
           cd Example
           pod repo update
           pod install
+          gem install slather
         shell: bash    
       - name: Build SwiftSyft project - ${{ matrix.destination }}
         run: | 
