@@ -3,8 +3,10 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 ![CI](https://img.shields.io/github/workflow/status/openmined/swiftsyft/SwiftSyft%20CI)
-![Licence](https://img.shields.io/github/license/openmined/swiftsyft)
+[![Coverage](https://codecov.io/gh/OpenMined/SwiftSyft/branch/master/graph/badge.svg)](https://codecov.io/gh/OpenMined/SwiftSyft)
+![License](https://img.shields.io/github/license/openmined/swiftsyft)
 ![Contributors](https://img.shields.io/opencollective/all/openmined)
+![OpenCollective](https://img.shields.io/opencollective/all/openmined)
 
 # SwiftSyft
 
