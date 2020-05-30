@@ -54,7 +54,9 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      codeCoverageEnabled = "YES"
+      onlyGenerateCoverageForSpecifiedTargets = "YES">
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
@@ -64,6 +66,15 @@
             ReferencedContainer = "container:SwiftSyft.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <CodeCoverageTargets>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "2D5A6AF628AF6E47ABD60798349E5620"
+            BuildableName = "libSwiftSyft.a"
+            BlueprintName = "SwiftSyft"
+            ReferencedContainer = "container:../Pods/Pods.xcodeproj">
+         </BuildableReference>
+      </CodeCoverageTargets>
       <Testables>
          <TestableReference
             skipped = "YES">
