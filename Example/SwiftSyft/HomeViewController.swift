@@ -11,16 +11,16 @@ import SwiftSyft
 import Combine
 
 enum StaticHomeScreenStrings {
-    static let headerDescription = "syft.js/grid.js testing"
+    static let headerDescription = "SwiftSyft Testing"
     static let description = """
-            This is a demo using @SwiftSyft@ from @OpenMined@ to execute a multi-worker protocol hosted on grid.js
+        This is a demonstration of how to use @SwiftSyft@ with @PyGrid@ to train a plan on local data on an iOS device.
     """
     static let swiftSyft = "SwiftSyft"
     static let swiftSyftKey = "@SwiftSyft@"
     static let swiftSyftURL = "https://github.com/OpenMined/SwiftSyft"
-    static let openMined = "OpenMined"
-    static let openMinedKey = "@OpenMined@"
-    static let openMinedURL = "https://github.com/OpenMined/PyGrid/"
+    static let pygrid = "PyGrid"
+    static let pygridKey = "@PyGrid@"
+    static let pygridURL = "https://github.com/OpenMined/PyGrid/"
     static let socketURL = "ws://127.0.0.1:3000" // "wss://localhost:3000/"
     static let connectButtonText = "Connect to PyGrid server"
 }
@@ -57,9 +57,9 @@ class HomeViewController: UIViewController, UITextViewDelegate {
             .fillInLink(StaticHomeScreenStrings.swiftSyftKey,
                         with: StaticHomeScreenStrings.swiftSyft,
                         url: StaticHomeScreenStrings.swiftSyftURL)
-            .fillInLink(StaticHomeScreenStrings.openMinedKey,
-                        with: StaticHomeScreenStrings.openMined,
-                        url: StaticHomeScreenStrings.openMinedURL)
+            .fillInLink(StaticHomeScreenStrings.pygridKey,
+                        with: StaticHomeScreenStrings.pygrid,
+                        url: StaticHomeScreenStrings.pygridURL)
 
         socketURLTextField.text = StaticHomeScreenStrings.socketURL
     }
