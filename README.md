@@ -107,16 +107,16 @@ if let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:5000")!) {
         debugPrint(error.localizedDescription)
     }
 
-})
+  })
 
-// This is the error handler for any job exeuction errors like connecting to PyGrid 
-self.syftJob?.onError(execute: { error in
+  // This is the error handler for any job exeuction errors like connecting to PyGrid 
+  self.syftJob?.onError(execute: { error in
     print(error)
-})
+  })
 
-// Start the job. You can set that the job should only execute if the device is being charge and there is 
-// a WiFi connection. These options are on by default if you don't specify them.
-self.syftJob?.start(chargeDetection: true, wifiDetection: true)
+  // Start the job. You can set that the job should only execute if the device is being charge and there is 
+  // a WiFi connection. These options are on by default if you don't specify them.
+  self.syftJob?.start(chargeDetection: true, wifiDetection: true)
 }
 ```
 
