@@ -1,0 +1,11 @@
+coverage_service: cobertura_xml
+workspace: SwiftSyft.xcworkspace
+xcodeproj: ./Example/SwiftSyft.xcodeproj
+scheme: SwiftSyft-Example
+output_directory: ./
+ignore:
+  - Pods/*
+  - Example/*
+  - Example-Background/*
+  - Tests/*
+
