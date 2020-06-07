@@ -53,6 +53,9 @@ Pod::Spec.new do |s|
   
   s.test_spec 'Tests' do |test_spec|
     test_spec.source_files = 'Tests/*.swift'
+
+    test_spec.resources = 'Tests/*.json'
+    test_spec.dependency 'OHHTTPStubs/Swift'
   end
 
 end
