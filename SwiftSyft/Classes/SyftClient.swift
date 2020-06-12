@@ -288,7 +288,6 @@ public class SyftJob: SyftJobProtocol {
                 let (cycleResponseSuccess, workerId) = cycleResponse
                 return self.downloadPlan(forWorkerId: workerId, planId: cycleResponseSuccess.planConfig.planId, requestKey: cycleResponseSuccess.requestKey)
             }
-//            .tryMap { try SyftProto_Types_Torch_V1_ScriptModule(serializedData: $0) }
             .tryMap { try SyftProto_Execution_V1_Plan(serializedData: $0) }
             .tryMap { torchScriptPlan -> String in
 
@@ -430,8 +429,6 @@ public class SyftJob: SyftJobProtocol {
                                    sendMessageSubject: PassthroughSubject<SignallingMessagesRequest, Never>,
                                    receiveMessagePublisher: AnyPublisher<SignallingMessagesResponse, Never>, authToken: String?) {
 
-        sendMessageSubject.send(.authRequest(authToken: authToken))
-
         // Authentication -> Connection Metrics -> Cycle Request
         receiveMessagePublisher.filter { socketMessageResponse -> Bool in
             switch socketMessageResponse {
@@ -458,7 +455,16 @@ public class SyftJob: SyftJobProtocol {
 
             return self.getConnectionMetrics(workerId: workerId)
 
-        }.sink(receiveCompletion: { _ in }, receiveValue: { (result) in
+        }.sink(receiveCompletion: { [unowned self] completionResult in
+
+            switch completionResult {
+            case .finished:
+                break
+            case .failure(let error):
+                self.onErrorBlock(error)
+            }
+
+        }, receiveValue: { (result) in
             let (workerId, connectionMetrics) = result
 
             let cycleRequest = CycleRequest(workerId: workerId, model: self.modelName, version: self.version, ping: String(connectionMetrics.ping), download: String(connectionMetrics.downloadSpeed), upload: String(connectionMetrics.uploadSpeed))
@@ -467,7 +473,16 @@ public class SyftJob: SyftJobProtocol {
         }).store(in: &self.disposeBag)
 
         // Cycle Request Response -> Start Plan and model
-        receiveMessagePublisher.sink(receiveCompletion: { _ in }, receiveValue: { cycleRequestResponse in
+        receiveMessagePublisher.sink(receiveCompletion: { [unowned self] completionResult in
+
+            switch completionResult {
+            case .finished:
+                break
+            case .failure(let error):
+                self.onErrorBlock(error)
+            }
+
+        }, receiveValue: { cycleRequestResponse in
             switch cycleRequestResponse {
             case .cycleRequestResponse(let result):
                 switch result {
@@ -485,6 +500,9 @@ public class SyftJob: SyftJobProtocol {
                 break
             }
         }).store(in: &disposeBag)
+
+        sendMessageSubject.send(.authRequest(authToken: authToken))
+
     }
 
     public func reportDiff(diffData: Data) {
