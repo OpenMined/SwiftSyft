@@ -153,12 +153,35 @@ extension SyftProto_Execution_V1_State {
 
                 let (stateTensor, paramsArray) = args
                 var copyStateTensor = stateTensor
-                var tensorDataCopy = copyStateTensor.torchTensor.contentsData
-                tensorDataCopy.contentsFloat32 = paramsArray as [Float32]
-                copyStateTensor.torchTensor.contentsData = tensorDataCopy
+
+                // Replace old params array with new updated params
+                switch copyStateTensor.tensor {
+                case .torchTensor(var tensor):
+                    switch tensor.contents {
+                    case .contentsData(var tensorHolder):
+                        tensorHolder.contentsFloat32 = paramsArray as [Float32]
+                        tensor.contents = .contentsData(tensorHolder)
+                        copyStateTensor.tensor = .torchTensor(tensor)
+                    default:
+                        break
+                    }
+                case .torchParam(var torchParam):
+
+                    switch torchParam.tensor.contents {
+                    case .contentsData(var tensorHolder):
+                        tensorHolder.contentsFloat32 = paramsArray as [Float32]
+                        torchParam.tensor.contents = .contentsData(tensorHolder)
+                        copyStateTensor.tensor = .torchParam(torchParam)
+                    default:
+                        break
+                    }
+                case nil:
+                    break
+                }
+
                 return copyStateTensor
 
-            }
+        }
 
         copy.tensors = updatedParamTensors
 
