@@ -73,6 +73,9 @@ std::map<int, at::ScalarType> tensorTypeMap = {{1, at::kInt}, {2, at::kInt}, {3,
                                         batchSize:(void *)batchSize
                                      learningRate:(void *)learningRate {
 
+    at::AutoNonVariableTypeMode nonVarTypeModeGuard(true);
+    torch::autograd::AutoGradMode guard(false);
+
     torch::jit::script::Module planModel = torch::jit::load(self.torchScriptFilePath.UTF8String);
 
     std::vector<torch::jit::IValue> modelArgs;
@@ -84,6 +87,7 @@ std::map<int, at::ScalarType> tensorTypeMap = {{1, at::kInt}, {2, at::kInt}, {3,
     }
 
     at::Tensor trainingDataTensor = torch::from_blob(trainingDataArray, trainingDataVectorShape, tensorTypeMap[trainingDataTypeInt]);
+
     modelArgs.push_back(trainingDataTensor);
 
     // Push training label vectors
@@ -107,6 +111,8 @@ std::map<int, at::ScalarType> tensorTypeMap = {{1, at::kInt}, {2, at::kInt}, {3,
 
     NSInteger paramArrayLength = [paramTensorsHolder.tensorPointerValues count];
 
+    std::vector<at::Tensor> modelParams;
+
     for (NSInteger index = 0; index < paramArrayLength; index++) {
         NSValue *tensorPointerValue = paramTensorsHolder.tensorPointerValues[index];
         void *tensorPointer = [tensorPointerValue pointerValue];
@@ -123,9 +129,11 @@ std::map<int, at::ScalarType> tensorTypeMap = {{1, at::kInt}, {2, at::kInt}, {3,
 
         at::Tensor paramsTensor = torch::from_blob(tensorPointer, shapes, tensorType);
 
-        modelArgs.push_back(paramsTensor);
+        modelParams.push_back(paramsTensor);
 
     }
+
+    modelArgs.push_back(modelParams);
 
     auto outputs = planModel.forward(modelArgs);
 
