@@ -127,7 +127,7 @@ class HTTPAuthenticationTests: XCTestCase {
         }
         self.noTokenJob.start(chargeDetection: false, wifiDetection: false)
 
-        wait(for: [authNoTokenExpectation], timeout: 5)
+        wait(for: [authNoTokenExpectation], timeout: 7)
 
     }
 
@@ -145,10 +145,10 @@ class HTTPAuthenticationTests: XCTestCase {
         }
         self.invalidTokenJob.start(chargeDetection: false, wifiDetection: false)
 
-        wait(for: [authInvalidExpectation], timeout: 5)
+        wait(for: [authInvalidExpectation], timeout: 7)
     }
 
-    func test_with_auth_valid_token() {
+    func testWithAuthValidToken() {
 
         authMode = .withAuthentication
 
