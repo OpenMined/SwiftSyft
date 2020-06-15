@@ -48,7 +48,7 @@ Pod::Spec.new do |s|
   s.dependency 'LibTorch', '~> 1.5.0'
   s.dependency 'GoogleWebRTC', '~> 1.1.0'
   #s.dependency 'SyftProto', '0.2.9.a1' # TODO: Change this when official syft-proto comes out
-  s.dependency 'SyftProto', '0.4.4' # TODO: Change this when official syft-proto comes out
+  s.dependency 'SyftProto', '0.4.7' # TODO: Change this when official syft-proto comes out
 
   
   s.test_spec 'Tests' do |test_spec|

@@ -26,13 +26,13 @@ PODS:
   - SwiftSyft (0.1.0):
     - GoogleWebRTC (~> 1.1.0)
     - LibTorch (~> 1.5.0)
-    - SyftProto (= 0.4.4)
+    - SyftProto (= 0.4.7)
   - SwiftSyft/Tests (0.1.0):
     - GoogleWebRTC (~> 1.1.0)
     - LibTorch (~> 1.5.0)
     - OHHTTPStubs/Swift
-    - SyftProto (= 0.4.4)
-  - SyftProto (0.4.4):
+    - SyftProto (= 0.4.7)
+  - SyftProto (0.4.7):
     - SwiftProtobuf (~> 1.8.0)
 
 DEPENDENCIES:
@@ -62,8 +62,8 @@ SPEC CHECKSUMS:
   OHHTTPStubs: cb29d2a9d09a828ecb93349a2b0c64f99e0db89f
   SwiftLint: 8f5d2f903e1c9bcbc832fd16771e80a263ac6cbb
   SwiftProtobuf: 2cbd9409689b7df170d82a92a33443c8e3e14a70
-  SwiftSyft: 2d16398447df31a93319986aae68bae0e349b351
-  SyftProto: e99313e9fbc4d94d456dcef7ca967254ebf5155e
+  SwiftSyft: d1002b80298d64e2df0f84b5d18d8872dc0d3058
+  SyftProto: 4ab6fa7d4e435d3d62a19847c65ed57502127d2a
 
 PODFILE CHECKSUM: c230b5a22b496f49d6d35334a75d3894e9b16f70
 
