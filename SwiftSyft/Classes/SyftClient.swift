@@ -37,18 +37,20 @@ public class SyftClient: SyftClientProtocol {
     private let url: URL
     private let signallingClient: SignallingClient?
     private let connectionType: SyftConnectionType
+    private var authToken: String?
 
-    init?(url: URL, connectionType: SyftConnectionType, signallingClient: SignallingClient? = nil) {
+    init?(url: URL, connectionType: SyftConnectionType, authToken: String? = nil, signallingClient: SignallingClient? = nil) {
         self.signallingClient = signallingClient
         self.url = url
+        self.authToken = authToken
         self.connectionType = connectionType
     }
 
-    convenience public init?(url: URL) {
+    convenience public init?(url: URL, authToken: String? = nil) {
 
         if url.scheme == "http" {
 
-            self.init(url: url, connectionType: .http(url))
+            self.init(url: url, connectionType: .http(url), authToken: authToken)
 
         } else if url.scheme == "ws" {
 
@@ -56,7 +58,8 @@ public class SyftClient: SyftClientProtocol {
             signallingClient.connect()
             let connectionType: SyftConnectionType = .socket(url: url,
                                                              sendMessageSubject: signallingClient.sendMessageSubject, receiveMessagePublisher: signallingClient.incomingMessagePublisher)
-            self.init(url: url, connectionType: connectionType, signallingClient: signallingClient)
+//            self.init(url: url, connectionType: connectionType, signallingClient: signallingClient)
+            self.init(url: url, connectionType: connectionType, authToken: authToken, signallingClient: signallingClient)
 
         } else {
             return nil
@@ -68,7 +71,8 @@ public class SyftClient: SyftClientProtocol {
 
         return SyftJob(connectionType: self.connectionType,
                        modelName: modelName,
-                       version: version)
+                       version: version,
+                       authToken: self.authToken)
     }
 }
 
@@ -81,6 +85,7 @@ public class SyftJob: SyftJobProtocol {
     var requestKey: String?
     let modelName: String
     let version: String
+    var authToken: String?
     private let connectionType: SyftConnectionType
 
     // Must be populated on `start`
@@ -96,10 +101,11 @@ public class SyftJob: SyftJobProtocol {
 
     private let monitor = NWPathMonitor()
 
-    init(connectionType: SyftConnectionType, modelName: String, version: String) {
+    init(connectionType: SyftConnectionType, modelName: String, version: String, authToken: String? = nil) {
         self.modelName = modelName
         self.version = version
         self.connectionType = connectionType
+        self.authToken = authToken
 
         switch connectionType {
         case let .http(url):
@@ -166,11 +172,11 @@ public class SyftJob: SyftJobProtocol {
 
                 switch self.connectionType {
                 case .http(let url):
-                    self.startThroughHTTP(url: url, authToken: nil)
+                    self.startThroughHTTP(url: url, authToken: self.authToken)
                 case let .socket(url, sendMessageSubject, receiveMessagePublisher):
                     self.startThroughSocket(url: url,
                                             sendMessageSubject: sendMessageSubject,
-                                            receiveMessagePublisher: receiveMessagePublisher, authToken: nil)
+                                            receiveMessagePublisher: receiveMessagePublisher, authToken: self.authToken)
                 }
 
             } else {
@@ -191,6 +197,7 @@ public class SyftJob: SyftJobProtocol {
         if let authToken = authToken {
             let authRequestBody = AuthRequest(authToken: authToken)
             let encoder = JSONEncoder()
+            encoder.keyEncodingStrategy = .convertToSnakeCase
             do {
                 let authBodyData = try encoder.encode(authRequestBody)
                 authRequest.httpBody = authBodyData
@@ -281,7 +288,6 @@ public class SyftJob: SyftJobProtocol {
                 let (cycleResponseSuccess, workerId) = cycleResponse
                 return self.downloadPlan(forWorkerId: workerId, planId: cycleResponseSuccess.planConfig.planId, requestKey: cycleResponseSuccess.requestKey)
             }
-//            .tryMap { try SyftProto_Types_Torch_V1_ScriptModule(serializedData: $0) }
             .tryMap { try SyftProto_Execution_V1_Plan(serializedData: $0) }
             .tryMap { torchScriptPlan -> String in
 
@@ -423,8 +429,6 @@ public class SyftJob: SyftJobProtocol {
                                    sendMessageSubject: PassthroughSubject<SignallingMessagesRequest, Never>,
                                    receiveMessagePublisher: AnyPublisher<SignallingMessagesResponse, Never>, authToken: String?) {
 
-        sendMessageSubject.send(.authRequest(authToken: authToken))
-
         // Authentication -> Connection Metrics -> Cycle Request
         receiveMessagePublisher.filter { socketMessageResponse -> Bool in
             switch socketMessageResponse {
@@ -451,7 +455,16 @@ public class SyftJob: SyftJobProtocol {
 
             return self.getConnectionMetrics(workerId: workerId)
 
-        }.sink(receiveCompletion: { _ in }, receiveValue: { (result) in
+        }.sink(receiveCompletion: { [unowned self] completionResult in
+
+            switch completionResult {
+            case .finished:
+                break
+            case .failure(let error):
+                self.onErrorBlock(error)
+            }
+
+        }, receiveValue: { (result) in
             let (workerId, connectionMetrics) = result
 
             let cycleRequest = CycleRequest(workerId: workerId, model: self.modelName, version: self.version, ping: String(connectionMetrics.ping), download: String(connectionMetrics.downloadSpeed), upload: String(connectionMetrics.uploadSpeed))
@@ -460,7 +473,16 @@ public class SyftJob: SyftJobProtocol {
         }).store(in: &self.disposeBag)
 
         // Cycle Request Response -> Start Plan and model
-        receiveMessagePublisher.sink(receiveCompletion: { _ in }, receiveValue: { cycleRequestResponse in
+        receiveMessagePublisher.sink(receiveCompletion: { [unowned self] completionResult in
+
+            switch completionResult {
+            case .finished:
+                break
+            case .failure(let error):
+                self.onErrorBlock(error)
+            }
+
+        }, receiveValue: { cycleRequestResponse in
             switch cycleRequestResponse {
             case .cycleRequestResponse(let result):
                 switch result {
@@ -478,6 +500,9 @@ public class SyftJob: SyftJobProtocol {
                 break
             }
         }).store(in: &disposeBag)
+
+        sendMessageSubject.send(.authRequest(authToken: authToken))
+
     }
 
     public func reportDiff(diffData: Data) {

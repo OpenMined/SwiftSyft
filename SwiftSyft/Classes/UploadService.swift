@@ -45,6 +45,13 @@ class UploadService: NSObject, URLSessionDataDelegate, URLSessionTaskDelegate {
         stopTime = CFAbsoluteTimeGetCurrent()
     }
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+
+        // This is for unit tests where the stub returns status code 200 immediately
+        // and will not trigger `urlsession(session:task:didSendBodyData)` anymore.
+        if stopTime == nil {
+            stopTime = CFAbsoluteTimeGetCurrent()
+        }
+
         let elapsed = stopTime - startTime
         if let tempError = error as NSError?, tempError.domain != NSURLErrorDomain && tempError.code != NSURLErrorTimedOut && elapsed == 0 {
             uploadCompletionBlock?(nil, error)

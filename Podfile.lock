@@ -8,6 +8,19 @@ PODS:
   - LibTorch/Core (1.5.0):
     - LibTorch/Torch
   - LibTorch/Torch (1.5.0)
+  - OHHTTPStubs/Core (9.0.0)
+  - OHHTTPStubs/Default (9.0.0):
+    - OHHTTPStubs/Core
+    - OHHTTPStubs/JSON
+    - OHHTTPStubs/NSURLSession
+    - OHHTTPStubs/OHPathHelpers
+  - OHHTTPStubs/JSON (9.0.0):
+    - OHHTTPStubs/Core
+  - OHHTTPStubs/NSURLSession (9.0.0):
+    - OHHTTPStubs/Core
+  - OHHTTPStubs/OHPathHelpers (9.0.0)
+  - OHHTTPStubs/Swift (9.0.0):
+    - OHHTTPStubs/Default
   - SwiftLint (0.38.2)
   - SwiftProtobuf (1.8.0)
   - SwiftSyft (0.1.0):
@@ -17,6 +30,7 @@ PODS:
   - SwiftSyft/Tests (0.1.0):
     - GoogleWebRTC (~> 1.1.0)
     - LibTorch (~> 1.5.0)
+    - OHHTTPStubs/Swift
     - SyftProto (= 0.4.7)
   - SyftProto (0.4.7):
     - SwiftProtobuf (~> 1.8.0)
@@ -32,6 +46,7 @@ SPEC REPOS:
     - Charts
     - GoogleWebRTC
     - LibTorch
+    - OHHTTPStubs
     - SwiftLint
     - SwiftProtobuf
     - SyftProto
@@ -44,9 +59,10 @@ SPEC CHECKSUMS:
   Charts: 40a08591df1f8ad5c223ddedfb1a06da92f24f7c
   GoogleWebRTC: cfb83bc346435a17fe06bb05f04ad826b858a7fb
   LibTorch: 6752ffb58ea396b672a2df6f14970bdbc7219de4
+  OHHTTPStubs: cb29d2a9d09a828ecb93349a2b0c64f99e0db89f
   SwiftLint: 8f5d2f903e1c9bcbc832fd16771e80a263ac6cbb
   SwiftProtobuf: 2cbd9409689b7df170d82a92a33443c8e3e14a70
-  SwiftSyft: e448b082db563c9e2f019c63e328ae09fe609446
+  SwiftSyft: d1002b80298d64e2df0f84b5d18d8872dc0d3058
   SyftProto: 4ab6fa7d4e435d3d62a19847c65ed57502127d2a
 
 PODFILE CHECKSUM: c230b5a22b496f49d6d35334a75d3894e9b16f70
