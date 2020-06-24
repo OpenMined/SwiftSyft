@@ -56,6 +56,7 @@ Pod::Spec.new do |s|
 
     test_spec.resources = 'Tests/Resources/*.{json,proto}'
     test_spec.dependency 'OHHTTPStubs/Swift'
+    test_spec.requires_app_host = true
   end
 
 end
