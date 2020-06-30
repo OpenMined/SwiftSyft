@@ -45,7 +45,7 @@ extension CycleResponse: Decodable {
 
 }
 
-public struct CycleResponseSuccess: Decodable {
+struct CycleResponseSuccess: Decodable {
     let status: String
     let requestKey: String
     let model: String
@@ -63,7 +63,7 @@ public struct CycleResponseSuccess: Decodable {
     }
 }
 
-public extension CycleResponseSuccess {
+extension CycleResponseSuccess {
 
     init(from decoder: Decoder) throws {
 
