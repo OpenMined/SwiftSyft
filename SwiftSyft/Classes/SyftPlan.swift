@@ -5,9 +5,13 @@ struct SwiftSyftError: LocalizedError {
     var localizedDescription: String
 }
 
+/// Contains tensor data information to be use for training/validation.
 public class TensorData<T> {
 
+    /// Tensor data as a one dimensional array
     public var data: [T]
+
+    /// Shape of the tensor
     public let shape: [Int]
     let tensorType: TensorType
 
@@ -19,6 +23,10 @@ public class TensorData<T> {
                                                 ObjectIdentifier(Double.self): TensorType.double,
                                                 ObjectIdentifier(Bool.self): TensorType.bool]
 
+    /// Initialize a tensor to be used for training/validation in `SwiftSyft`
+    /// - Parameters:
+    ///   - data: tensor data as a 1D array. Must be a floating point type or an integer type
+    ///   - shape: an array of integers defining the shape of the tensor
     public init(data: [T], shape: [Int]) throws {
         self.data = data
         self.shape = shape
@@ -30,9 +38,13 @@ public class TensorData<T> {
     }
 }
 
+/// Tensor data used for training only. To be passed to `SyftPlan.execute()`
 public class TrainingData<T>: TensorData<T> { }
+
+/// Tensor data used for validation only. To be passed to `SyftPlan.execute()`
 public class ValidationData<T>: TensorData<T> { }
 
+/// Holds the training script to be used for training your data and generating diffs
 public class SyftPlan {
 
     private let trainingModule: TorchTrainingModule
@@ -45,6 +57,12 @@ public class SyftPlan {
         self.updatedModelState = modelState
     }
 
+    /// Executes the model received from PyGrid on your training and validation data.
+    /// Loop through your entire training data and call this method to update the model parameters received from PyGrid.
+    /// - Parameters:
+    ///   - trainingData: tensor data used for training
+    ///   - validationData: tensor data used for validation
+    ///   - clientConfig: contains training parameters (batch size and learning rate)
     @discardableResult public func execute<T, U>(trainingData: TrainingData<T>, validationData: ValidationData<U>, clientConfig: FederatedClientConfig) -> Float {
 
         var trainingDataCopy = trainingData
@@ -84,6 +102,8 @@ public class SyftPlan {
     }
     // swiftlint:enable force_cast
 
+    /// Calculates difference between the original model parameters received from PyGrid and the updated model parameters generated from running this plan
+    /// on your training and validation data. This diff data will be passed to the model report closure to send it to PyGrid.
     public func generateDiffData() throws -> Data {
 
         let originalParamsHolder = self.originalModelState.getTensorData()
