@@ -19,6 +19,8 @@ enum SyftConnectionType {
     }
 }
 
+
+/// Error struct that contains errors from the training cycle
 public struct SyftClientError: Error {
     let message: String
 
@@ -86,8 +88,11 @@ public class SyftClient: SyftClientProtocol {
     }
 }
 
-public typealias ModelReport = (Data) -> Void
+/// Closure that accepts a diff from `SyftPlan.generateDiffData()`
+/// - parameter diffData: diff data from `SyftPlan.generateDiffData()`.
+public typealias ModelReport = (_ diffData: Data) -> Void
 
+/// Represents a single training cycle done by the client
 public class SyftJob: SyftJobProtocol {
 
     let url: URL
@@ -103,8 +108,8 @@ public class SyftJob: SyftJobProtocol {
     let ping: String = "8"
     let upload: String = "23"
 
-    var onReadyBlock: (SyftPlan, FederatedClientConfig, ModelReport) -> Void = { _, _, _ in }
-    var onErrorBlock: (Error) -> Void = { _ in }
+    var onReadyBlock: (_ plan: SyftPlan, _ clientConfig: FederatedClientConfig, _ report: ModelReport) -> Void = { _, _, _ in }
+    var onErrorBlock: (_ error: Error) -> Void = { _ in }
 
     private var cyclePublisher: AnyPublisher<(SyftPlan, FederatedClientConfig), Error>?
     private var disposeBag = Set<AnyCancellable>()
@@ -162,7 +167,15 @@ public class SyftJob: SyftJobProtocol {
 
     }
 
-    /// Request to join a federated learning cycle at "federated/cycle-request" endpoint (https://github.com/OpenMined/PyGrid/issues/445)
+    /// Starts the job executing the following actions:
+    /// 1. Meters connection speed to PyGrid
+    /// 2. Registers into training cycle on PyGrid
+    /// 3. Retrieves cycle and client parameters.
+    /// 4. Downloads Plans, Model and Protocols.
+    /// 5. Triggers `onReady` handler
+    /// - Parameters:
+    ///   - chargeDetection: Specifies whether to check if device is charging before continuing job execution. Default is `true`.
+    ///   - wifiDetection: Specifies whether to have wifi connection before continuing job execution. Default is `true`.
     public func start(chargeDetection: Bool = true, wifiDetection: Bool = true) {
 
         // Continue if battery charging check is false or if true, check that the device is indeed charging
@@ -515,7 +528,7 @@ public class SyftJob: SyftJobProtocol {
 
     }
 
-    public func reportDiff(diffData: Data) {
+    func reportDiff(diffData: Data) {
 
         guard let workerId = self.workerId, let requestKey = self.requestKey else {
             return
@@ -549,11 +562,20 @@ public class SyftJob: SyftJobProtocol {
         }
     }
 
-    public func onReady(execute: @escaping (SyftPlan, FederatedClientConfig, ModelReport) -> Void) {
+    /// Registers a closure to execute when the job is accepted into a training cycle.
+    /// - Parameter execute: Closure that accepts the training plan (`SyftPlan`), training configuration (`FederatedClientConfig`) and reporting closure (`ModelReport`).
+    /// All of these objects will be used during training.
+    /// - parameter plan: `SyftPlan` use this to train your model and generate diffs
+    /// - parameter clientConfig: contains training configuration such as batch size and learning rate.
+    /// - parameter report: closure that accepts diffs as `Data` and sends them to PyGrid.
+    public func onReady(execute: @escaping (_ plan: SyftPlan, _ clientConfig: FederatedClientConfig, _ report: ModelReport) -> Void) {
         self.onReadyBlock = execute
     }
 
-    public func onError(execute: @escaping (Error) -> Void) {
+    /// Registers a closure to execute whenever an error occurs during training cycle
+    /// - Parameter execute: closure to execute during training cycle
+    /// - parameter error: contains information about error that occurred
+    public func onError(execute: @escaping (_ error: Error) -> Void) {
         self.onErrorBlock = execute
     }
 
