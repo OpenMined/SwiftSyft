@@ -33,6 +33,7 @@ struct SyftConnectionMetrics {
     let downloadSpeed: Double
 }
 
+/// Syft client for static federated learning
 public class SyftClient: SyftClientProtocol {
     private let url: URL
     private let signallingClient: SignallingClient?
@@ -46,6 +47,10 @@ public class SyftClient: SyftClientProtocol {
         self.connectionType = connectionType
     }
 
+    /// Initializes as `SyftClient` with a PyGrid server URL and an authentication token (if needed)
+    /// - Parameters:
+    ///   - url: Full URL to a PyGrid server (`ws`(websocket) and `http` protocols suppported)
+    ///   - authToken: PyGrid authentication token
     convenience public init?(url: URL, authToken: String? = nil) {
 
         if url.scheme == "http" {
@@ -67,6 +72,11 @@ public class SyftClient: SyftClientProtocol {
 
     }
 
+    /// Creates a new federated learning cycle job with the given options
+    /// - Parameters:
+    ///   - modelName: Model name as it is stored in the PyGrid server you are connecting to
+    ///   - version: Version of the model (ex. 1.0)
+    /// - Returns: `SyftJob`
     public func newJob(modelName: String, version: String) -> SyftJob {
 
         return SyftJob(connectionType: self.connectionType,
