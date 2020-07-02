@@ -120,6 +120,10 @@ if let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:5000")!) {
 }
 ```
 
+### API Documenation
+
+See [API Documenation](Documentation/Reference/README.md) for complete reference.
+
 ### Running the Demo App
 The demo app fetches the plans, protocols and model weights from PyGrid server hosted locally. The plans are then deserialized and executed using libtorch.
 
