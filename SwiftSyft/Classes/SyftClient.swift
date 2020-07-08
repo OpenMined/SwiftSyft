@@ -543,6 +543,9 @@ public class SyftJob: SyftJobProtocol {
         self.onErrorBlock = execute
     }
 
+    /// Registers a closure to execute whenever an error occurs during training cycle
+    /// - Parameter execute: closure to execute during training cycle
+    /// - parameter timeout: how long you need to wait before trying again
     public func onRejected(execute: @escaping (TimeInterval?) -> Void) {
         self.onRejectedBlock = execute
     }
