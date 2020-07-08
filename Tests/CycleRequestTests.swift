@@ -11,13 +11,23 @@ import OHHTTPStubs
 
 class CycleRequestTests: XCTestCase {
 
-    var modelExists: Bool = false
+    enum CycleRequestResult {
+        case success
+        case noModel
+        case rejectedWithTimeout
+    }
+
+    var cycleRequestResult: CycleRequestResult!
 
     var cycleAcceptClient: SyftClient!
     var cycleAcceptJob: SyftJob!
 
     var cycleRejectClient: SyftClient!
     var cycleRejectJob: SyftJob!
+
+    var cycleRejectTimeoutClient: SyftClient!
+    var cycleRejectTimeoutJob: SyftJob!
+
 
     override func setUp() {
 
@@ -40,18 +50,20 @@ class CycleRequestTests: XCTestCase {
                 return HTTPStubsResponse(error: URLError.init(URLError.Code.cancelled))
             }
 
-            if self.modelExists {
-
+            switch self.cycleRequestResult {
+            case .success:
                 let responseFilePath = OHPathForFile("cycle-request.json", type(of: self))!
-
                 return HTTPStubsResponse(fileAtPath: responseFilePath, statusCode: 200, headers: nil)
-
-            } else {
+            case .noModel:
+                let responseFilePath = OHPathForFile("cycle-request-rejected-no-model.json", type(of: self))!
+                return HTTPStubsResponse(fileAtPath: responseFilePath, statusCode: 200, headers: nil)
+            case .rejectedWithTimeout:
                 let responseFilePath = OHPathForFile("cycle-request-rejected.json", type(of: self))!
-
                 return HTTPStubsResponse(fileAtPath: responseFilePath, statusCode: 200, headers: nil)
+            case nil:
+                return HTTPStubsResponse(error: URLError.init(URLError.Code.cancelled))
+                XCTFail("Set cycle request appropriate result before testing")
             }
-
         }
 
         stub(condition: isHost("test.com") && isPath("/federated/get-model")) { _ -> HTTPStubsResponse in
@@ -74,7 +86,7 @@ class CycleRequestTests: XCTestCase {
 
     func testCycleAccepted() {
 
-        modelExists = true
+        cycleRequestResult = .success
 
         let cycleAcceptedExpectation = expectation(description: "test cycle request successful")
 
@@ -94,14 +106,14 @@ class CycleRequestTests: XCTestCase {
 
     func testCycleRejected() {
 
-        modelExists = false
+        cycleRequestResult = .noModel
 
         let cycleRejectedExpectation = expectation(description: "test cycle request rejected")
 
         self.cycleRejectClient = SyftClient(url: URL(string: "http://test.com:5000")!)!
         self.cycleRejectJob = self.cycleRejectClient.newJob(modelName: "mnist", version: "1.0")
 
-        self.cycleRejectJob.onError { _ in
+        self.cycleRejectJob.onRejected { _ in
             cycleRejectedExpectation.fulfill()
         }
 
@@ -110,6 +122,27 @@ class CycleRequestTests: XCTestCase {
         wait(for: [cycleRejectedExpectation], timeout: 7)
         
     }
+
+    func testCycleRejectedWithTimeout() {
+
+        cycleRequestResult = .rejectedWithTimeout
+
+        let cycleRejectedExpectation = expectation(description: "test cycle request rejected")
+
+        self.cycleRejectTimeoutClient = SyftClient(url: URL(string: "http://test.com:5000")!)!
+        self.cycleRejectTimeoutJob = self.cycleRejectTimeoutClient.newJob(modelName: "mnist", version: "1.0")
+
+        self.cycleRejectTimeoutJob.onRejected { timeout in
+            XCTAssert(timeout! == 10)
+            cycleRejectedExpectation.fulfill()
+        }
+
+        self.cycleRejectTimeoutJob.start(chargeDetection: false, wifiDetection: false)
+
+        wait(for: [cycleRejectedExpectation], timeout: 7)
+
+    }
+
 
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.

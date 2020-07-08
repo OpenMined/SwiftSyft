@@ -214,17 +214,8 @@ public class SyftJob: SyftJobProtocol {
                                 .map { $0.data }
                                 .decode(type: AuthResponse.self, decoder: decoder)
                                 .map({ $0.workerId })
+                                .handleEvents(receiveOutput: { [unowned self] workerId in self.workerId = workerId})
                                 .eraseToAnyPublisher()
-
-        // Save workerId
-        authPublisher.sink(receiveCompletion: { _ in },
-                           receiveValue: { [weak self] workerId in
-                                                guard let self = self else {
-                                                    return
-                                                }
-
-                                                self.workerId = workerId
-                                         }).store(in: &disposeBag)
 
         // Auth response -> Get Ping/Downoad/Upload Speed -> Cycle Request
         let cycleResponsePublisher = authPublisher
@@ -234,7 +225,12 @@ public class SyftJob: SyftJobProtocol {
                                         .flatMap { [unowned self] (result) -> AnyPublisher<(cycleResponse: CycleResponseSuccess, workerId: String), Error> in
                                             let (workerId, connectionMetrics) = result
                                             return self.cycleRequest(forWorkerId: workerId, connectionMetrics: connectionMetrics)
-                                        }.eraseToAnyPublisher()
+                                        }
+                                        .handleEvents(receiveOutput: { [unowned self] cycleResponse in
+                                            let (cycleResponseSuccess, _) = cycleResponse
+                                            self.requestKey = cycleResponseSuccess.requestKey
+                                        })
+                                        .eraseToAnyPublisher()
 
         self.startPlanAndModelDownload(withCycleResponse: cycleResponsePublisher)
 
@@ -307,45 +303,24 @@ public class SyftJob: SyftJobProtocol {
             }
             .map { TorchTrainingModule(fileAtPath: $0) }
 
-        cycleResponsePublisher.sink(receiveCompletion: { [unowned self] completionResult in
-
-            switch completionResult {
-            case .failure(let error):
-                switch error {
-                case let error as CycleResponseFailed where error.status == "rejected":
-
-                    guard let timeout = error.timeout else {
-                        self.onRejectedBlock(nil)
-                        return
-                    }
-
-                    self.onRejectedBlock(TimeInterval(timeout))
-                default:
-                    self.onErrorBlock(error)
-                }
-            case .finished:
-                break
-            }
-
-        }, receiveValue: { [weak self] (cycleResponse) in
-
-            guard let self = self else {
-                return
-            }
-
-            // Save request key
-            let (cycleResponseSuccess, _) = cycleResponse
-            self.requestKey = cycleResponseSuccess.requestKey
-        }).store(in: &disposeBag)
-
         clientConfigPublisher.zip(planPublisher, modelParamPublisher)
-            .sink(receiveCompletion: { [weak self] completion in
+            .sink(receiveCompletion: { [unowned self] completion in
                 switch completion {
                 case .finished:
-                    print("finished")
+                    break
                 case .failure(let error):
-                    self?.onErrorBlock(error)
-                    print(error.localizedDescription)
+                    switch error {
+                    case let error as CycleResponseFailed where error.status == "rejected":
+
+                        guard let timeout = error.timeout else {
+                            self.onRejectedBlock(nil)
+                            return
+                        }
+
+                        self.onRejectedBlock(TimeInterval(timeout))
+                    default:
+                        self.onErrorBlock(error)
+                    }
                 }
             }, receiveValue: { [weak self] (clientConfig, trainingModule, modelParam) in
                 let syftPlan = SyftPlan(trainingModule: trainingModule, modelState: modelParam)
