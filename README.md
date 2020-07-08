@@ -191,7 +191,11 @@ You can work on the project by running `pod install` in the root directory. Then
 5. Push your fork
 6. Submit a PR to OpenMined/SwiftSyft
 
-Read the [contribution guide](https://github.com/OpenMined/.github/blob/master/CONTRIBUTING.md) as a good starting place. Additionally, we welcome you to the [slack](http://slack.openmined.org/) for queries related to the library and contribution in general. The Slack channel `#lib_swift_syft` is specific to SwiftSyft development, the Slack channel `#lib_syft_mobile` is meant for both Android and iOS teams. See you there! 
+Read the [contribution guide](https://github.com/OpenMined/.github/blob/master/CONTRIBUTING.md) as a good starting place. 
+
+### Support
+
+For support in using this library, please join the **#lib_swift_syft** Slack channel. If you'd like to follow along with any code changes to the library, please join **#code_swiftsyft** Slack channel. [Click here to join our Slack Community!](https://slack.openmined.org)
 
 ## License
 [Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/)
