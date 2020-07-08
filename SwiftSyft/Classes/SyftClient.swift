@@ -95,6 +95,7 @@ public class SyftJob: SyftJobProtocol {
 
     var onReadyBlock: (SyftPlan, FederatedClientConfig, ModelReport) -> Void = { _, _, _ in }
     var onErrorBlock: (Error) -> Void = { _ in }
+    var onRejectedBlock: (TimeInterval?) -> Void = { _ in }
 
     private var cyclePublisher: AnyPublisher<(SyftPlan, FederatedClientConfig), Error>?
     private var disposeBag = Set<AnyCancellable>()
@@ -306,13 +307,33 @@ public class SyftJob: SyftJobProtocol {
             }
             .map { TorchTrainingModule(fileAtPath: $0) }
 
-        // Save request key
-        cycleResponsePublisher.sink(receiveCompletion: { _ in }, receiveValue: { [weak self] (cycleResponse) in
+        cycleResponsePublisher.sink(receiveCompletion: { [unowned self] completionResult in
+
+            switch completionResult {
+            case .failure(let error):
+                switch error {
+                case let error as CycleResponseFailed where error.status == "rejected":
+
+                    guard let timeout = error.timeout else {
+                        self.onRejectedBlock(nil)
+                        return
+                    }
+
+                    self.onRejectedBlock(TimeInterval(timeout))
+                default:
+                    self.onErrorBlock(error)
+                }
+            case .finished:
+                break
+            }
+
+        }, receiveValue: { [weak self] (cycleResponse) in
 
             guard let self = self else {
                 return
             }
 
+            // Save request key
             let (cycleResponseSuccess, _) = cycleResponse
             self.requestKey = cycleResponseSuccess.requestKey
         }).store(in: &disposeBag)
@@ -545,6 +566,10 @@ public class SyftJob: SyftJobProtocol {
 
     public func onError(execute: @escaping (Error) -> Void) {
         self.onErrorBlock = execute
+    }
+
+    public func onRejected(execute: @escaping (TimeInterval?) -> Void) {
+        self.onRejectedBlock = execute
     }
 
 }
