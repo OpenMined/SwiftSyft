@@ -126,6 +126,9 @@ A mini tutorial on how to run `SwiftSyft` on iOS using the background task sched
 
 ### Running the Demo App
 The demo app fetches the plans, protocols and model weights from PyGrid server hosted locally. The plans are then deserialized and executed using libtorch.
+<p align="center">
+<img src="openmined_assets/swiftsyft_demo.gif" height="354">
+</p>
 
 Follow these steps to setup an environment to run the demo app:
 
