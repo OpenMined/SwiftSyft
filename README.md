@@ -1,4 +1,4 @@
-![SwiftSyft-logo](openmined_logo.png)
+![SwiftSyft-logo](openmined_assets/openmined_logo.png)
 ![CI](https://img.shields.io/github/workflow/status/openmined/swiftsyft/SwiftSyft%20CI)
 [![Coverage](https://codecov.io/gh/OpenMined/SwiftSyft/branch/master/graph/badge.svg)](https://codecov.io/gh/OpenMined/SwiftSyft)
 ![License](https://img.shields.io/github/license/openmined/swiftsyft)
