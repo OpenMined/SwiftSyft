@@ -17,7 +17,7 @@ internal class PingChecker: NSObject {
     /// - parameters:
     ///     - hostname: The hostname to ping. It can be a domain or an IP Address.
     ///     - resultCallback: The result callback. Check PingCheckerCallback for the callback type.
-    public static func pingHostname(hostname: String, resultCallback callback: PingCheckerCallback?) {
+    static func pingHostname(hostname: String, resultCallback callback: PingCheckerCallback?) {
         singletonPingChecker.pingHostname(hostname: hostname, resultCallback: callback)
     }
     /// This method checks the latency between the device and a hostname.
@@ -29,7 +29,7 @@ internal class PingChecker: NSObject {
     ///     - hostname: The hostname to ping. It can be a domain or an IP Address.
     /// - returns:
     ///   A publisher that produces one UInt16 value or fails if the hostname is unreachable.
-    public static func pingHostname(hostname: String) -> Future<UInt16, Error> {
+    static func pingHostname(hostname: String) -> Future<UInt16, Error> {
          let pingFuture = Future<UInt16, Error> { promise in
                  pingHostname(hostname: hostname) { latency in
                      guard let latencyMS = latency else {
@@ -51,28 +51,28 @@ internal class PingChecker: NSObject {
 
 extension PingChecker: SimplePingDelegate {
     // Simple Ping delegate methods
-    public func simplePing(_ pinger: SimplePing, didStartWithAddress address: Data) {
+    func simplePing(_ pinger: SimplePing, didStartWithAddress address: Data) {
         pinger.send(with: nil)
     }
-    public func simplePing(_ pinger: SimplePing, didFailWithError error: Error) {
+    func simplePing(_ pinger: SimplePing, didFailWithError error: Error) {
         pingResultCallback?(nil)
     }
 
-    public func simplePing(_ pinger: SimplePing, didSendPacket packet: Data, sequenceNumber: UInt16) {
+    func simplePing(_ pinger: SimplePing, didSendPacket packet: Data, sequenceNumber: UInt16) {
         referenceDate = Date()
     }
 
-    public func simplePing(pinger: SimplePing!, _ didFailToSendPacket: NSData!, error: NSError!) {
+    func simplePing(pinger: SimplePing!, _ didFailToSendPacket: NSData!, error: NSError!) {
         pinger.stop()
         pingResultCallback?(nil)
     }
 
-    public func simplePing(_ pinger: SimplePing, didReceiveUnexpectedPacket packet: Data) {
+    func simplePing(_ pinger: SimplePing, didReceiveUnexpectedPacket packet: Data) {
         pinger.stop()
         pingResultCallback?(nil)
     }
 
-    public func simplePing(_ pinger: SimplePing, didReceivePingResponsePacket packet: Data, sequenceNumber: UInt16) {
+    func simplePing(_ pinger: SimplePing, didReceivePingResponsePacket packet: Data, sequenceNumber: UInt16) {
        pinger.stop()
        guard let referencedate = referenceDate else { return }
        let latency = UInt16(Date().timeIntervalSince(referencedate) * 1000)

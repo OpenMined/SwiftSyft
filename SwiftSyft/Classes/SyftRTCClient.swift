@@ -18,7 +18,7 @@ class SyftRTCClient {
 
     }
 
-    public convenience init (socketURL: URL, workerId: UUID, scopeId: UUID) {
+    convenience init (socketURL: URL, workerId: UUID, scopeId: UUID) {
 
         let signallingClient = SignallingClient(url: socketURL, pingInterval: 30)
 
@@ -38,7 +38,7 @@ class SyftRTCClient {
 
     }
 
-    public func connect() {
+    func connect() {
         self.signallingClient.connect()
         self.signallingClient.send(.getProtocolRequest(workerId: self.workerId, scopeId: self.scopeId, protocolId: "50801316202"))
     }
