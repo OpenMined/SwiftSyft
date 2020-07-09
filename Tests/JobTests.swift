@@ -21,6 +21,8 @@ class JobTests: XCTestCase {
     var diffReportClient: SyftClient!
     var diffReportJob: SyftJob!
 
+    var diffExpectation: XCTestExpectation!
+
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
 
@@ -64,6 +66,15 @@ class JobTests: XCTestCase {
             return HTTPStubsResponse(fileAtPath: responseFilePath, statusCode: 200, headers: nil)
 
         }
+
+        stub(condition: isHost("test.com") && isPath("/federated/report")) { _ -> HTTPStubsResponse in
+
+            self.diffExpectation.fulfill()
+
+            return HTTPStubsResponse(data: Data(), statusCode: 200, headers: nil)
+
+        }
+
 
     }
 
@@ -124,6 +135,20 @@ class JobTests: XCTestCase {
     // TODO: Wait for PyTorch fix to run in simulator: https://github.com/pytorch/pytorch/issues/32040
     func testModelDiffReport() {
 
+        self.diffExpectation = XCTestExpectation(description: "Test if diff was reported")
+
+        self.diffReportClient = SyftClient(url: URL(string: "http://test.com:5000")!)!
+        self.diffReportJob = self.diffReportClient.newJob(modelName: "mnist", version: "1.0")
+
+        self.diffReportJob.onReady { (_, _, report) in
+
+            report(Data())
+
+        }
+
+        self.diffReportJob.start(chargeDetection: false, wifiDetection: false)
+
+        wait(for: [self.diffExpectation], timeout: 7)
     }
     
     override func tearDown() {
