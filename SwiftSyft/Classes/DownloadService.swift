@@ -8,10 +8,10 @@ class DownloadService: NSObject, URLSessionDelegate, URLSessionDataDelegate {
     var stopTime: CFAbsoluteTime!
     var bytesReceived: Int!
     private static let defaultTimeout: Double = 60
-    public override init() {
+    override init() {
         super.init()
     }
-    public func downloadSpeedWithDefaultTimeOut(url:URL) -> Future<Double, Error> {
+    func downloadSpeedWithDefaultTimeOut(url: URL) -> Future<Double, Error> {
         let downloadFuture = Future<Double, Error> { promise in
             self.testDownloadSpeedWithTimout(url:url, timeout: DownloadService.defaultTimeout) { (speed, error) in
                 guard let speedMBPS = speed else {
@@ -23,7 +23,7 @@ class DownloadService: NSObject, URLSessionDelegate, URLSessionDataDelegate {
         }
         return downloadFuture
     }
-    func testDownloadSpeedWithTimout(url:URL, timeout: TimeInterval, withCompletionBlock: @escaping SpeedTestCompletionHandler) {
+    func testDownloadSpeedWithTimout(url: URL, timeout: TimeInterval, withCompletionBlock: @escaping SpeedTestCompletionHandler) {
         startTime = CFAbsoluteTimeGetCurrent()
         stopTime = startTime
         bytesReceived = 0
@@ -45,5 +45,5 @@ class DownloadService: NSObject, URLSessionDelegate, URLSessionDataDelegate {
         }
         let speed = elapsed != 0 ? Double(bytesReceived) / elapsed / 1024.0 / 1024.0 : -1
         speedTestCompletionBlock?(speed, nil)
-    }    
+    }
 }

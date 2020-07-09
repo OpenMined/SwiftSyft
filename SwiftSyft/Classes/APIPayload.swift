@@ -45,7 +45,7 @@ extension CycleResponse: Decodable {
 
 }
 
-public struct CycleResponseSuccess: Decodable {
+struct CycleResponseSuccess: Decodable {
     let status: String
     let requestKey: String
     let model: String
@@ -63,7 +63,7 @@ public struct CycleResponseSuccess: Decodable {
     }
 }
 
-public extension CycleResponseSuccess {
+extension CycleResponseSuccess {
 
     init(from decoder: Decoder) throws {
 
@@ -112,10 +112,17 @@ extension CycleResponseFailed {
 
 }
 
+/// Configuration value that contains details regarding the model used for the training cycle
+/// and the training configuration.
 public struct FederatedClientConfig: Codable {
+
+    /// Name of the model received from PyGrid
     public let name: String
+    /// Version of the model received from PyGrid
     public let version: String
+    /// Size of batch used for training the model
     public let batchSize: Int
+    /// Learning rate used for training the model
     public let learningRate: Float
     public let maxUpdates: Int
 

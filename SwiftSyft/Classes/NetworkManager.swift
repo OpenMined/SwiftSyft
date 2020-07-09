@@ -17,7 +17,7 @@ class NetworkManager {
     ///  port: the port of PyGrid (It  can be nil if not applicable)
     ///  - returns:
     ///  An instance of NetworkManager class
-    public init(url:String, port:Int?){
+    init(url:String, port:Int?){
         guard let pyGridPort = port else {
             self.endPoint = url
             return
@@ -35,7 +35,7 @@ class NetworkManager {
     /// workerId
     ///  - returns:
     ///  A publisher that produces a Double value or fails if the host is unreachable.
-    public func downloadSpeedTest(workerId:String) -> Future<Double, Error> {
+    func downloadSpeedTest(workerId:String) -> Future<Double, Error> {
         let url = buildUrl(workerId: workerId)
         return self.downloadService.downloadSpeedWithDefaultTimeOut(url: url)
    }
@@ -46,7 +46,7 @@ class NetworkManager {
     /// workerId
     ///  - returns:
     ///  A publisher that produces a Double value or fails if the host is unreachable.
-    public func uploadSpeedTest(workerId:String) -> Future<Double, Error> {
+    func uploadSpeedTest(workerId:String) -> Future<Double, Error> {
         let url = buildUrl(workerId: workerId)
         return self.uploadService.startUploadtest(url, fileSize: NetworkManager.defaultFileSize)
     }
@@ -57,7 +57,7 @@ class NetworkManager {
     /// workerId
     ///  - returns:
     ///  A publisher that produces a Double value or fails if the host is unreachable.
-    public func speedTest(workerId:String) -> Publishers.Zip<Future<Double, Error>, Future<Double, Error>>{
+    func speedTest(workerId:String) -> Publishers.Zip<Future<Double, Error>, Future<Double, Error>>{
         let url = buildUrl(workerId: workerId)
         return Publishers.Zip(self.downloadService.downloadSpeedWithDefaultTimeOut(url: url),
                         self.uploadService.startUploadtest(url, fileSize: NetworkManager.defaultFileSize)
