@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'OpenMinedSwiftSyft'
   s.module_name      = 'SwiftSyft'
-  s.version          = '0.1.0'
+  s.version          = '0.1.0-beta1'
   s.summary          = 'The official Syft worker for iOS, built in Swift.'
 
 # This description is used to generate tags and improve search results.
@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
   s.homepage         = 'https://github.com/OpenMined/SwiftSyft'
   s.license          = { :type => 'Apache 2.0', :file => 'LICENSE' }
   s.author           = { 'OpenMined' => 'author@openmined.com' }
-  s.source           = { :git => 'https://github.com/OpenMined/SwiftSyft.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/OpenMined/SwiftSyft.git', :tag => "v#{s.version.to_s}" }
 
   s.pod_target_xcconfig = { 'ENABLE_BITCODE' => 'NO' }
   s.ios.deployment_target = '13.0'
