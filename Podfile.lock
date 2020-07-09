@@ -21,25 +21,25 @@ PODS:
   - OHHTTPStubs/OHPathHelpers (9.0.0)
   - OHHTTPStubs/Swift (9.0.0):
     - OHHTTPStubs/Default
-  - SwiftLint (0.38.2)
-  - SwiftProtobuf (1.8.0)
-  - SwiftSyft (0.1.0):
+  - OpenMinedSwiftSyft (0.1.0):
     - GoogleWebRTC (~> 1.1.0)
     - LibTorch (~> 1.5.0)
     - SyftProto (= 0.4.7)
-  - SwiftSyft/Tests (0.1.0):
+  - OpenMinedSwiftSyft/Tests (0.1.0):
     - GoogleWebRTC (~> 1.1.0)
     - LibTorch (~> 1.5.0)
     - OHHTTPStubs/Swift
     - SyftProto (= 0.4.7)
+  - SwiftLint (0.38.2)
+  - SwiftProtobuf (1.8.0)
   - SyftProto (0.4.7):
     - SwiftProtobuf (~> 1.8.0)
 
 DEPENDENCIES:
   - Charts
+  - OpenMinedSwiftSyft (from `.`)
+  - OpenMinedSwiftSyft/Tests (from `.`)
   - SwiftLint (~> 0.38.0)
-  - SwiftSyft (from `.`)
-  - SwiftSyft/Tests (from `.`)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -52,7 +52,7 @@ SPEC REPOS:
     - SyftProto
 
 EXTERNAL SOURCES:
-  SwiftSyft:
+  OpenMinedSwiftSyft:
     :path: "."
 
 SPEC CHECKSUMS:
@@ -60,11 +60,11 @@ SPEC CHECKSUMS:
   GoogleWebRTC: cfb83bc346435a17fe06bb05f04ad826b858a7fb
   LibTorch: 6752ffb58ea396b672a2df6f14970bdbc7219de4
   OHHTTPStubs: cb29d2a9d09a828ecb93349a2b0c64f99e0db89f
+  OpenMinedSwiftSyft: 081e80900e38e09023970d2f866baece45408b70
   SwiftLint: 8f5d2f903e1c9bcbc832fd16771e80a263ac6cbb
   SwiftProtobuf: 2cbd9409689b7df170d82a92a33443c8e3e14a70
-  SwiftSyft: e9f1a379f6dae73c8af7d4823862681755aecdc9
   SyftProto: 4ab6fa7d4e435d3d62a19847c65ed57502127d2a
 
-PODFILE CHECKSUM: c230b5a22b496f49d6d35334a75d3894e9b16f70
+PODFILE CHECKSUM: 64f244727d3ccbde48ae1b9659ba642815f878ec
 
 COCOAPODS: 1.9.3
