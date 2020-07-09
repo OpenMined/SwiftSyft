@@ -1,2 +1,5 @@
-{"status": "rejected", "error": "Not found any process related with this cycle and worker ID.Traceback (most recent call last):\n  File \"/app/grid/app/main/events/fl_events.py\", line 127, in cycle_request\n    last_participation = processes.last_cycle(worker_id, name, version)\n  File \"/app/grid/app/main/controller/fl_controller.py\", line 76, in last_cycle\n    process = process_manager.first(name=name, version=version)\n  File \"/app/grid/app/main/processes/process_manager.py\", line 161, in first\n    raise ProcessFoundError\ngrid.app.main.exceptions.ProcessFoundError: Not found any process related with this cycle and worker ID.\n"}
+{"status": "rejected",
+ "error": "Some error",
+ "timeout": 10
+}
 

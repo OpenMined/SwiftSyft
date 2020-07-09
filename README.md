@@ -114,6 +114,15 @@ if let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:5000")!) {
     print(error)
   })
 
+  // This is the error handler for being rejected in a cycle. You can retry again
+  // after the suggested timeout.
+  self.syftJob?.onRejected(execute: { timeout in
+      if let timeout = timeout {
+          // Retry again after timeout
+          print(timeout)
+      }
+  })
+
   // Start the job. You can set that the job should only execute if the device is being charge and there is 
   // a WiFi connection. These options are on by default if you don't specify them.
   self.syftJob?.start(chargeDetection: true, wifiDetection: true)
