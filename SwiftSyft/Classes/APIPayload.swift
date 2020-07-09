@@ -87,7 +87,7 @@ extension CycleResponseSuccess {
     }
 }
 
-public struct CycleResponseFailed: Codable, Error {
+struct CycleResponseFailed: Codable, Error {
     let status: String
     var timeout: Int?
     var error: String?
@@ -101,7 +101,7 @@ public struct CycleResponseFailed: Codable, Error {
 
 extension CycleResponseFailed {
 
-    public init(from decoder: Decoder) throws {
+    init(from decoder: Decoder) throws {
 
         let container = try decoder.container(keyedBy: CodingKeys.self)
         status = try container.decode(String.self, forKey: .status)
