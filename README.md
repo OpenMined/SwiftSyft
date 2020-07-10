@@ -1,4 +1,4 @@
-![SwiftSyft-logo](openmined_logo.png)
+![SwiftSyft-logo](openmined_assets/openmined_logo.png)
 ![CI](https://img.shields.io/github/workflow/status/openmined/swiftsyft/SwiftSyft%20CI)
 [![Coverage](https://codecov.io/gh/OpenMined/SwiftSyft/branch/master/graph/badge.svg)](https://codecov.io/gh/OpenMined/SwiftSyft)
 ![License](https://img.shields.io/github/license/openmined/swiftsyft)
@@ -114,6 +114,15 @@ if let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:5000")!) {
     print(error)
   })
 
+  // This is the error handler for being rejected in a cycle. You can retry again
+  // after the suggested timeout.
+  self.syftJob?.onRejected(execute: { timeout in
+      if let timeout = timeout {
+          // Retry again after timeout
+          print(timeout)
+      }
+  })
+
   // Start the job. You can set that the job should only execute if the device is being charge and there is 
   // a WiFi connection. These options are on by default if you don't specify them.
   self.syftJob?.start(chargeDetection: true, wifiDetection: true)
@@ -130,6 +139,9 @@ A mini tutorial on how to run `SwiftSyft` on iOS using the background task sched
 
 ### Running the Demo App
 The demo app fetches the plans, protocols and model weights from PyGrid server hosted locally. The plans are then deserialized and executed using libtorch.
+<p align="center">
+<img src="openmined_assets/swiftsyft_demo.gif" height="354">
+</p>
 
 Follow these steps to setup an environment to run the demo app:
 
@@ -192,7 +204,11 @@ You can work on the project by running `pod install` in the root directory. Then
 5. Push your fork
 6. Submit a PR to OpenMined/SwiftSyft
 
-Read the [contribution guide](https://github.com/OpenMined/.github/blob/master/CONTRIBUTING.md) as a good starting place. Additionally, we welcome you to the [slack](http://slack.openmined.org/) for queries related to the library and contribution in general. The Slack channel `#lib_swift_syft` is specific to SwiftSyft development, the Slack channel `#lib_syft_mobile` is meant for both Android and iOS teams. See you there! 
+Read the [contribution guide](https://github.com/OpenMined/.github/blob/master/CONTRIBUTING.md) as a good starting place. 
+
+### Support
+
+For support in using this library, please join the **#lib_swift_syft** Slack channel. If you'd like to follow along with any code changes to the library, please join **#code_swiftsyft** Slack channel. [Click here to join our Slack Community!](https://slack.openmined.org)
 
 ## License
 [Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/)

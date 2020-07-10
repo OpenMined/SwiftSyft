@@ -8,6 +8,7 @@
   - `start(chargeDetection:wifiDetection:)`
   - `onReady(execute:)`
   - `onError(execute:)`
+  - `onRejected(execute:)`
 
 ```swift
 public class SyftJob: SyftJobProtocol
@@ -77,3 +78,20 @@ Registers a closure to execute whenever an error occurs during training cycle
 | ---- | ----------- |
 | execute | closure to execute during training cycle |
 | error | contains information about error that occurred |
+
+### `onRejected(execute:)`
+
+```swift
+public func onRejected(execute: @escaping (_ timeout: TimeInterval?) -> Void)
+```
+
+Registers a closure to execute whenever an error occurs during training cycle
+- Parameter execute: closure to execute during training cycle
+- parameter timeout: how long you need to wait before trying again
+
+#### Parameters
+
+| Name | Description |
+| ---- | ----------- |
+| execute | closure to execute during training cycle |
+| timeout | how long you need to wait before trying again |
