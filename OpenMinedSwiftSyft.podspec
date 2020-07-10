@@ -48,9 +48,7 @@ Pod::Spec.new do |s|
   # s.frameworks = 'UIKit', 'MapKit'
   s.dependency 'LibTorch', '~> 1.5.0'
   s.dependency 'GoogleWebRTC', '~> 1.1.0'
-  #s.dependency 'SyftProto', '0.2.9.a1' # TODO: Change this when official syft-proto comes out
-  s.dependency 'SyftProto', '0.4.7' # TODO: Change this when official syft-proto comes out
-
+  s.dependency 'SyftProto', '0.4.9'
   
   s.test_spec 'Tests' do |test_spec|
     test_spec.source_files = 'Tests/*.swift'
