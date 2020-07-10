@@ -10,6 +10,7 @@ jobs:
 
     runs-on: macos-latest
     name: Create API documentation
+    if: github.event_name == 'release' && !failure()
 
     steps:
       - uses: actions/checkout@v2
@@ -35,6 +36,7 @@ jobs:
     needs: documentation
     runs-on: macos-latest
     name: Publish this version to Cocoapods
+    if: github.event_name == 'release' && !failure()
 
     steps:
       - uses: actions/checkout@v2
