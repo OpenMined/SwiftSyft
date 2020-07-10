@@ -52,7 +52,7 @@ extension SignallingClient: SignallingClientProtocol {
         do {
             let encoder = JSONEncoder()
             let data = try encoder.encode(message)
-            self.socketClient.send(data: data)
+            self.socketClient.sendText(text: String(data: data, encoding: .utf8)!)
         } catch let error {
             debugPrint(error.localizedDescription)
         }
