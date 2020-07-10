@@ -157,11 +157,11 @@ cd PyGrid
 docker-compose up
 ```
 
-- Install [PySyft](https://github.com/OpenMined/PySyft) `v0.2.5` in the virtual environment.
+- Install [PySyft](https://github.com/OpenMined/PySyft) `v0.2.7` in the virtual environment.
 ```bash
 virtualenv -p python3 venv
 source venv/bin/activate
-pip install syft==0.2.5, jupyter==1.0.0, notebook==5.7.8
+pip install syft==0.2.7, jupyter==1.0.0, notebook==5.7.8
 ```
 
 - Host Jupyter Notebook 
@@ -169,8 +169,7 @@ pip install syft==0.2.5, jupyter==1.0.0, notebook==5.7.8
 jupyter notebook
 ```
 - Open a browser and navigate to [localhost:8888](http://localhost:8888/). You should be able to see the pysyft notebook console.
-- In the Jupyter Notebook, navigate to `examples/experimental/FL Training Plan`
-- Run the notebooks `Create Plan`. It should save three files in the `FL Training Plan` folder
+- In the Jupyter Notebook, navigate to `examples/tutorials/static-fl/FL Training Plan`
 - Run the notebook `Host Plan`. Now PyGrid is setup and the model is hosted over it.
 
 ```
