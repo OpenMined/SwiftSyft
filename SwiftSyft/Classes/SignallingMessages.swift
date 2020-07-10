@@ -3,7 +3,7 @@ import Foundation
 
 enum SignallingMessagesRequest {
     // Federated Learning
-    case authRequest(authToken: String?)
+    case authRequest(authToken: String?, modelName: String, modelVersion: String)
     case cycleRequest(CycleRequest)
     case modelReport(FederatedReport)
 
@@ -23,6 +23,8 @@ enum SignallingMessagesRequest {
         case scopeId
         case protocolId
         case authToken = "auth_token"
+        case modelName = "model_name"
+        case modelVersion = "model_version"
         case diff
     }
 }
@@ -227,12 +229,12 @@ extension SignallingMessagesRequest: Encodable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         switch self {
-        case .authRequest(let authToken):
+        case .authRequest(let authToken, let modelName, let modelVersion):
             try container.encode("federated/authenticate", forKey: .type)
-            if let authToken = authToken {
-                var dataPayloadContainer = container.nestedContainer(keyedBy: DataPayloadCodingKeys.self, forKey: .data)
-                try dataPayloadContainer.encode(authToken, forKey: .authToken)
-            }
+            var dataPayloadContainer = container.nestedContainer(keyedBy: DataPayloadCodingKeys.self, forKey: .data)
+            try dataPayloadContainer.encodeIfPresent(authToken, forKey: .authToken)
+            try dataPayloadContainer.encode(modelName, forKey: .modelName)
+            try dataPayloadContainer.encode(modelVersion, forKey: .modelVersion)
         case .cycleRequest(let cycleRequest):
             try container.encode("federated/cycle-request", forKey: .type)
             var dataPayloadContainer = container.nestedContainer(keyedBy: CycleRequest.CodingKeys.self, forKey: .data)

@@ -14,6 +14,7 @@
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		BE4D0A602453302E0013DD79 /* LossChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4D0A5F2453302E0013DD79 /* LossChartViewController.swift */; };
+		BED313F724B70495005F2E95 /* OpenMinedSwiftSyft.podspec in Resources */ = {isa = PBXBuildFile; fileRef = BED313F624B70495005F2E95 /* OpenMinedSwiftSyft.podspec */; };
 		BEDCA17B243236FC007747A5 /* train-images-idx3-ubyte in Resources */ = {isa = PBXBuildFile; fileRef = BEDCA177243236FC007747A5 /* train-images-idx3-ubyte */; };
 		BEDCA17C243236FC007747A5 /* t10k-labels-idx1-ubyte in Resources */ = {isa = PBXBuildFile; fileRef = BEDCA178243236FC007747A5 /* t10k-labels-idx1-ubyte */; };
 		BEDCA17D243236FC007747A5 /* t10k-images-idx3-ubyte in Resources */ = {isa = PBXBuildFile; fileRef = BEDCA179243236FC007747A5 /* t10k-images-idx3-ubyte */; };
@@ -33,7 +34,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3797A10E8295C82119A0AC21 /* SwiftSyft.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = SwiftSyft.podspec; path = ../SwiftSyft.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		3F48219C9B34CBEFE3051365 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		490BD72B6F91240C69E2BA37 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* SwiftSyft_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftSyft_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -48,6 +48,7 @@
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		7BC01F94C28529D588A96676 /* libPods-SwiftSyft_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SwiftSyft_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE4D0A5F2453302E0013DD79 /* LossChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LossChartViewController.swift; sourceTree = "<group>"; };
+		BED313F624B70495005F2E95 /* OpenMinedSwiftSyft.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; fileEncoding = 4; name = OpenMinedSwiftSyft.podspec; path = ../OpenMinedSwiftSyft.podspec; sourceTree = "<group>"; };
 		BEDCA177243236FC007747A5 /* train-images-idx3-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; path = "train-images-idx3-ubyte"; sourceTree = "<group>"; };
 		BEDCA178243236FC007747A5 /* t10k-labels-idx1-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; path = "t10k-labels-idx1-ubyte"; sourceTree = "<group>"; };
 		BEDCA179243236FC007747A5 /* t10k-images-idx3-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; path = "t10k-images-idx3-ubyte"; sourceTree = "<group>"; };
@@ -150,7 +151,7 @@
 		607FACF51AFB993E008FA782 /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
-				3797A10E8295C82119A0AC21 /* SwiftSyft.podspec */,
+				BED313F624B70495005F2E95 /* OpenMinedSwiftSyft.podspec */,
 				490BD72B6F91240C69E2BA37 /* README.md */,
 				3F48219C9B34CBEFE3051365 /* LICENSE */,
 			);
@@ -266,6 +267,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BED313F724B70495005F2E95 /* OpenMinedSwiftSyft.podspec in Resources */,
 				BEDCA17D243236FC007747A5 /* t10k-images-idx3-ubyte in Resources */,
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,

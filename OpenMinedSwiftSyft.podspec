@@ -7,8 +7,9 @@
 #
 
 Pod::Spec.new do |s|
-  s.name             = 'SwiftSyft'
-  s.version          = '0.1.0'
+  s.name             = 'OpenMinedSwiftSyft'
+  s.module_name      = 'SwiftSyft'
+  s.version          = '0.1.0-beta1'
   s.summary          = 'The official Syft worker for iOS, built in Swift.'
 
 # This description is used to generate tags and improve search results.
@@ -25,7 +26,7 @@ Pod::Spec.new do |s|
   s.homepage         = 'https://github.com/OpenMined/SwiftSyft'
   s.license          = { :type => 'Apache 2.0', :file => 'LICENSE' }
   s.author           = { 'OpenMined' => 'author@openmined.com' }
-  s.source           = { :git => 'https://github.com/OpenMined/SwiftSyft.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/OpenMined/SwiftSyft.git', :tag => "v#{s.version.to_s}" }
 
   s.pod_target_xcconfig = { 'ENABLE_BITCODE' => 'NO' }
   s.ios.deployment_target = '13.0'
@@ -47,9 +48,7 @@ Pod::Spec.new do |s|
   # s.frameworks = 'UIKit', 'MapKit'
   s.dependency 'LibTorch', '~> 1.5.0'
   s.dependency 'GoogleWebRTC', '~> 1.1.0'
-  #s.dependency 'SyftProto', '0.2.9.a1' # TODO: Change this when official syft-proto comes out
-  s.dependency 'SyftProto', '0.4.7' # TODO: Change this when official syft-proto comes out
-
+  s.dependency 'SyftProto', '0.4.9'
   
   s.test_spec 'Tests' do |test_spec|
     test_spec.source_files = 'Tests/*.swift'

@@ -90,9 +90,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7A7F2EE98B0DF16CF0A3FD5DE5FECB4A"
-               BuildableName = "SwiftSyft-Unit-Tests.xctest"
-               BlueprintName = "SwiftSyft-Unit-Tests"
+               BlueprintIdentifier = "CC7DD5E16FD32D85A43ED117F38C298D"
+               BuildableName = "OpenMinedSwiftSyft-Unit-Tests.xctest"
+               BlueprintName = "OpenMinedSwiftSyft-Unit-Tests"
                ReferencedContainer = "container:../Pods/Pods.xcodeproj">
             </BuildableReference>
          </TestableReference>

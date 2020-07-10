@@ -49,8 +49,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // This is a demonstration of how to use SwiftSyft with PyGrid to train a plan on local data on an iOS device
 
+        // Get token from here on the "Create Plan" notebook: https://github.com/OpenMined/PySyft/tree/master/examples/tutorials/static-fl
+        // swiftlint:disable:next line_length
+        let authToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.e30.Cn_0cSjCw1QKtcYDx_mYN_q9jO2KkpcUoiVbILmKVB4LUCQvZ7YeuyQ51r9h3562KQoSas_ehbjpz2dw1Dk24hQEoN6ObGxfJDOlemF5flvLO_sqAHJDGGE24JRE4lIAXRK6aGyy4f4kmlICL6wG8sGSpSrkZlrFLOVRJckTptgaiOTIm5Udfmi45NljPBQKVpqXFSmmb3dRy_e8g3l5eBVFLgrBhKPQ1VbNfRK712KlQWs7jJ31fGpW2NxMloO1qcd6rux48quivzQBCvyK8PV5Sqrfw_OMOoNLcSvzePDcZXa2nPHSu3qQIikUdZIeCnkJX-w0t8uEFG3DfH1fVA"
+
         // Create a client with a PyGrid server URL
-        guard let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:5000")!) else {
+        guard let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:5000", authToken: authToken)!) else {
 
             // Set background task failed if creating a client fails
             backgroundTask.setTaskCompleted(success: false)

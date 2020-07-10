@@ -84,8 +84,9 @@ class SignallingClientTests: XCTestCase {
 
         let encoder = JSONEncoder()
         let messageData = try! encoder.encode(message)
+        let messageString = String(data: messageData, encoding: .utf8)!
 
-        XCTAssertEqual(messageData, mockSocketClient.sentData)
+        XCTAssertEqual(messageString, mockSocketClient.sentText!)
 
     }
 
