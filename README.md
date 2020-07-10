@@ -48,8 +48,11 @@ You can use SwiftSyft as a front-end or as a background service. The following i
 
 // This is a demonstration of how to use SwiftSyft with PyGrid to train a plan on local data on an iOS device
 
+// Authentication token
+let authToken = /* Get auth token from somewhere (if auth is required): */
+
 // Create a client with a PyGrid server URL
-if let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:5000")!) {
+if let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:5000")!, authToken: authToken) {
 
   // Store the client as a property so it doesn't get deallocated during training.
   self.syftClient = syftClient
