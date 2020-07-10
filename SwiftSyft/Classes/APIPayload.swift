@@ -1,7 +1,15 @@
 import Foundation
 
 struct AuthRequest: Codable {
-    let authToken: String
+    let authToken: String?
+    let model: String
+    let version: String
+
+    enum CodingKeys: String, CodingKey {
+        case authToken = "auth_token"
+        case model = "model_name"
+        case version = "model_version"
+    }
 }
 
 struct AuthResponse: Codable {

@@ -217,16 +217,18 @@ public class SyftJob: SyftJobProtocol {
         let authURL = self.url.appendingPathComponent("federated/authenticate")
         var authRequest = URLRequest(url: authURL)
         authRequest.httpMethod = "POST"
-        if let authToken = authToken {
-            let authRequestBody = AuthRequest(authToken: authToken)
-            let encoder = JSONEncoder()
-            encoder.keyEncodingStrategy = .convertToSnakeCase
-            do {
-                let authBodyData = try encoder.encode(authRequestBody)
-                authRequest.httpBody = authBodyData
-            } catch {
-                debugPrint("Error encoding auth request body")
-            }
+        authRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        authRequest.addValue("application/json", forHTTPHeaderField: "Accept")
+
+        let authRequestBody = AuthRequest(authToken: authToken, model: self.modelName, version: self.version)
+        let encoder = JSONEncoder()
+        encoder.keyEncodingStrategy = .convertToSnakeCase
+        do {
+            let authBodyData = try encoder.encode(authRequestBody)
+            print(String(data: authBodyData, encoding: .utf8)!)
+            authRequest.httpBody = authBodyData
+        } catch {
+            debugPrint("Error encoding auth request body")
         }
 
         let decoder = JSONDecoder()
@@ -519,7 +521,7 @@ public class SyftJob: SyftJobProtocol {
             }
         }).store(in: &disposeBag)
 
-        sendMessageSubject.send(.authRequest(authToken: authToken))
+        sendMessageSubject.send(.authRequest(authToken: authToken, modelName: self.modelName, modelVersion: self.version))
 
     }
 
