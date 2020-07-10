@@ -47,7 +47,7 @@ class PingCheckerTests: XCTestCase {
             XCTAssertTrue(latencyMS > 0)
             expectation.fulfill()
         })
-        wait(for: [expectation], timeout: 5.0)
+        wait(for: [expectation], timeout: 7.0)
     }
     
     func testPingFutureWithUnknownHost(){

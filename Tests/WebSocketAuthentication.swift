@@ -86,7 +86,7 @@ class WebSocketAuthentication: XCTestCase {
 
         self.noTokenSendMessageSubject.sink(receiveCompletion: { _ in }) { messageRequest in
             switch messageRequest {
-            case .authRequest(let authToken):
+            case .authRequest(let authToken, let modelName, let modelVersion):
 
                 if authToken == nil {
                     self.noTokenReceiveMessageSubject.send(.authRequestResponse(.failure(SyftClientError(message: "Invalid token"))))
@@ -122,7 +122,7 @@ class WebSocketAuthentication: XCTestCase {
 
         self.invalidTokenSendMessageSubject.sink(receiveCompletion: { _ in }) { messageRequest in
             switch messageRequest {
-            case .authRequest(let authToken):
+            case .authRequest(let authToken, let modelName, let modelVersion):
 
                 if authToken == "invalid-token" {
                     self.invalidTokenReceiveMessageSubject.send(.authRequestResponse(.failure(SyftClientError(message: "Invalid token"))))
@@ -158,7 +158,7 @@ class WebSocketAuthentication: XCTestCase {
 
         self.validTokenSendMessageSubject.sink(receiveCompletion: { _ in }) { messageRequest in
             switch messageRequest {
-            case .authRequest(let authToken):
+            case .authRequest(let authToken, _, _):
 
                 if authToken == "valid-token" {
                     self.validTokenReceiveMessageSubject.send(.authRequestResponse(.success("worker-id")))
