@@ -15,6 +15,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Install and run cocoapods
+        run: |
+          gem install cocoapods
+          pod install
+
       - name: Install sourcedocs
         run: |
           brew install sourcedocs
@@ -41,9 +46,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Install cocoapods
+      - name: Install and run cocoapods
         run: |
           gem install cocoapods
+          pod install
 
       - name: Publish to cocoapods
         env:
