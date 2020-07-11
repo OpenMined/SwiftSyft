@@ -171,9 +171,9 @@ pip install syft==0.2.7, jupyter==1.0.0, notebook==5.7.8
 ```bash
 jupyter notebook
 ```
-- Open a browser and navigate to [localhost:8888](http://localhost:8888/). You should be able to see the pysyft notebook console.
-- In the Jupyter Notebook, navigate to `examples/tutorials/static-fl/FL Training Plan`
-- Run the notebook `Host Plan`. Now PyGrid is setup and the model is hosted over it.
+- Open a browser and navigate to [localhost:8888](http://localhost:8888/). You should be able to see the PySyft notebook console.
+- In the Jupyter Notebook, navigate to `examples/tutorials/static-fl`
+- Run the notebook `Part 01 - Create Plan`. Now PyGrid is setup and the model is hosted over it.
 
 ```
 syft.base_url="<IP_address_from_step_16>:5000"
