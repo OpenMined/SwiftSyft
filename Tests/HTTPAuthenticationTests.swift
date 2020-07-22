@@ -39,7 +39,7 @@ class HTTPAuthenticationTests: XCTestCase {
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
 
-        stub(condition: isHost("test.com") && isPath("/federated/authenticate")) { request -> HTTPStubsResponse in
+        stub(condition: isHost("test.com") && isPath("/model_centric/authenticate")) { request -> HTTPStubsResponse in
 
             switch self.authMode {
             case .noAuthentication:
@@ -78,12 +78,12 @@ class HTTPAuthenticationTests: XCTestCase {
             }
         }
 
-        stub(condition: isHost("test.com") && isPath("/federated/speed-test")) { request -> HTTPStubsResponse in
+        stub(condition: isHost("test.com") && isPath("/model_centric/speed-test")) { request -> HTTPStubsResponse in
 
             return HTTPStubsResponse(data: Data(), statusCode: 200, headers: nil)
         }
 
-        stub(condition: isHost("test.com") && isPath("/federated/cycle-request")) { request -> HTTPStubsResponse in
+        stub(condition: isHost("test.com") && isPath("/model_centric/cycle-request")) { request -> HTTPStubsResponse in
 
             if let noAuthFlowExpectation = self.noAuthFlowExpectation {
                 noAuthFlowExpectation.fulfill()

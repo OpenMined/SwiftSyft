@@ -31,7 +31,7 @@ class CycleRequestTests: XCTestCase {
 
     override func setUp() {
 
-        stub(condition: isHost("test.com") && isPath("/federated/authenticate")) { request -> HTTPStubsResponse in
+        stub(condition: isHost("test.com") && isPath("/model_centric/authenticate")) { request -> HTTPStubsResponse in
 
                 let responseFile = OHPathForFile("authenticate-success.json", type(of: self))!
 
@@ -39,12 +39,12 @@ class CycleRequestTests: XCTestCase {
 
         }
 
-        stub(condition: isHost("test.com") && isPath("/federated/speed-test")) { request -> HTTPStubsResponse in
+        stub(condition: isHost("test.com") && isPath("/model_centric/speed-test")) { request -> HTTPStubsResponse in
 
             return HTTPStubsResponse(data: Data(), statusCode: 200, headers: nil)
         }
 
-        stub(condition: isHost("test.com") && isPath("/federated/cycle-request")) { [weak self] request -> HTTPStubsResponse in
+        stub(condition: isHost("test.com") && isPath("/model_centric/cycle-request")) { [weak self] request -> HTTPStubsResponse in
 
             guard let self = self else {
                 return HTTPStubsResponse(error: URLError.init(URLError.Code.cancelled))
@@ -66,7 +66,7 @@ class CycleRequestTests: XCTestCase {
             }
         }
 
-        stub(condition: isHost("test.com") && isPath("/federated/get-model")) { _ -> HTTPStubsResponse in
+        stub(condition: isHost("test.com") && isPath("/model_centric/get-model")) { _ -> HTTPStubsResponse in
 
             let responseFilePath = OHPathForFile("model_state.proto", type(of: self))!
 
@@ -74,7 +74,7 @@ class CycleRequestTests: XCTestCase {
 
         }
 
-        stub(condition: isHost("test.com") && isPath("/federated/get-plan")) { _ -> HTTPStubsResponse in
+        stub(condition: isHost("test.com") && isPath("/model_centric/get-plan")) { _ -> HTTPStubsResponse in
 
             let responseFilePath = OHPathForFile("plan.proto", type(of: self))!
 

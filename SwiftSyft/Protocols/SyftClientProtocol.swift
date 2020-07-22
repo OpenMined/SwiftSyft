@@ -19,7 +19,7 @@ protocol SyftJobProtocol {
     var modelName: String { get }
     var version: String { get }
 
-    /// Request to join a federated learning cycle at "federated/cycle-request" endpoint (https://github.com/OpenMined/PyGrid/issues/445)
+    /// Request to join a federated learning cycle at "model_centric/cycle-request" endpoint (https://github.com/OpenMined/PyGrid/issues/445)
     func start(chargeDetection: Bool, wifiDetection: Bool)
 
 }
