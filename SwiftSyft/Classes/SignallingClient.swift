@@ -70,7 +70,7 @@ extension SignallingClient: SocketClientDelegate {
             let keepAliveMessage = ["type": "socket-ping"]
             do {
                 let data = try JSONSerialization.data(withJSONObject: keepAliveMessage, options: .sortedKeys)
-                self?.socketClient.send(data: data)
+                self?.socketClient.sendText(text: String(bytes: data, encoding: .utf8)!)
             } catch {
                 debugPrint("Error sending keep alive message")
             }
