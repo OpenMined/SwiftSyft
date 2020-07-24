@@ -13,16 +13,20 @@ struct AuthRequest: Codable {
 }
 
 struct AuthResponse: Codable {
+
+    let status: String
     let workerId: String
+    let requiresSpeedTest: Bool
+
 }
 
 struct CycleRequest: Codable {
     let workerId: String
     let model: String
     let version: String
-    let ping: String
-    let download: String
-    let upload: String
+    let ping: Int?
+    let download: Double?
+    let upload: Double?
 
     enum CodingKeys: String, CodingKey {
         case workerId = "worker_id"
