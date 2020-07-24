@@ -214,7 +214,7 @@ public class SyftJob: SyftJobProtocol {
     func startThroughHTTP(url: URL, authToken: String?) {
 
         // Set-up authentication request
-        let authURL = self.url.appendingPathComponent("federated/authenticate")
+        let authURL = self.url.appendingPathComponent("model_centric/authenticate")
         var authRequest = URLRequest(url: authURL)
         authRequest.httpMethod = "POST"
         authRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -358,7 +358,7 @@ public class SyftJob: SyftJobProtocol {
         let encoder = JSONEncoder()
         let decoder = JSONDecoder()
 
-        let cycleRequestURL = self.url.appendingPathComponent("federated/cycle-request")
+        let cycleRequestURL = self.url.appendingPathComponent("model_centric/cycle-request")
         var cycleRequest: URLRequest = URLRequest(url: cycleRequestURL)
         cycleRequest.httpMethod = "POST"
         cycleRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -394,7 +394,7 @@ public class SyftJob: SyftJobProtocol {
         urlComponents.scheme = self.url.scheme
         urlComponents.port = self.url.port
         urlComponents.host = self.url.host
-        urlComponents.path = "/federated/get-model"
+        urlComponents.path = "/model_centric/get-model"
         urlComponents.queryItems = [
             URLQueryItem(name: "worker_id", value: workerId),
             URLQueryItem(name: "model_id", value: String(modelId)),
@@ -422,7 +422,7 @@ public class SyftJob: SyftJobProtocol {
         urlComponents.scheme = self.url.scheme
         urlComponents.port = self.url.port
         urlComponents.host = self.url.host
-        urlComponents.path = "/federated/get-plan"
+        urlComponents.path = "/model_centric/get-plan"
         urlComponents.queryItems = [
             URLQueryItem(name: "worker_id", value: workerId),
             URLQueryItem(name: "plan_id", value: String(planId)),
@@ -538,7 +538,7 @@ public class SyftJob: SyftJobProtocol {
 
             let jsonEncoder = JSONEncoder()
 
-            let cycleRequestURL = self.url.appendingPathComponent("federated/report")
+            let cycleRequestURL = self.url.appendingPathComponent("model_centric/report")
             var reportRequest: URLRequest = URLRequest(url: cycleRequestURL)
             reportRequest.httpMethod = "POST"
             reportRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")

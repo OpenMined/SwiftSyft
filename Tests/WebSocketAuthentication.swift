@@ -32,7 +32,7 @@ class WebSocketAuthentication: XCTestCase {
 
     override func setUp() {
 
-        stub(condition: isHost("test.com") && isPath("/federated/speed-test")) { request -> HTTPStubsResponse in
+        stub(condition: isHost("test.com") && isPath("/model_centric/speed-test")) { request -> HTTPStubsResponse in
 
             return HTTPStubsResponse(data: Data(), statusCode: 200, headers: nil)
         }
