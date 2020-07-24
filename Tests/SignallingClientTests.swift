@@ -116,10 +116,11 @@ class SignallingClientTests: XCTestCase {
         self.mockSocketClient.delegate!.didConnect(self.mockSocketClient)
         MockTimer.currentTimer.fire()
 
-        if let data = self.mockSocketClient.sentData {
+        if let text = self.mockSocketClient.sentText,
+           let jsonData = text.data(using: .utf8) {
 
             do {
-                let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: String]
+                let json = try JSONSerialization.jsonObject(with: jsonData, options: []) as! [String: String]
                 XCTAssertEqual(json, ["type": "socket-ping"])
             } catch {
                 XCTFail("Did not send valid json message")

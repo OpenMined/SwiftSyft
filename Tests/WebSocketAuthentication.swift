@@ -55,7 +55,7 @@ class WebSocketAuthentication: XCTestCase {
             switch messageRequest {
             case .authRequest(authToken: _):
 
-                self.noAuthReceiveMessageSubject.send(.authRequestResponse(.success("worker-id")))
+                self.noAuthReceiveMessageSubject.send(.authRequestResponse(.success(AuthResponse(status: "success", workerId: "worker-id", requiresSpeedTest: true))))
 
             case .cycleRequest(_):
 
@@ -161,7 +161,7 @@ class WebSocketAuthentication: XCTestCase {
             case .authRequest(let authToken, _, _):
 
                 if authToken == "valid-token" {
-                    self.validTokenReceiveMessageSubject.send(.authRequestResponse(.success("worker-id")))
+                    self.validTokenReceiveMessageSubject.send(.authRequestResponse(.success(AuthResponse(status: "success", workerId: "worker-id", requiresSpeedTest: true))))
                 }
 
             case .cycleRequest(_):
