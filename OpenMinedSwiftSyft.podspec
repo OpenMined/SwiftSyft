@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'OpenMinedSwiftSyft'
   s.module_name      = 'SwiftSyft'
-  s.version          = '0.1.1-beta1'
+  s.version          = '0.1.2-beta1'
   s.summary          = 'The official Syft worker for iOS, built in Swift.'
 
 # This description is used to generate tags and improve search results.
