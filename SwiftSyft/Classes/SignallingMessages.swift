@@ -31,7 +31,7 @@ enum SignallingMessagesRequest {
 
 enum SignallingMessagesResponse {
 
-    case authRequestResponse(Result<String, Error>)
+    case authRequestResponse(Result<AuthResponse, Error>)
     case cycleRequestResponse(Result<CycleResponseSuccess, CycleRequestError>)
 
     case getProtocolRequest(workerId: UUID, scopeId: UUID, protocolId: String)
@@ -54,6 +54,8 @@ enum SignallingMessagesResponse {
 
     enum AuthenticationCodingKeys: String, CodingKey {
         case workerId = "worker_id"
+        case status
+        case requiresSpeedTest = "requires_speed_test"
         case error
     }
 
@@ -241,9 +243,9 @@ extension SignallingMessagesRequest: Encodable {
             try dataPayloadContainer.encode(cycleRequest.workerId, forKey: .workerId)
             try dataPayloadContainer.encode(cycleRequest.model, forKey: .model)
             try dataPayloadContainer.encode(cycleRequest.version, forKey: .version)
-            try dataPayloadContainer.encode(cycleRequest.ping, forKey: .ping)
-            try dataPayloadContainer.encode(cycleRequest.download, forKey: .download)
-            try dataPayloadContainer.encode(cycleRequest.upload, forKey: .upload)
+            try dataPayloadContainer.encodeIfPresent(cycleRequest.ping, forKey: .ping)
+            try dataPayloadContainer.encodeIfPresent(cycleRequest.download, forKey: .download)
+            try dataPayloadContainer.encodeIfPresent(cycleRequest.upload, forKey: .upload)
         case .modelReport(let federatedReport):
             try container.encode("model_centric/report", forKey: .type)
             var dataPayloadContainer = container.nestedContainer(keyedBy: FederatedReport.CodingKeys.self, forKey: .data)
