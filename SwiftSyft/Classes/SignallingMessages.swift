@@ -369,8 +369,10 @@ extension SignallingMessagesResponse: Codable {
         if type == "model_centric/authenticate" {
 
             let authenticationContainer = try container.nestedContainer(keyedBy: AuthenticationCodingKeys.self, forKey: .data)
-            if let workerId = try authenticationContainer.decodeIfPresent(String.self, forKey: .workerId) {
-                self = .authRequestResponse(.success(workerId))
+            if let status = try authenticationContainer.decodeIfPresent(String.self, forKey: .status),
+               let workerId = try authenticationContainer.decodeIfPresent(String.self, forKey: .workerId),
+                let requiresSpeedTest = try authenticationContainer.decodeIfPresent(Bool.self, forKey: .requiresSpeedTest)  {
+                self = .authRequestResponse(.success(AuthResponse(status: status, workerId: workerId, requiresSpeedTest: requiresSpeedTest)))
             } else if let errorString = try authenticationContainer.decodeIfPresent(String.self, forKey: .error) {
                 self = .authRequestResponse(.failure(AuthenticationError(message: errorString)))
             } else {
