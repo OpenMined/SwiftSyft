@@ -160,11 +160,11 @@ cd PyGrid
 docker-compose up
 ```
 
-- Install [PySyft](https://github.com/OpenMined/PySyft) `v0.2.7` in the virtual environment.
+- Install [PySyft](https://github.com/OpenMined/PySyft) from source in the virtual environment.
 ```bash
 virtualenv -p python3 venv
 source venv/bin/activate
-pip install syft==0.2.7, jupyter==1.0.0, notebook==5.7.8
+python setup.py install
 ```
 
 - Host Jupyter Notebook 
