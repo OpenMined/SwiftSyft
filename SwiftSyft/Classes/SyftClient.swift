@@ -58,7 +58,7 @@ public class SyftClient: SyftClientProtocol {
 
             self.init(url: url, connectionType: .http(url), authToken: authToken)
 
-        } else if url.scheme == "ws" {
+        } else if url.scheme == "ws" || url.scheme == "wss"{
 
             let signallingClient = SignallingClient(url: url, pingInterval: 30)
             signallingClient.connect()
