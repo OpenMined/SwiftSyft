@@ -54,7 +54,7 @@ public class SyftClient: SyftClientProtocol {
     ///   - authToken: PyGrid authentication token
     convenience public init?(url: URL, authToken: String? = nil) {
 
-        if url.scheme == "http" {
+        if url.scheme == "http" || url.scheme == "https"{
 
             self.init(url: url, connectionType: .http(url), authToken: authToken)
 
