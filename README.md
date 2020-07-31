@@ -171,7 +171,6 @@ docker-compose up
 ```
 
 - Install [PySyft](https://github.com/OpenMined/PySyft) from source in the virtual environment.
-
 ```bash
 virtualenv -p python3 venv
 source venv/bin/activate
