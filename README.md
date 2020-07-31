@@ -4,8 +4,11 @@
 ![License](https://img.shields.io/github/license/openmined/swiftsyft)
 ![Contributors](https://img.shields.io/opencollective/all/openmined)
 ![OpenCollective](https://img.shields.io/opencollective/all/openmined)
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # SwiftSyft
@@ -16,12 +19,12 @@ SwiftSyft makes it easy for you to **train and inference PySyft models on iOS de
 - :bust_in_silhouette: Allows all data to stay on the user's device
 - :back: Support for delegation to background task scheduler
 - :key: Support for **JWT authentication** to protect models from Sybil attacks
-- :+1: Host of **inbuilt best practices** to prevent apps from over using device resources. 
-    - :electric_plug: **Charge detection** to allow background training only when device is connected to charger
-    - :zzz: **Sleep and wake detection** so that the app does not occupy resource when user starts using the device
-    - :money_with_wings: **Wifi and metered network detection** to ensure the model updates do not use all the available data quota 
-    - :no_bell: All of these smart defaults are easily are **overridable**
-- :mortar_board: Support for both reactive and callback patterns so you have your freedom of choice (_in progress_)
+- :+1: Host of **inbuilt best practices** to prevent apps from over using device resources.
+  - :electric_plug: **Charge detection** to allow background training only when device is connected to charger
+  - :zzz: **Sleep and wake detection** so that the app does not occupy resource when user starts using the device
+  - :money_with_wings: **Wifi and metered network detection** to ensure the model updates do not use all the available data quota
+  - :no_bell: All of these smart defaults are easily are **overridable**
+- :mortar*board: Support for both reactive and callback patterns so you have your freedom of choice (\_in progress*)
 - :lock: Support for **secure multi-party computation** and **secure aggregation** protocols using **peer-to-peer WebRTC** connections (_in progress_).
 
 There are a variety of additional privacy-preserving protections that may be applied, including [differential privacy](https://towardsdatascience.com/understanding-differential-privacy-85ce191e198a), [muliti-party computation](https://www.inpher.io/technology/what-is-secure-multiparty-computation), and [secure aggregation](https://research.google/pubs/pub45808/).
@@ -31,9 +34,11 @@ There are a variety of additional privacy-preserving protections that may be app
 If you want to know how scalable federated systems are built, [Towards Federated Learning at Scale](https://arxiv.org/pdf/1902.01046.pdf) is a fantastic introduction!
 
 ## Installation
+
 We have not currently made our initial release. SwiftSyft would soon be available on Cocoapods.
 
 ## Quick Start
+
 As a developer, there are few steps to building your own secure federated learning system upon the OpenMined infrastructure:
 
 1. :robot: Generate your secure ML model using [PySyft](https://github.com/OpenMined/PySyft). By design, PySyft is built upon PyTorch and TensorFlow so you **don't need to learn a new ML framework**. You will also need to write a training plan (training code the worker runs) and an averaging plan (code that PyGrid runs to average the model diff).
@@ -63,7 +68,7 @@ if let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:5000")!, authTok
   // This function is called when SwiftSyft has downloaded the plans and model parameters from PyGrid
   // You are ready to train your model on your data
   // plan - Use this to generate diffs using our training data
-  // clientConfig - contains the configuration for the training cycle (batchSize, learning rate) and  
+  // clientConfig - contains the configuration for the training cycle (batchSize, learning rate) and
   // metadata for the model (name, version)
   // modelReport - Used as a completion block and reports the diffs to PyGrid.
   self.syftJob?.onReady(execute: { plan, clientConfig, modelReport in
@@ -85,23 +90,23 @@ if let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:5000")!, authTok
                 // Preprocess the label ( 0 to 9 ) by creating one-hot features and then flattening the entire thing
                 let oneHotLabels = MNISTLoader.oneHotMNISTLabels(labels: labels).compactMap { Float($0)}
 
-                // Since we don't have native tensor wrappers in Swift yet, we use 
+                // Since we don't have native tensor wrappers in Swift yet, we use
                 // `TrainingData` and `ValidationData` classes to store the data and shape.
                 let trainingData = try TrainingData(data: flattenedBatch, shape: [clientConfig.batchSize, 784])
                 let validationData = try ValidationData(data: oneHotLabels, shape: [clientConfig.batchSize, 10])
 
-                // Execute the plan with the training data and validation data. `plan.execute()` 
+                // Execute the plan with the training data and validation data. `plan.execute()`
                 // returns the loss and you can use it if you want to (plan.execute()
-                // has the @discardableResult attribute) 
-                let loss = plan.execute(trainingData: trainingData, 
-                                      validationData: validationData, 
+                // has the @discardableResult attribute)
+                let loss = plan.execute(trainingData: trainingData,
+                                      validationData: validationData,
                                         clientConfig: clientConfig)
 
             }
 
         }
 
-        // Generate diff data and report the final diffs as 
+        // Generate diff data and report the final diffs as
         let diffStateData = try plan.generateDiffData()
         modelReport(diffStateData)
 
@@ -112,7 +117,7 @@ if let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:5000")!, authTok
 
   })
 
-  // This is the error handler for any job exeuction errors like connecting to PyGrid 
+  // This is the error handler for any job exeuction errors like connecting to PyGrid
   self.syftJob?.onError(execute: { error in
     print(error)
   })
@@ -126,7 +131,7 @@ if let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:5000")!, authTok
       }
   })
 
-  // Start the job. You can set that the job should only execute if the device is being charge and there is 
+  // Start the job. You can set that the job should only execute if the device is being charge and there is
   // a WiFi connection. These options are on by default if you don't specify them.
   self.syftJob?.start(chargeDetection: true, wifiDetection: true)
 }
@@ -141,7 +146,9 @@ See [API Documenation](Documentation/Reference/README.md) for complete reference
 A mini tutorial on how to run `SwiftSyft` on iOS using the background task scheduler can be found [here](Background-Example.md)
 
 ### Running the Demo App
+
 The demo app fetches the plans, protocols and model weights from PyGrid server hosted locally. The plans are then deserialized and executed using libtorch.
+
 <p align="center">
 <img src="openmined_assets/swiftsyft_demo.gif" height="354">
 </p>
@@ -149,30 +156,36 @@ The demo app fetches the plans, protocols and model weights from PyGrid server h
 Follow these steps to setup an environment to run the demo app:
 
 - Clone the repo [PyGrid](https://github.com/OpenMined/PyGrid) and change directory to it
+
 ```bash
 git clone https://github.com/OpenMined/PyGrid
 cd PyGrid
 ```
+
 - Install [docker](https://github.com/OpenMined/PyGrid/#getting-started)
 - Install docker-compose.
 - Execute `docker-compose` in the command line to start pygrid server.
+
 ```bash
 docker-compose up
 ```
 
-- Install [PySyft](https://github.com/OpenMined/PySyft) `v0.2.7` in the virtual environment.
+- Install [PySyft](https://github.com/OpenMined/PySyft) from source in the virtual environment.
+
 ```bash
 virtualenv -p python3 venv
 source venv/bin/activate
-pip install syft==0.2.7, jupyter==1.0.0, notebook==5.7.8
+python setup.py install
 ```
 
-- Host Jupyter Notebook 
+- Host Jupyter Notebook
+
 ```bash
 jupyter notebook
 ```
+
 - Open a browser and navigate to [localhost:8888](http://localhost:8888/). You should be able to see the PySyft notebook console.
-- In the Jupyter Notebook, navigate to `examples/tutorials/static-fl`
+- In the Jupyter Notebook, navigate to `examples/tutorials/model-centric-fl`
 - Run the notebook `Part 01 - Create Plan`. Now PyGrid is setup and the model is hosted over it.
 
 ```
@@ -180,14 +193,18 @@ syft.base_url="<IP_address_from_step_16>:5000"
 ```
 
 - Set-up demo project using Cocoapods
-- Install [Cocoapods](https://cocoapods.org/) 
+- Install [Cocoapods](https://cocoapods.org/)
+
 ```bash
 gem install cocoapods
 ```
+
 - Install the dependencies of the project.
+
 ```bash
 pod install # On the root directory of this project
 ```
+
 - Open the file `SwiftSyft.xcworkspace` in Xcode.
 - Run the `SwiftSyft` project. It automatically uses `127.0.0.1:5000` as the PyGrid URL.
 
@@ -206,13 +223,14 @@ You can work on the project by running `pod install` in the root directory. Then
 5. Push your fork
 6. Submit a PR to OpenMined/SwiftSyft
 
-Read the [contribution guide](https://github.com/OpenMined/.github/blob/master/CONTRIBUTING.md) as a good starting place. 
+Read the [contribution guide](https://github.com/OpenMined/.github/blob/master/CONTRIBUTING.md) as a good starting place.
 
 ### Support
 
 For support in using this library, please join the **#lib_swift_syft** Slack channel. If you'd like to follow along with any code changes to the library, please join **#code_swiftsyft** Slack channel. [Click here to join our Slack Community!](https://slack.openmined.org)
 
 ## License
+
 [Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/)
 
 ## Contributors ✨
@@ -231,6 +249,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

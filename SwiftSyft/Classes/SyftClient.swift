@@ -29,12 +29,12 @@ public struct SyftClientError: Error {
 }
 
 struct SyftConnectionMetrics {
-    let ping: String
+    let ping: Int
     let uploadSpeed: Double
     let downloadSpeed: Double
 }
 
-/// Syft client for static federated learning
+/// Syft client for model-centric federated learning
 public class SyftClient: SyftClientProtocol {
     private let url: URL
     private let signallingClient: SignallingClient?
@@ -104,7 +104,7 @@ public class SyftJob: SyftJobProtocol {
 
     // Must be populated on `start`
     let download: String = "46"
-    let ping: String = "8"
+    let ping: Int = 8
     let upload: String = "23"
 
     var onReadyBlock: (_ plan: SyftPlan, _ clientConfig: FederatedClientConfig, _ report: ModelReport) -> Void = { _, _, _ in }
@@ -214,7 +214,7 @@ public class SyftJob: SyftJobProtocol {
     func startThroughHTTP(url: URL, authToken: String?) {
 
         // Set-up authentication request
-        let authURL = self.url.appendingPathComponent("model_centric/authenticate")
+        let authURL = self.url.appendingPathComponent("model-centric/authenticate")
         var authRequest = URLRequest(url: authURL)
         authRequest.httpMethod = "POST"
         authRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -225,7 +225,6 @@ public class SyftJob: SyftJobProtocol {
         encoder.keyEncodingStrategy = .convertToSnakeCase
         do {
             let authBodyData = try encoder.encode(authRequestBody)
-            print(String(data: authBodyData, encoding: .utf8)!)
             authRequest.httpBody = authBodyData
         } catch {
             debugPrint("Error encoding auth request body")
@@ -237,14 +236,29 @@ public class SyftJob: SyftJobProtocol {
         let authPublisher = URLSession.shared.dataTaskPublisher(for: authRequest)
                                 .map { $0.data }
                                 .decode(type: AuthResponse.self, decoder: decoder)
-                                .map({ $0.workerId })
-                                .handleEvents(receiveOutput: { [unowned self] workerId in self.workerId = workerId})
+                                .handleEvents(receiveOutput: { [unowned self] authResponse in
+                                    self.workerId = authResponse.workerId
+                                })
                                 .eraseToAnyPublisher()
 
         // Auth response -> Get Ping/Downoad/Upload Speed -> Cycle Request
         let cycleResponsePublisher = authPublisher
-                                        .flatMap { [unowned self] workerId -> AnyPublisher<(workerId: String, connectionMetrics: SyftConnectionMetrics), Error> in
-                                            return self.getConnectionMetrics(workerId: workerId)
+                                        .flatMap { [unowned self] authResponse -> AnyPublisher<(workerId: String, connectionMetrics: SyftConnectionMetrics?), Error> in
+
+                                            if authResponse.requiresSpeedTest {
+
+                                                return self.getConnectionMetrics(workerId: authResponse.workerId)
+
+                                            } else {
+
+                                                return Just((workerId: authResponse.workerId, connectionMetrics: nil))
+                                                    .mapError({ _ in
+                                                        SyftClientError(message: "Impossible Error")
+                                                    })
+                                                    .eraseToAnyPublisher()
+
+                                            }
+
                                         }
                                         .flatMap { [unowned self] (result) -> AnyPublisher<(cycleResponse: CycleResponseSuccess, workerId: String), Error> in
                                             let (workerId, connectionMetrics) = result
@@ -254,13 +268,14 @@ public class SyftJob: SyftJobProtocol {
                                             let (cycleResponseSuccess, _) = cycleResponse
                                             self.requestKey = cycleResponseSuccess.requestKey
                                         })
+                                        .share()
                                         .eraseToAnyPublisher()
 
         self.startPlanAndModelDownload(withCycleResponse: cycleResponsePublisher)
 
     }
 
-    func getConnectionMetrics(workerId: String) -> AnyPublisher<(workerId: String, connectionMetrics: SyftConnectionMetrics), Error> {
+    func getConnectionMetrics(workerId: String) -> AnyPublisher<(workerId: String, connectionMetrics: SyftConnectionMetrics?), Error> {
 
         var urlComponents = URLComponents()
         urlComponents.scheme = "http"
@@ -353,12 +368,12 @@ public class SyftJob: SyftJobProtocol {
 
     }
 
-    func cycleRequest(forWorkerId workerId: String, connectionMetrics: SyftConnectionMetrics) -> AnyPublisher<(cycleResponse: CycleResponseSuccess, workerId: String), Error> {
+    func cycleRequest(forWorkerId workerId: String, connectionMetrics: SyftConnectionMetrics?) -> AnyPublisher<(cycleResponse: CycleResponseSuccess, workerId: String), Error> {
 
         let encoder = JSONEncoder()
         let decoder = JSONDecoder()
 
-        let cycleRequestURL = self.url.appendingPathComponent("model_centric/cycle-request")
+        let cycleRequestURL = self.url.appendingPathComponent("model-centric/cycle-request")
         var cycleRequest: URLRequest = URLRequest(url: cycleRequestURL)
         cycleRequest.httpMethod = "POST"
         cycleRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -369,8 +384,8 @@ public class SyftJob: SyftJobProtocol {
                                             model: self.modelName,
                                             version: self.version,
                                             ping: self.ping,
-                                            download: String(connectionMetrics.downloadSpeed),
-                                            upload: String(connectionMetrics.uploadSpeed))
+                                            download: connectionMetrics?.downloadSpeed,
+                                            upload: connectionMetrics?.uploadSpeed)
 
         cycleRequest.httpBody = try? encoder.encode(cycleRequestBody)
 
@@ -394,7 +409,7 @@ public class SyftJob: SyftJobProtocol {
         urlComponents.scheme = self.url.scheme
         urlComponents.port = self.url.port
         urlComponents.host = self.url.host
-        urlComponents.path = "/model_centric/get-model"
+        urlComponents.path = "/model-centric/get-model"
         urlComponents.queryItems = [
             URLQueryItem(name: "worker_id", value: workerId),
             URLQueryItem(name: "model_id", value: String(modelId)),
@@ -422,7 +437,7 @@ public class SyftJob: SyftJobProtocol {
         urlComponents.scheme = self.url.scheme
         urlComponents.port = self.url.port
         urlComponents.host = self.url.host
-        urlComponents.path = "/model_centric/get-plan"
+        urlComponents.path = "/model-centric/get-plan"
         urlComponents.queryItems = [
             URLQueryItem(name: "worker_id", value: workerId),
             URLQueryItem(name: "plan_id", value: String(planId)),
@@ -457,23 +472,35 @@ public class SyftJob: SyftJobProtocol {
             default:
                 return false
             }
-        }.tryMap { authRequestResponse -> String in
+        }.tryMap { authRequestResponse -> AuthResponse in
             switch authRequestResponse {
             case .authRequestResponse(let result):
                 switch result {
-                case .success(let workerId):
-                    self.workerId = workerId
-                    return workerId
+                case .success(let authResponse):
+                    self.workerId = authResponse.workerId
+                    return authResponse
                 case .failure(let error):
                     throw error
                 }
             default:
                 throw SyftClientError(message: "Authentication Error Unknown Response")
             }
-        }.flatMap { [unowned self] workerId -> AnyPublisher<(workerId: String,
-                                     connectionMetrics: SyftConnectionMetrics), Error> in
+        }.flatMap { [unowned self] authResponse -> AnyPublisher<(workerId: String,
+                                     connectionMetrics: SyftConnectionMetrics?), Error> in
 
-            return self.getConnectionMetrics(workerId: workerId)
+            if authResponse.requiresSpeedTest {
+
+                return self.getConnectionMetrics(workerId: authResponse.workerId)
+
+            } else {
+
+                return Just((workerId: authResponse.workerId, connectionMetrics: nil))
+                    .mapError({ _ in
+                        SyftClientError(message: "Impossible Error")
+                    })
+                    .eraseToAnyPublisher()
+
+            }
 
         }.sink(receiveCompletion: { [unowned self] completionResult in
 
@@ -487,7 +514,7 @@ public class SyftJob: SyftJobProtocol {
         }, receiveValue: { (result) in
             let (workerId, connectionMetrics) = result
 
-            let cycleRequest = CycleRequest(workerId: workerId, model: self.modelName, version: self.version, ping: String(connectionMetrics.ping), download: String(connectionMetrics.downloadSpeed), upload: String(connectionMetrics.uploadSpeed))
+            let cycleRequest = CycleRequest(workerId: workerId, model: self.modelName, version: self.version, ping: connectionMetrics?.ping, download: connectionMetrics?.downloadSpeed, upload: connectionMetrics?.uploadSpeed)
             sendMessageSubject.send(.cycleRequest(cycleRequest))
 
         }).store(in: &self.disposeBag)
@@ -502,11 +529,12 @@ public class SyftJob: SyftJobProtocol {
                 self.onErrorBlock(error)
             }
 
-        }, receiveValue: { cycleRequestResponse in
+        }, receiveValue: { [unowned self] cycleRequestResponse in
             switch cycleRequestResponse {
             case .cycleRequestResponse(let result):
                 switch result {
                 case .success(let cycleSuccess):
+                    self.requestKey = cycleSuccess.requestKey
                     if let workerId = self.workerId {
                         let cycleResponsePublisher = CurrentValueSubject<(cycleResponse: CycleResponseSuccess,
                             workerId: String), Error>((cycleResponse: cycleSuccess, workerId: workerId)).eraseToAnyPublisher()
@@ -538,7 +566,7 @@ public class SyftJob: SyftJobProtocol {
 
             let jsonEncoder = JSONEncoder()
 
-            let cycleRequestURL = self.url.appendingPathComponent("model_centric/report")
+            let cycleRequestURL = self.url.appendingPathComponent("model-centric/report")
             var reportRequest: URLRequest = URLRequest(url: cycleRequestURL)
             reportRequest.httpMethod = "POST"
             reportRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
