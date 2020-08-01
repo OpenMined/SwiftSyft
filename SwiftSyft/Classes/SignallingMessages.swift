@@ -232,13 +232,13 @@ extension SignallingMessagesRequest: Encodable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         switch self {
         case .authRequest(let authToken, let modelName, let modelVersion):
-            try container.encode("model_centric/authenticate", forKey: .type)
+            try container.encode("model-centric/authenticate", forKey: .type)
             var dataPayloadContainer = container.nestedContainer(keyedBy: DataPayloadCodingKeys.self, forKey: .data)
             try dataPayloadContainer.encodeIfPresent(authToken, forKey: .authToken)
             try dataPayloadContainer.encode(modelName, forKey: .modelName)
             try dataPayloadContainer.encode(modelVersion, forKey: .modelVersion)
         case .cycleRequest(let cycleRequest):
-            try container.encode("model_centric/cycle-request", forKey: .type)
+            try container.encode("model-centric/cycle-request", forKey: .type)
             var dataPayloadContainer = container.nestedContainer(keyedBy: CycleRequest.CodingKeys.self, forKey: .data)
             try dataPayloadContainer.encode(cycleRequest.workerId, forKey: .workerId)
             try dataPayloadContainer.encode(cycleRequest.model, forKey: .model)
@@ -247,7 +247,7 @@ extension SignallingMessagesRequest: Encodable {
             try dataPayloadContainer.encodeIfPresent(cycleRequest.download, forKey: .download)
             try dataPayloadContainer.encodeIfPresent(cycleRequest.upload, forKey: .upload)
         case .modelReport(let federatedReport):
-            try container.encode("model_centric/report", forKey: .type)
+            try container.encode("model-centric/report", forKey: .type)
             var dataPayloadContainer = container.nestedContainer(keyedBy: FederatedReport.CodingKeys.self, forKey: .data)
             try dataPayloadContainer.encode(federatedReport.workerId, forKey: .workerId)
             try dataPayloadContainer.encode(federatedReport.requestKey, forKey: .requestKey)
@@ -368,7 +368,7 @@ extension SignallingMessagesResponse: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let type = try container.decode(String.self, forKey: .type)
 
-        if type == "model_centric/authenticate" {
+        if type == "model-centric/authenticate" {
 
             let authenticationContainer = try container.nestedContainer(keyedBy: AuthenticationCodingKeys.self, forKey: .data)
             if let status = try authenticationContainer.decodeIfPresent(String.self, forKey: .status),
@@ -381,7 +381,7 @@ extension SignallingMessagesResponse: Codable {
                 self = .authRequestResponse(.failure(AuthenticationError(message: "Unknown Authentication Error")))
             }
 
-        } else if type == "model_centric/cycle-request" {
+        } else if type == "model-centric/cycle-request" {
 
             let cycleStatusContainer = try container.nestedContainer(keyedBy: CycleCodingKeys.self, forKey: .data)
             let status = try cycleStatusContainer.decode(String.self, forKey: .status)
@@ -427,7 +427,7 @@ extension SignallingMessagesResponse: Codable {
 
             self = .webRTCInternalMessage(try container.decode(WebRTCInternalMessage.self, forKey: .data))
 
-        } else if type == "model_centric/report" {
+        } else if type == "model-centric/report" {
 
             self = .modelReportResponse
 

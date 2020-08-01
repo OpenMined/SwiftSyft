@@ -22,7 +22,7 @@ class NetworkManager {
             self.endPoint = url
             return
         }
-        self.endPoint = "\(url):\(pyGridPort)/model_centric/speed-test"
+        self.endPoint = "\(url):\(pyGridPort)/model-centric/speed-test"
     }
     // Download Service
     var downloadService = DownloadService()
