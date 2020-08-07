@@ -133,7 +133,7 @@ public class SyftJob: SyftJobProtocol {
 
     func isBatteryCharging() -> Bool {
 
-        // Remember current batter monitoring setting to reset it after checking.
+        // Remember current battery monitoring setting to reset it after checking.
         let userBatteryMonitoringSetting = UIDevice.current.isBatteryMonitoringEnabled
 
         defer {
@@ -180,8 +180,7 @@ public class SyftJob: SyftJobProtocol {
 
         // Continue if battery charging check is false or if true, check that the device is indeed charging
         if chargeDetection && !self.isBatteryCharging() {
-            let error = SyftClientError(message: "User requested that device should be charging when executing.")
-            self.onErrorBlock(error)
+            self.onErrorBlock(SyftClientError(message: "User requested that device should be charging when executing."))
             return
         }
 

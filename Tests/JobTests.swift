@@ -17,6 +17,7 @@ class JobTests: XCTestCase {
     var multipleJobClient: SyftClient!
     var multipleJobOne: SyftJob!
     var multipleJobTwo: SyftJob!
+    var multipleJobThree: SyftJob!
 
     var diffReportClient: SyftClient!
     var diffReportJob: SyftJob!
@@ -149,6 +150,79 @@ class JobTests: XCTestCase {
         self.diffReportJob.start(chargeDetection: false, wifiDetection: false)
 
         wait(for: [self.diffExpectation], timeout: 7)
+    }
+    
+    // This test only passes when simulator is not on charge and wifi.
+    func test_Battery_wifi_Charging() {
+        
+        let ChargeExpectation = XCTestExpectation(description: "Test for Batterycharging functionality")
+        let ChargeandwifiExpectation = XCTestExpectation(description: "Test for Batterycharging and wifi functionality")
+        let wifiExpectation = XCTestExpectation(description: "Test for WifiDetection functionality")
+        
+        self.multipleJobClient = SyftClient(url: URL(string: "http://test.com:5000")!)!
+        self.multipleJobOne = self.multipleJobClient.newJob(modelName: "mnist", version: "1.0")
+        self.multipleJobTwo = self.multipleJobClient.newJob(modelName: "mnist", version: "1.1")
+        self.multipleJobThree = self.multipleJobClient.newJob(modelName: "mnist", version: "1.0")
+        
+        self.multipleJobOne.onError { (_) in
+            
+            ChargeExpectation.fulfill()
+            
+        }
+        
+        self.multipleJobTwo.onError { (_) in
+            
+            ChargeandwifiExpectation.fulfill()
+            
+        }
+        
+        self.multipleJobThree.onError { (_) in
+            
+            wifiExpectation.fulfill()
+            
+        }
+        
+        self.multipleJobOne.start(chargeDetection: true, wifiDetection: false)
+        self.multipleJobTwo.start(chargeDetection: true, wifiDetection: true)
+        self.multipleJobThree.start(chargeDetection: false, wifiDetection: true)
+        
+        wait(for: [ChargeExpectation, ChargeandwifiExpectation, wifiExpectation], timeout: 7)
+        
+    }
+    
+    // This test passes only when simulator is on charge and wifi.
+    func test_wifiDetection(){
+        
+        let wifiExpectation = XCTestExpectation(description: "Test for WifiDetection functionality when on charge and wifi")
+        let wifiandChargeExpectation = XCTestExpectation(description: "Test for charge detection and WifiDetection functionality when on charge and wifi")
+        let chargeExpectation = XCTestExpectation(description: "Test for charge detection when on charge and wifi")
+        
+        self.multipleJobClient = SyftClient(url: URL(string: "http://test.com:5000")!)!
+        self.multipleJobOne = self.multipleJobClient.newJob(modelName: "mnist", version: "1.0")
+        self.multipleJobTwo = self.multipleJobClient.newJob(modelName: "mnist", version: "1.1")
+        self.multipleJobThree = self.multipleJobClient.newJob(modelName: "mnist", version: "1.1")
+
+         self.multipleJobOne.onReady { (_, _, _) in
+
+                   wifiExpectation.fulfill()
+        }
+
+        self.multipleJobTwo.onReady { (_, _, _) in
+
+                   wifiandChargeExpectation.fulfill()
+        }
+        
+        self.multipleJobThree.onReady { (_, _, _) in
+
+                   chargeExpectation.fulfill()
+        }
+        
+        self.multipleJobOne.start(chargeDetection: false, wifiDetection: true)
+        self.multipleJobTwo.start(chargeDetection: true, wifiDetection: true)
+        self.multipleJobThree.start(chargeDetection: true, wifiDetection: false)
+        
+        wait(for: [wifiExpectation, wifiandChargeExpectation, chargeExpectation], timeout: 7)
+        
     }
     
     override func tearDown() {
