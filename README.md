@@ -35,7 +35,13 @@ If you want to know how scalable federated systems are built, [Towards Federated
 
 ## Installation
 
-We have not currently made our initial release. SwiftSyft would soon be available on Cocoapods.
+### Cocoapods
+
+Cocoapods is a dependency manager used for Cocoa projects. Just add `OpenMinedSwiftSyft` to your `Podfile` like below.
+
+```
+pod 'OpenMinedSwiftSyft', '~> 0.1.3-beta1'
+```
 
 ## Quick Start
 
@@ -184,7 +190,7 @@ jupyter notebook
 ```
 
 - Open a browser and navigate to [localhost:8888](http://localhost:8888/). You should be able to see the PySyft notebook console.
-- In the Jupyter Notebook, navigate to `examples/tutorials/model-centric-fl`
+- In the Jupyter Notebook, navigate to `examples/tutorials/model_centric-fl`
 - Run the notebook `Part 01 - Create Plan`. Now PyGrid is setup and the model is hosted over it.
 
 ```
