@@ -35,7 +35,13 @@ If you want to know how scalable federated systems are built, [Towards Federated
 
 ## Installation
 
-We have not currently made our initial release. SwiftSyft would soon be available on Cocoapods.
+### Cocoapods
+
+Cocoapods is a dependency manager for Cocoa projects. Just add `OpenMinedSwiftSyft` to your Podfile like below:
+
+```
+pod 'OpenMinedSwiftSyft', ~> 0.1.3-beta1
+```
 
 ## Quick Start
 
