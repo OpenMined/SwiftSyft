@@ -90,7 +90,7 @@ class CycleRequestTests: XCTestCase {
 
         let cycleAcceptedExpectation = expectation(description: "test cycle request successful")
 
-        self.cycleAcceptClient = SyftClient(url: URL(string: "http://test.com:5000")!)!
+        self.cycleAcceptClient = SyftClient(url: URL(string: "http://test.com:3000")!)!
         self.cycleAcceptJob = self.cycleAcceptClient.newJob(modelName: "mnist", version: "1.0")
 
         self.cycleAcceptJob.onReady { (_, _, _) in
@@ -110,7 +110,7 @@ class CycleRequestTests: XCTestCase {
 
         let cycleRejectedExpectation = expectation(description: "test cycle request rejected")
 
-        self.cycleRejectClient = SyftClient(url: URL(string: "http://test.com:5000")!)!
+        self.cycleRejectClient = SyftClient(url: URL(string: "http://test.com:3000")!)!
         self.cycleRejectJob = self.cycleRejectClient.newJob(modelName: "mnist", version: "1.0")
 
         self.cycleRejectJob.onRejected { _ in
@@ -129,7 +129,7 @@ class CycleRequestTests: XCTestCase {
 
         let cycleRejectedExpectation = expectation(description: "test cycle request rejected")
 
-        self.cycleRejectTimeoutClient = SyftClient(url: URL(string: "http://test.com:5000")!)!
+        self.cycleRejectTimeoutClient = SyftClient(url: URL(string: "http://test.com:3000")!)!
         self.cycleRejectTimeoutJob = self.cycleRejectTimeoutClient.newJob(modelName: "mnist", version: "1.0")
 
         self.cycleRejectTimeoutJob.onRejected { timeout in

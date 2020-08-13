@@ -106,7 +106,7 @@ class HTTPAuthenticationTests: XCTestCase {
 
         self.noAuthFlowExpectation = expectation(description: "test auth if successful")
 
-        self.noAuthClient = SyftClient(url: URL(string: "http://test.com:5000")!)!
+        self.noAuthClient = SyftClient(url: URL(string: "http://test.com:3000")!)!
         self.noAuthJob = self.noAuthClient.newJob(modelName: "mnist", version: "1.0")
         self.noAuthJob.start(chargeDetection: false, wifiDetection: false)
 
@@ -120,7 +120,7 @@ class HTTPAuthenticationTests: XCTestCase {
 
         let authNoTokenExpectation = expectation(description: "test auth with no token")
 
-        self.noTokenClient = SyftClient(url: URL(string: "http://test.com:5000")!)!
+        self.noTokenClient = SyftClient(url: URL(string: "http://test.com:3000")!)!
         self.noTokenJob = self.noTokenClient.newJob(modelName: "mnist", version: "1.0")
         self.noTokenJob.onError { _ in
             authNoTokenExpectation.fulfill()
@@ -137,7 +137,7 @@ class HTTPAuthenticationTests: XCTestCase {
 
         let authInvalidExpectation = expectation(description: "test auth with invalid token")
 
-        self.invalidTokenClient = SyftClient(url: URL(string: "http://test.com:5000")!,
+        self.invalidTokenClient = SyftClient(url: URL(string: "http://test.com:3000")!,
                                            authToken: "incorrect-token")!
         self.invalidTokenJob = self.invalidTokenClient.newJob(modelName: "mnist", version: "1.0")
         self.invalidTokenJob.onError { _ in
@@ -154,7 +154,7 @@ class HTTPAuthenticationTests: XCTestCase {
 
         self.validTokenExpectation = expectation(description: "test auth with valid token")
 
-        self.validTokenClient = SyftClient(url: URL(string: "http://test.com:5000")!,
+        self.validTokenClient = SyftClient(url: URL(string: "http://test.com:3000")!,
                                            authToken: "correct-token")!
         self.validTokenJob = self.validTokenClient.newJob(modelName: "mnist", version: "1.0")
         self.validTokenJob.start(chargeDetection: false, wifiDetection: false)

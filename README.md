@@ -63,7 +63,7 @@ You can use SwiftSyft as a front-end or as a background service. The following i
 let authToken = /* Get auth token from somewhere (if auth is required): */
 
 // Create a client with a PyGrid server URL
-if let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:5000")!, authToken: authToken) {
+if let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:3000")!, authToken: authToken) {
 
   // Store the client as a property so it doesn't get deallocated during training.
   self.syftClient = syftClient
@@ -194,7 +194,7 @@ jupyter notebook
 - Run the notebook `Part 01 - Create Plan`. Now PyGrid is setup and the model is hosted over it.
 
 ```
-syft.base_url="<IP_address_from_step_16>:5000"
+syft.base_url="<IP_address_from_step_16>:3000"
 ```
 
 - Set-up demo project using Cocoapods
@@ -211,7 +211,7 @@ pod install # On the root directory of this project
 ```
 
 - Open the file `SwiftSyft.xcworkspace` in Xcode.
-- Run the `SwiftSyft` project. It automatically uses `127.0.0.1:5000` as the PyGrid URL.
+- Run the `SwiftSyft` project. It automatically uses `127.0.0.1:3000` as the PyGrid URL.
 
 ## Contributing
 
