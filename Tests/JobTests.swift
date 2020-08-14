@@ -82,7 +82,7 @@ class JobTests: XCTestCase {
 
         let jobCompletedExpectation = expectation(description: "test cycle request successful")
 
-        self.oneJobClient = SyftClient(url: URL(string: "http://test.com:5000")!)!
+        self.oneJobClient = SyftClient(url: URL(string: "http://test.com:3000")!)!
         self.oneJobJob = self.oneJobClient.newJob(modelName: "mnist", version: "1.0")
 
         self.oneJobJob.onReady { (plan, clientConfig, _) in
@@ -112,7 +112,7 @@ class JobTests: XCTestCase {
         let jobOneExpectation = expectation(description: "test cycle request successful")
         let jobTwoExpectation = expectation(description: "test cycle request successful")
 
-        self.multipleJobClient = SyftClient(url: URL(string: "http://test.com:5000")!)!
+        self.multipleJobClient = SyftClient(url: URL(string: "http://test.com:3000")!)!
         self.multipleJobOne = self.multipleJobClient.newJob(modelName: "mnist", version: "1.0")
         self.multipleJobTwo = self.multipleJobClient.newJob(modelName: "mnist", version: "1.0")
 
@@ -137,7 +137,7 @@ class JobTests: XCTestCase {
 
         self.diffExpectation = XCTestExpectation(description: "Test if diff was reported")
 
-        self.diffReportClient = SyftClient(url: URL(string: "http://test.com:5000")!)!
+        self.diffReportClient = SyftClient(url: URL(string: "http://test.com:3000")!)!
         self.diffReportJob = self.diffReportClient.newJob(modelName: "mnist", version: "1.0")
 
         self.diffReportJob.onReady { (_, _, report) in
