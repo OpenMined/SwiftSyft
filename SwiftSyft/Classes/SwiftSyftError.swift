@@ -1,7 +1,7 @@
 import Foundation
 import Combine
 
-enum SwiftSyftError: Error {
+public enum SwiftSyftError: Error, LocalizedError {
     case networkConstraintsFailure
     case batteryConstraintsFailure
     case authenticationFailure(underlyingError: Error)
@@ -9,6 +9,26 @@ enum SwiftSyftError: Error {
     case networkError(underlyingError: Error, urlResponse: URLResponse?)
     case networkResponseError(underlyingError: Error?)
     case unknownError(underlyingError: Error?)
+
+    public var localizedDescription: String {
+        switch self {
+        case .networkConstraintsFailure:
+            return "Network constraints failed"
+        case .batteryConstraintsFailure:
+            return "Battery constraints failed"
+        case .authenticationFailure:
+            return "Authentication failed"
+        case .cycleRejected:
+            return "Rejected from learning cycle"
+        case .networkError:
+            return "Network error"
+        case .networkResponseError:
+            return "Server response error"
+        case .unknownError:
+            return "Unknown error"
+        }
+    }
+
 }
 
 // Easier `mapError` for decode publisher
