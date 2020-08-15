@@ -4,9 +4,10 @@ import Combine
 enum SwiftSyftError: Error {
     case networkConstraintsFailure
     case batteryConstraintsFailure
-    case authenticationFailure
-    case cycleRejected
+    case authenticationFailure(underlyingError: Error)
+    case cycleRejected(status: String, timeout: Int?, error: String?)
     case networkError(underlyingError: Error, urlResponse: URLResponse?)
+    case networkResponseError(underlyingError: Error?)
     case unknownError(underlyingError: Error?)
 }
 

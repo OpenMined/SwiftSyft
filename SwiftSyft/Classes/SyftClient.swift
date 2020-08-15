@@ -234,8 +234,12 @@ public class SyftJob: SyftJobProtocol {
         decoder.keyDecodingStrategy = .convertFromSnakeCase
 
         let authPublisher = URLSession.shared.dataTaskPublisher(for: authRequest)
+                                .mapError { SwiftSyftError.networkError(underlyingError: $0, urlResponse: nil) }
                                 .map { $0.data }
-                                .decode(type: AuthResponse.self, decoder: decoder)
+                                .decode(type: AuthResponse.self,
+                                        decoder: decoder,
+                                        errorTransform: { SwiftSyftError.networkError(underlyingError: $0, urlResponse: nil)})
+//                                .decode(type: AuthResponse.self, decoder: decoder)
                                 .handleEvents(receiveOutput: { [unowned self] authResponse in
                                     self.workerId = authResponse.workerId
                                 })
@@ -243,7 +247,7 @@ public class SyftJob: SyftJobProtocol {
 
         // Auth response -> Get Ping/Downoad/Upload Speed -> Cycle Request
         let cycleResponsePublisher = authPublisher
-                                        .flatMap { [unowned self] authResponse -> AnyPublisher<(workerId: String, connectionMetrics: SyftConnectionMetrics?), Error> in
+                                        .flatMap { [unowned self] authResponse -> AnyPublisher<(workerId: String, connectionMetrics: SyftConnectionMetrics?), SwiftSyftError> in
 
                                             if authResponse.requiresSpeedTest {
 
@@ -253,14 +257,14 @@ public class SyftJob: SyftJobProtocol {
 
                                                 return Just((workerId: authResponse.workerId, connectionMetrics: nil))
                                                     .mapError({ _ in
-                                                        SyftClientError(message: "Impossible Error")
+                                                        SwiftSyftError.unknownError(underlyingError: nil)
                                                     })
                                                     .eraseToAnyPublisher()
 
                                             }
 
                                         }
-                                        .flatMap { [unowned self] (result) -> AnyPublisher<(cycleResponse: CycleResponseSuccess, workerId: String), Error> in
+                                        .flatMap { [unowned self] (result) -> AnyPublisher<(cycleResponse: CycleResponseSuccess, workerId: String), SwiftSyftError> in
                                             let (workerId, connectionMetrics) = result
                                             return self.cycleRequest(forWorkerId: workerId, connectionMetrics: connectionMetrics)
                                         }
@@ -275,7 +279,7 @@ public class SyftJob: SyftJobProtocol {
 
     }
 
-    func getConnectionMetrics(workerId: String) -> AnyPublisher<(workerId: String, connectionMetrics: SyftConnectionMetrics?), Error> {
+    func getConnectionMetrics(workerId: String) -> AnyPublisher<(workerId: String, connectionMetrics: SyftConnectionMetrics?), SwiftSyftError> {
 
         var urlComponents = URLComponents()
         urlComponents.scheme = "http"
@@ -285,7 +289,7 @@ public class SyftJob: SyftJobProtocol {
               let _ = connectionURL.host,
               let port = self.url.port else {
 
-            let urlError = URLError(.badURL)
+                let urlError = SwiftSyftError.networkError(underlyingError: URLError(.badURL), urlResponse: nil)
             return Fail(error: urlError).eraseToAnyPublisher()
 
         }
@@ -297,11 +301,13 @@ public class SyftJob: SyftJobProtocol {
         return connectionMetricsPublisher.map { (result) -> (workerId: String, connectionMetrics: SyftConnectionMetrics) in
             let (uploadSpeed, downloadSpeed) = result
             return (workerId: workerId, connectionMetrics: SyftConnectionMetrics(ping: self.ping, uploadSpeed: uploadSpeed, downloadSpeed: downloadSpeed))
-        }.eraseToAnyPublisher()
+        }
+        .mapError { SwiftSyftError.networkError(underlyingError: $0, urlResponse: nil) }
+        .eraseToAnyPublisher()
 
     }
 
-    func startPlanAndModelDownload(withCycleResponse cycleResponsePublisher: AnyPublisher<(cycleResponse: CycleResponseSuccess, workerId: String), Error>) {
+    func startPlanAndModelDownload(withCycleResponse cycleResponsePublisher: AnyPublisher<(cycleResponse: CycleResponseSuccess, workerId: String), SwiftSyftError>) {
 
         // Filter out client config
         let clientConfigPublisher = cycleResponsePublisher
@@ -312,15 +318,16 @@ public class SyftJob: SyftJobProtocol {
 
         // Download model params
         let modelParamPublisher = cycleResponsePublisher
-            .flatMap { (cycleResponse) -> AnyPublisher<Data, Error> in
+            .flatMap { (cycleResponse) -> AnyPublisher<Data, SwiftSyftError> in
                 let (cycleResponseSuccess, workerId) = cycleResponse
                 return self.downloadModel(forWorkerId: workerId, modelId: cycleResponseSuccess.modelId, requestKey: cycleResponseSuccess.requestKey)
             }
             .tryMap { try SyftProto_Execution_V1_State(serializedData: $0) }
+            .mapError { SwiftSyftError.networkResponseError(underlyingError: $0)}
 
         // Download plan
         let planPublisher = cycleResponsePublisher
-            .flatMap { (cycleResponse) -> AnyPublisher<Data, Error> in
+            .flatMap { (cycleResponse) -> AnyPublisher<Data, SwiftSyftError> in
                 let (cycleResponseSuccess, workerId) = cycleResponse
                 return self.downloadPlan(forWorkerId: workerId, planId: cycleResponseSuccess.planConfig.planId, requestKey: cycleResponseSuccess.requestKey)
             }
@@ -340,6 +347,7 @@ public class SyftJob: SyftJobProtocol {
 
                 return fileURL.path
             }
+            .mapError { SwiftSyftError.networkResponseError(underlyingError: $0)}
             .map { TorchTrainingModule(fileAtPath: $0) }
 
         clientConfigPublisher.zip(planPublisher, modelParamPublisher)
@@ -349,14 +357,15 @@ public class SyftJob: SyftJobProtocol {
                     break
                 case .failure(let error):
                     switch error {
-                    case let error as CycleResponseFailed where error.status == "rejected":
+                    case .cycleRejected(let status, let timeout, _) where status == "rejected":
 
-                        guard let timeout = error.timeout else {
+                        guard let timeout = timeout else {
                             self.onRejectedBlock(nil)
                             return
                         }
 
                         self.onRejectedBlock(TimeInterval(timeout))
+
                     default:
                         self.onErrorBlock(error)
                     }
@@ -368,7 +377,7 @@ public class SyftJob: SyftJobProtocol {
 
     }
 
-    func cycleRequest(forWorkerId workerId: String, connectionMetrics: SyftConnectionMetrics?) -> AnyPublisher<(cycleResponse: CycleResponseSuccess, workerId: String), Error> {
+    func cycleRequest(forWorkerId workerId: String, connectionMetrics: SyftConnectionMetrics?) -> AnyPublisher<(cycleResponse: CycleResponseSuccess, workerId: String), SwiftSyftError> {
 
         let encoder = JSONEncoder()
         let decoder = JSONDecoder()
@@ -390,8 +399,9 @@ public class SyftJob: SyftJobProtocol {
         cycleRequest.httpBody = try? encoder.encode(cycleRequestBody)
 
         return URLSession.shared.dataTaskPublisher(for: cycleRequest)
+                .mapError { SwiftSyftError.networkError(underlyingError: $0, urlResponse: nil) }
                 .map { $0.data }
-                .decode(type: CycleResponse.self, decoder: decoder)
+                .decode(type: CycleResponse.self, decoder: decoder, errorTransform: { SwiftSyftError.networkError(underlyingError: $0, urlResponse: nil)})
                 .tryMap { cycleResponse -> (CycleResponseSuccess, String) in
                     switch cycleResponse {
                     case .success(let cycleResponseSuccess):
@@ -400,10 +410,20 @@ public class SyftJob: SyftJobProtocol {
                         throw cycleResponseFailure
                     }
                 }
+                .mapError({ error  in
+                    switch error {
+                    case let error as CycleResponseFailed:
+                        return SwiftSyftError.cycleRejected(status: error.status,
+                                                     timeout: error.timeout,
+                                                     error: error.error)
+                    default:
+                        return SwiftSyftError.unknownError(underlyingError: error)
+                    }
+                })
                 .eraseToAnyPublisher()
     }
 
-    func downloadModel(forWorkerId workerId: String, modelId: Int, requestKey: String) -> AnyPublisher<Data, Error> {
+    func downloadModel(forWorkerId workerId: String, modelId: Int, requestKey: String) -> AnyPublisher<Data, SwiftSyftError> {
 
         var urlComponents = URLComponents()
         urlComponents.scheme = self.url.scheme
@@ -417,7 +437,7 @@ public class SyftJob: SyftJobProtocol {
         ]
 
         guard let downloadModelURL = urlComponents.url else {
-            let urlError = URLError(.badURL)
+            let urlError = SwiftSyftError.networkError(underlyingError: URLError(.badURL), urlResponse: nil)
             return Fail(error: urlError).eraseToAnyPublisher()
         }
 
@@ -425,13 +445,13 @@ public class SyftJob: SyftJobProtocol {
         downloadModelRequest.httpMethod = "GET"
 
         return URLSession.shared.dataTaskPublisher(for: downloadModelRequest)
+                    .mapError { SwiftSyftError.networkError(underlyingError: $0, urlResponse: nil) }
                     .map { $0.data }
-                    .mapError { $0 as Error}
                     .eraseToAnyPublisher()
 
     }
 
-    func downloadPlan(forWorkerId workerId: String, planId: Int, requestKey: String) -> AnyPublisher<Data, Error> {
+    func downloadPlan(forWorkerId workerId: String, planId: Int, requestKey: String) -> AnyPublisher<Data, SwiftSyftError> {
 
         var urlComponents = URLComponents()
         urlComponents.scheme = self.url.scheme
@@ -446,7 +466,7 @@ public class SyftJob: SyftJobProtocol {
         ]
 
         guard let downloadModelURL = urlComponents.url else {
-            let urlError = URLError(.badURL)
+            let urlError = SwiftSyftError.networkError(underlyingError: URLError(.badURL), urlResponse: nil)
             return Fail(error: urlError).eraseToAnyPublisher()
         }
 
@@ -454,8 +474,8 @@ public class SyftJob: SyftJobProtocol {
         downloadPlanRequest.httpMethod = "GET"
 
         return URLSession.shared.dataTaskPublisher(for: downloadPlanRequest)
+                    .mapError { SwiftSyftError.networkError(underlyingError: $0, urlResponse: nil) }
                     .map { $0.data }
-                    .mapError { $0 as Error}
                     .eraseToAnyPublisher()
 
     }
@@ -483,10 +503,13 @@ public class SyftJob: SyftJobProtocol {
                     throw error
                 }
             default:
-                throw SyftClientError(message: "Authentication Error Unknown Response")
+                // Should not reach this because authentication response are filtered
+                throw SwiftSyftError.unknownError(underlyingError: nil)
             }
-        }.flatMap { [unowned self] authResponse -> AnyPublisher<(workerId: String,
-                                     connectionMetrics: SyftConnectionMetrics?), Error> in
+        }
+        .mapError { SwiftSyftError.authenticationFailure(underlyingError: $0) }
+        .flatMap { [unowned self] authResponse -> AnyPublisher<(workerId: String,
+                                     connectionMetrics: SyftConnectionMetrics?), SwiftSyftError> in
 
             if authResponse.requiresSpeedTest {
 
@@ -496,7 +519,7 @@ public class SyftJob: SyftJobProtocol {
 
                 return Just((workerId: authResponse.workerId, connectionMetrics: nil))
                     .mapError({ _ in
-                        SyftClientError(message: "Impossible Error")
+                        SwiftSyftError.unknownError(underlyingError: nil)
                     })
                     .eraseToAnyPublisher()
 
@@ -537,7 +560,7 @@ public class SyftJob: SyftJobProtocol {
                     self.requestKey = cycleSuccess.requestKey
                     if let workerId = self.workerId {
                         let cycleResponsePublisher = CurrentValueSubject<(cycleResponse: CycleResponseSuccess,
-                            workerId: String), Error>((cycleResponse: cycleSuccess, workerId: workerId)).eraseToAnyPublisher()
+                            workerId: String), SwiftSyftError>((cycleResponse: cycleSuccess, workerId: workerId)).eraseToAnyPublisher()
                         self.startPlanAndModelDownload(withCycleResponse: cycleResponsePublisher)
                     }
                 case .failure(let error):
