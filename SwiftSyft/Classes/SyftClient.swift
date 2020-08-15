@@ -108,7 +108,7 @@ public class SyftJob: SyftJobProtocol {
     let upload: String = "23"
 
     var onReadyBlock: (_ plan: SyftPlan, _ clientConfig: FederatedClientConfig, _ report: ModelReport) -> Void = { _, _, _ in }
-    var onErrorBlock: (_ error: Error) -> Void = { _ in }
+    var onErrorBlock: (_ error: SwiftSyftError) -> Void = { _ in }
     var onRejectedBlock: (_ timeout: TimeInterval?) -> Void = { _ in }
 
     private var cyclePublisher: AnyPublisher<(SyftPlan, FederatedClientConfig), Error>?
@@ -180,7 +180,7 @@ public class SyftJob: SyftJobProtocol {
 
         // Continue if battery charging check is false or if true, check that the device is indeed charging
         if chargeDetection && !self.isBatteryCharging() {
-            let error = SyftClientError(message: "User requested that device should be charging when executing.")
+            let error = SwiftSyftError.batteryConstraintsFailure
             self.onErrorBlock(error)
             return
         }
@@ -204,7 +204,7 @@ public class SyftJob: SyftJobProtocol {
 
             } else {
 
-                self.onErrorBlock(SyftClientError(message: "Device not on wifi"))
+                self.onErrorBlock(SwiftSyftError.networkConstraintsFailure)
 
             }
         }.store(in: &self.disposeBag)
@@ -548,8 +548,7 @@ public class SyftJob: SyftJobProtocol {
             switch completionResult {
             case .finished:
                 break
-            case .failure(let error):
-                self.onErrorBlock(error)
+            case .failure:                self.onErrorBlock(SwiftSyftError.networkResponseError(underlyingError: nil))
             }
 
         }, receiveValue: { [unowned self] cycleRequestResponse in
