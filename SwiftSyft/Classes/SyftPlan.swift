@@ -1,7 +1,7 @@
 import Foundation
 import SyftProto
 
-struct SwiftSyftError: LocalizedError {
+struct TensorError: LocalizedError {
     var localizedDescription: String
 }
 
@@ -33,7 +33,7 @@ public class TensorData<T> {
         if let tensorType = typeMapping[ObjectIdentifier(type(of: data).Element.self)] {
             self.tensorType = tensorType
         } else {
-            throw SwiftSyftError(localizedDescription: "Unsupported type selected for array. Please use Int, Int64, Float or Double")
+            throw TensorError(localizedDescription: "Unsupported type selected for array. Please use Int, Int64, Float or Double")
         }
     }
 }
