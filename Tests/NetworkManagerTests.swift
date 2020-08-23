@@ -7,7 +7,7 @@ class NetworkManagerTests: XCTestCase {
     
     private let DummyWorkerID:String = UUID().uuidString
     private let baseUrl:String = "http://localhost"
-    private let port:Int = 5000
+    private let port:Int = 3000
     
     override func setUp() {
         super.setUp()
@@ -19,7 +19,7 @@ class NetworkManagerTests: XCTestCase {
     /// - Replace baseUrl and port with your base url and port.
     /// - Uncomment the tests from below.
     func testPortDummy() {
-            XCTAssertTrue(port == 5000)
+            XCTAssertTrue(port == 3000)
     }
     
 //    func testDownloadSpeed() {
