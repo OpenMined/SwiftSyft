@@ -1,6 +1,7 @@
 platform :ios, '13.0'
 source 'https://github.com/CocoaPods/Specs.git'
 workspace 'SwiftSyft'
+use_frameworks!
 
 target 'SwiftSyft_Example' do
   project 'Example/SwiftSyft.xcodeproj'
