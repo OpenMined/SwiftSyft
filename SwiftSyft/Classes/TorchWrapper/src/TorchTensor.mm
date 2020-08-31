@@ -117,4 +117,23 @@ static inline TorchTensorType tensorTypeFromScalarType(c10::ScalarType type) {
   return torchTensor;
 }
 
+#pragma mark Tensor Operations
+
++ (TorchTensor *)cat:(NSArray<TorchTensor *> *)tensors {
+
+    std::vector<at::Tensor> tensorsImpl;
+
+    for (TorchTensor* tensor in tensors) {
+
+        tensorsImpl.push_back(tensor.toTensor);
+
+    }
+
+    at::Tensor result =  torch::cat(tensorsImpl, 0);
+
+    return [TorchTensor newWithTensor:result];
+
+}
+
+
 @end
