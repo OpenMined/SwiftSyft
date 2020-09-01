@@ -115,54 +115,28 @@ public class SyftJob: SyftJobProtocol {
     private var disposeBag = Set<AnyCancellable>()
 
     private let monitor = NWPathMonitor()
+    private let batteryChargeCheck: () -> Bool
+    private let wifiCheck: (NWPathMonitor, Bool) -> Future<Bool, Never>
 
-    init(connectionType: SyftConnectionType, modelName: String, version: String, authToken: String? = nil) {
+    init(connectionType: SyftConnectionType,
+         modelName: String,
+         version: String,
+         authToken: String? = nil,
+         batteryChargeCheck: @escaping () -> Bool = SyftJob.isBatteryCharging,
+         wifiCheck: @escaping (NWPathMonitor, Bool) -> Future<Bool, Never> = SyftJob.validateWifiNetwork) {
+
         self.modelName = modelName
         self.version = version
         self.connectionType = connectionType
         self.authToken = authToken
+        self.batteryChargeCheck = batteryChargeCheck
+        self.wifiCheck = wifiCheck
 
         switch connectionType {
         case let .http(url):
             self.url = url
         case let .socket(url, sendMessageSubject: _, receiveMessagePublisher: _):
             self.url = url
-        }
-
-    }
-
-    func isBatteryCharging() -> Bool {
-
-        // Remember current batter monitoring setting to reset it after checking.
-        let userBatteryMonitoringSetting = UIDevice.current.isBatteryMonitoringEnabled
-
-        defer {
-            UIDevice.current.isBatteryMonitoringEnabled = userBatteryMonitoringSetting
-        }
-
-        UIDevice.current.isBatteryMonitoringEnabled = true
-
-        return UIDevice.current.batteryState == .charging
-
-    }
-
-    func validateWifiNetwork(isOnWifi: Bool) -> Future<Bool, Never> {
-
-        if !isOnWifi {
-            return Future { $0(.success(true)) }
-        } else {
-
-            return Future { promise in
-                self.monitor.pathUpdateHandler = { path in
-                    if path.usesInterfaceType(.wifi) {
-                        promise(.success(true))
-                    } else {
-                        promise(.success(false))
-                    }
-                }
-                self.monitor.start(queue: .global())
-            }
-
         }
 
     }
@@ -179,13 +153,13 @@ public class SyftJob: SyftJobProtocol {
     public func start(chargeDetection: Bool = true, wifiDetection: Bool = true) {
 
         // Continue if battery charging check is false or if true, check that the device is indeed charging
-        if chargeDetection && !self.isBatteryCharging() {
+        if chargeDetection && !self.batteryChargeCheck() {
             let error = SwiftSyftError.batteryConstraintsFailure
             self.onErrorBlock(error)
             return
         }
 
-        self.validateWifiNetwork(isOnWifi: wifiDetection).sink(receiveCompletion: { _ in }) { [weak self] networkIntefaceValid in
+        self.wifiCheck(self.monitor, wifiDetection).sink(receiveCompletion: { _ in }) { [weak self] networkIntefaceValid in
 
             guard let self = self else {
                 return
@@ -633,4 +607,41 @@ public class SyftJob: SyftJobProtocol {
         self.onRejectedBlock = execute
     }
 
+}
+
+extension SyftJob {
+
+    class func isBatteryCharging() -> Bool {
+
+        // Remember current battery monitoring setting to reset it after checking.
+        let userBatteryMonitoringSetting = UIDevice.current.isBatteryMonitoringEnabled
+
+        defer {
+            UIDevice.current.isBatteryMonitoringEnabled = userBatteryMonitoringSetting
+        }
+
+        UIDevice.current.isBatteryMonitoringEnabled = true
+
+        return UIDevice.current.batteryState == .charging
+
+    }
+
+    class func validateWifiNetwork(networkMonitor: NWPathMonitor, isOnWifi: Bool) -> Future<Bool, Never> {
+
+        if !isOnWifi {
+            return Future { $0(.success(true)) }
+        } else {
+
+            return Future { promise in
+                networkMonitor.pathUpdateHandler = { path in
+                    if path.usesInterfaceType(.wifi) {
+                        promise(.success(true))
+                    } else {
+                        promise(.success(false))
+                    }
+                }
+                networkMonitor.start(queue: .global())
+            }
+        }
+    }
 }

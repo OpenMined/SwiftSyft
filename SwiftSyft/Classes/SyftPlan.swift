@@ -65,8 +65,8 @@ public class SyftPlan {
     ///   - clientConfig: contains training parameters (batch size and learning rate)
     @discardableResult public func execute<T, U>(trainingData: TrainingData<T>, validationData: ValidationData<U>, clientConfig: FederatedClientConfig) -> Float {
 
-        var trainingDataCopy = trainingData
-        var validationDataCopy = validationData
+        let trainingDataCopy = trainingData
+        let validationDataCopy = validationData
 
         let stateTensorsHolder = self.updatedModelState.getTensorData()
 
