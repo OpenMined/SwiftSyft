@@ -613,7 +613,7 @@ extension SyftJob {
 
     class func isBatteryCharging() -> Bool {
 
-        // Remember current batter monitoring setting to reset it after checking.
+        // Remember current battery monitoring setting to reset it after checking.
         let userBatteryMonitoringSetting = UIDevice.current.isBatteryMonitoringEnabled
 
         defer {

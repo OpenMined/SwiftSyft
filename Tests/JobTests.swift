@@ -8,6 +8,7 @@
 import XCTest
 import OHHTTPStubs
 @testable import SwiftSyft
+import Combine
 
 class JobTests: XCTestCase {
 
@@ -17,6 +18,7 @@ class JobTests: XCTestCase {
     var multipleJobClient: SyftClient!
     var multipleJobOne: SyftJob!
     var multipleJobTwo: SyftJob!
+    var multipleJobThree: SyftJob!
 
     var diffReportClient: SyftClient!
     var diffReportJob: SyftJob!
@@ -149,6 +151,62 @@ class JobTests: XCTestCase {
         self.diffReportJob.start(chargeDetection: false, wifiDetection: false)
 
         wait(for: [self.diffExpectation], timeout: 7)
+    }
+    
+    func testChargeandWifi() {
+        
+        let jobOneExpectation = expectation(description: "charge true and wifi true test")
+        let jobTwoExpectation = expectation(description: "charge false and wifi true test")
+        let jobThreeExpectation = expectation(description: "charge true and wifi false test")
+        
+        self.multipleJobOne = SyftJob(connectionType: .http(URL(string: "http://test.com:3000")!),
+         modelName: "model",version: "1.0",authToken: nil,batteryChargeCheck: { return true },
+         wifiCheck: { _,_ in
+            return Future<Bool, Never> { promise in
+                promise(.success(true))
+                // promise(.success(false))
+            }
+        })
+        
+        self.multipleJobTwo = SyftJob(connectionType: .http(URL(string: "http://test.com:3000")!),
+         modelName: "model",version: "1.0",authToken: nil,batteryChargeCheck: { return false },
+         wifiCheck: { _,_ in
+            return Future<Bool, Never> { promise in
+                promise(.success(true))
+                // promise(.success(false))
+            }
+        })
+        
+        self.multipleJobThree = SyftJob(connectionType: .http(URL(string: "http://test.com:3000")!),
+         modelName: "model",version: "1.0",authToken: nil,batteryChargeCheck: { return true },
+         wifiCheck: { _,_ in
+            return Future<Bool, Never> { promise in
+                // promise(.success(true))
+                promise(.success(false))
+            }
+        })
+        
+        self.multipleJobOne.onReady { (_,_,_) in
+            
+            jobOneExpectation.fulfill()
+        }
+        
+        self.multipleJobTwo.onError {(_) in
+            
+            jobTwoExpectation.fulfill()
+        }
+        
+        self.multipleJobThree.onError { (_) in
+            
+            jobThreeExpectation.fulfill()
+        }
+        
+        self.multipleJobOne.start(chargeDetection: true, wifiDetection: true)
+        self.multipleJobTwo.start(chargeDetection: true, wifiDetection: true)
+        self.multipleJobThree.start(chargeDetection: true, wifiDetection: true)
+        
+        wait(for: [jobOneExpectation,jobTwoExpectation,jobThreeExpectation], timeout: 7)
+
     }
     
     override func tearDown() {
