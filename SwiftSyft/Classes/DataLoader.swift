@@ -54,7 +54,7 @@ struct RandomIterator<T: Collection>: IteratorProtocol {
     }
 }
 
-struct BatchIterator<T: IteratorProtocol>: IteratorProtocol {
+struct TensorBatchIterator<T: IteratorProtocol>: IteratorProtocol where T.Element == TorchTensor {
 
     var iterator: T
     let batchSize: Int
@@ -66,24 +66,30 @@ struct BatchIterator<T: IteratorProtocol>: IteratorProtocol {
 
     mutating func next() -> T.Element? {
 
-        var result: [T.Element] = []
+        var resultArray: [T.Element] = []
 
         for _ in 1...batchSize {
 
             if let next = iterator.next() {
-                result.append(next)
+                resultArray.append(next)
             } else {
                 return nil
             }
 
         }
 
-        return result.first
+        guard resultArray.count == batchSize else {
+            return nil
+        }
+
+        let resultTensor = TorchTensor.cat(resultArray)
+
+        return resultTensor
 
     }
 }
 
-struct MultiBatchIterator<T: IteratorProtocol>: IteratorProtocol where T.Element == [TorchTensor] {
+struct MultiTensorBatchIterator<T: IteratorProtocol>: IteratorProtocol where T.Element == [TorchTensor] {
 
     var iterator: T
     var batchSize: Int
@@ -164,7 +170,7 @@ class TensorDataLoader<T: Collection>: DataLoader<T> where T.Element == TorchTen
         }
 
         if batchSize > 1 {
-            self.iterator = AnyIterator(BatchIterator(iterator: self.iterator, batchSize: batchSize))
+            self.iterator = AnyIterator(TensorBatchIterator(iterator: self.iterator, batchSize: batchSize))
         }
 
         super.init(dataset: dataset)
@@ -193,7 +199,7 @@ class MultiTensorDataLoader<T: Collection>: DataLoader<T> where T.Element == [To
         }
 
         if batchSize > 1 {
-            self.iterator = AnyIterator(MultiBatchIterator(iterator: self.iterator, batchSize: batchSize))
+            self.iterator = AnyIterator(MultiTensorBatchIterator(iterator: self.iterator, batchSize: batchSize))
         }
 
         super.init(dataset: dataset)
