@@ -100,6 +100,10 @@ static inline TorchTensorType tensorTypeFromScalarType(c10::ScalarType type) {
   NSAssert(NO, @"Tensors are immutable");
 }
 
+- (BOOL)isEqualToTensor:(TorchTensor *)other {
+    return torch::equal(_impl, other.toTensor);
+}
+
 #pragma mark NSCopying
 
 - (instancetype)copyWithZone:(NSZone*)zone {
@@ -129,10 +133,29 @@ static inline TorchTensorType tensorTypeFromScalarType(c10::ScalarType type) {
 
     }
 
-    at::Tensor result =  torch::cat(tensorsImpl, 0);
+    try {
+        at::Tensor result =  torch::cat(tensorsImpl, 0);
+        return [TorchTensor newWithTensor:result];
+    } catch (std::exception const& exception) {
+        NSLog(@"%s", exception.what());
+        return nil;
+    }
 
-    return [TorchTensor newWithTensor:result];
+    return nil;
 
+}
+
+- (BOOL)isEqual:(id)object {
+
+    if (self == object) {
+        return YES;
+    }
+
+    if (![object isKindOfClass:[TorchTensor class]]) {
+        return NO;
+    }
+
+    return [self isEqualToTensor:(TorchTensor*)object];
 }
 
 
