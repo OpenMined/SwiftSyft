@@ -20,16 +20,32 @@ extension TorchTensor: TorchIValueConvertable {
 
 }
 
+// Swift for tensorflow wrapper for RandomNumberGenerator
+struct AnyRandomNumberGenerator: RandomNumberGenerator {
+    var rng: RandomNumberGenerator
+
+    init(_ rng: RandomNumberGenerator) {
+        self.rng = rng
+    }
+
+    mutating func next() -> UInt64 {
+        return self.rng.next()
+    }
+}
+
 struct RandomIterator<T: Collection>: IteratorProtocol {
 
     var mutableCollection: [T.Element]
+    var randomNumberGenerator: AnyRandomNumberGenerator
 
-    init(collection: T) {
+    init(collection: T, randomNumberGenerator: RandomNumberGenerator = SystemRandomNumberGenerator()) {
         self.mutableCollection = Array(collection)
+        self.randomNumberGenerator = AnyRandomNumberGenerator(randomNumberGenerator)
     }
 
     mutating func next() -> T.Element? {
-        guard let randomIndex = mutableCollection.indices.randomElement() else {
+
+        guard let randomIndex = mutableCollection.indices.randomElement(using: &randomNumberGenerator) else {
             return nil
         }
 
