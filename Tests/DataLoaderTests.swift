@@ -21,6 +21,9 @@ class SeededGenerator: RandomNumberGenerator {
     }
 }
 
+// LibTorch tensor operations (ex. torch::cat) currently not working in
+// test target with error message: "PyTorch is not linked with support for cpu devices".
+// Will wait for these operations to work before adding more tests.
 class DataLoaderTests: XCTestCase {
 
     func testRandomIterator() {
@@ -37,5 +40,6 @@ class DataLoaderTests: XCTestCase {
         XCTAssertEqual(result, [3, 4, 2, 5, 1])
 
     }
+
 
 }
