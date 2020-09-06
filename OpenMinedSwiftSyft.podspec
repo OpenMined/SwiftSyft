@@ -44,9 +44,10 @@ Pod::Spec.new do |s|
   #   'SwiftSyft' => ['SwiftSyft/Assets/*.png']
   # }
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
+#  s.public_header_files = 'SwiftSyft/Classes/TorchWrapper/apis/*.h'
+  s.private_header_files = 'SwiftSyft/Classes/TorchWrapper/src/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'LibTorch', '~> 1.5.0'
+  s.dependency 'LibTorch', '~> 1.6.0'
   s.dependency 'GoogleWebRTC', '~> 1.1.0'
   s.dependency 'SyftProto', '0.4.9'
   
