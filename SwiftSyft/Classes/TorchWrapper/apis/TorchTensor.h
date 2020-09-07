@@ -46,7 +46,13 @@ typedef NS_ENUM(NSUInteger, TorchTensorType) {
                                 Size:(NSArray<NSNumber*>*)size
                                 Type:(TorchTensorType)type;
 
+# pragma mark - TorchTensor operations
+
 - (BOOL)isEqual:(nullable id)object;
+- (nullable TorchTensor *)sub:(TorchTensor *)other error:(NSError **)error;
+- (nullable TorchTensor *)add:(TorchTensor *)other error:(NSError **)error;
+- (nullable TorchTensor *)mul:(TorchTensor *)other error:(NSError **)error;
+- (nullable TorchTensor *)div:(TorchTensor *)other error:(NSError **)error;
 
 + (TorchTensor *)cat:(NSArray<TorchTensor *> *)tensor;
 
