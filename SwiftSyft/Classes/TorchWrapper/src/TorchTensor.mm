@@ -1,6 +1,7 @@
 #import "TorchTensor.h"
 #import <LibTorch/LibTorch.h>
 #import "TorchTensorPrivate.h"
+#import "TorchError.h"
 
 #define DEFINE_TENSOR_TYPES(_) \
   _(Byte)                      \
@@ -158,5 +159,48 @@ static inline TorchTensorType tensorTypeFromScalarType(c10::ScalarType type) {
     return [self isEqualToTensor:(TorchTensor*)object];
 }
 
+- (TorchTensor *)sub:(TorchTensor *)other error:(NSError **)error {
+    try {
+        at::Tensor result = torch::sub(_impl, other.toTensor);
+        return [TorchTensor newWithTensor:result];
+    } catch (std::exception const& exception) {
+        NSString *errorMessage = [NSString stringWithFormat:@"%s", exception.what()];
+        *error = [NSError errorWithDomain:TorchErrorDomain code:TorchTensorOperationError userInfo:@{NSLocalizedDescriptionKey: errorMessage}];
+        return nil;
+    }
+}
+
+- (nullable TorchTensor *)add:(TorchTensor *)other error:(NSError **)error {
+    try {
+        at::Tensor result = torch::add(_impl, other.toTensor);
+        return [TorchTensor newWithTensor:result];
+    } catch (std::exception const& exception) {
+        NSString *errorMessage = [NSString stringWithFormat:@"%s", exception.what()];
+        *error = [NSError errorWithDomain:TorchErrorDomain code:TorchTensorOperationError userInfo:@{NSLocalizedDescriptionKey: errorMessage}];
+        return nil;
+    }
+}
+
+- (nullable TorchTensor *)mul:(TorchTensor *)other error:(NSError **)error {
+    try {
+        at::Tensor result = torch::mul(_impl, other.toTensor);
+        return [TorchTensor newWithTensor:result];
+    } catch (std::exception const& exception) {
+        NSString *errorMessage = [NSString stringWithFormat:@"%s", exception.what()];
+        *error = [NSError errorWithDomain:TorchErrorDomain code:TorchTensorOperationError userInfo:@{NSLocalizedDescriptionKey: errorMessage}];
+        return nil;
+    }
+}
+
+- (nullable TorchTensor *)div:(TorchTensor *)other error:(NSError **)error {
+    try {
+        at::Tensor result = torch::div(_impl, other.toTensor);
+        return [TorchTensor newWithTensor:result];
+    } catch (std::exception const& exception) {
+        NSString *errorMessage = [NSString stringWithFormat:@"%s", exception.what()];
+        *error = [NSError errorWithDomain:TorchErrorDomain code:TorchTensorOperationError userInfo:@{NSLocalizedDescriptionKey: errorMessage}];
+        return nil;
+    }
+}
 
 @end
