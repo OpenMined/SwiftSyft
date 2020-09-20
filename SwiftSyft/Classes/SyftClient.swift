@@ -34,6 +34,11 @@ struct SyftConnectionMetrics {
     let downloadSpeed: Double
 }
 
+struct Plan {
+    let name: String
+    let planProto: SyftProto_Execution_V1_Plan
+}
+
 /// Syft client for model-centric federated learning
 public class SyftClient: SyftClientProtocol {
     private let url: URL
@@ -301,28 +306,50 @@ public class SyftJob: SyftJobProtocol {
 
         // Download plan
         let planPublisher = cycleResponsePublisher
-            .flatMap { (cycleResponse) -> AnyPublisher<Data, SwiftSyftError> in
+            .flatMap { (cycleResponse) -> AnyPublisher<[Plan], SwiftSyftError> in
+
                 let (cycleResponseSuccess, workerId) = cycleResponse
-                return self.downloadPlan(forWorkerId: workerId, planId: cycleResponseSuccess.planConfig.planId, requestKey: cycleResponseSuccess.requestKey)
-            }
-            .tryMap { try SyftProto_Execution_V1_Plan(serializedData: $0) }
-            .tryMap { torchScriptPlan -> String in
 
-                // Save torchscript plan to filesystem before loading
-                let torchscriptData = torchScriptPlan.torchscript
+                let planDownloadPublishers: [AnyPublisher<Plan, SwiftSyftError>] =  cycleResponseSuccess.plans.enumerated().map { (_, dictElement) -> AnyPublisher<Plan, SwiftSyftError> in
 
-                let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-                guard let documentDirectory = urls.first else {
-                    throw SyftClientError(message: "Error saving plan. Saving not allowed")
+                    let (planName, planId) = dictElement
+
+                    return self.downloadPlan(forWorkerId: workerId, planName: planName, planId: planId, requestKey: cycleResponseSuccess.requestKey)
                 }
 
-                let fileURL = documentDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("pt")
-                try torchscriptData.write(to: fileURL, options: .atomic)
+                return Publishers.ZipMany(planDownloadPublishers).eraseToAnyPublisher()
 
-                return fileURL.path
+            }
+            .tryMap { plans -> [String: URL] in
+
+                let planArray = try plans.map { plan -> (String, URL) in
+
+                    // Save torchscript plan to filesystem before loading
+                    let torchscriptData = plan.planProto.torchscript
+
+                    let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+                    guard let documentDirectory = urls.first else {
+                        throw SyftClientError(message: "Error saving plan. Saving not allowed")
+                    }
+
+                    let fileURL = documentDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("pt")
+                    try torchscriptData.write(to: fileURL, options: .atomic)
+
+                    return (plan.name, fileURL)
+
+                }
+
+                return Dictionary(uniqueKeysWithValues: planArray)
+
             }
             .mapError { SwiftSyftError.networkResponseError(underlyingError: $0)}
-            .map { TorchTrainingModule(fileAtPath: $0) }
+            .map { planDictionary -> [String: TorchTrainingModule] in
+
+                return planDictionary.mapValues { planURL in
+                    return TorchTrainingModule(fileAtPath: planURL.path)
+                }
+
+            }
 
         clientConfigPublisher.zip(planPublisher, modelParamPublisher)
             .sink(receiveCompletion: { [unowned self] completion in
@@ -344,7 +371,12 @@ public class SyftJob: SyftJobProtocol {
                         self.onErrorBlock(error)
                     }
                 }
-            }, receiveValue: { [weak self] (clientConfig, trainingModule, modelParam) in
+            }, receiveValue: { [weak self] (clientConfig, planDictionary, modelParam) in
+
+                guard let trainingModule = planDictionary.values.first else {
+                    return
+                }
+
                 let syftPlan = SyftPlan(trainingModule: trainingModule, modelState: modelParam)
                 self?.onReadyBlock(syftPlan, clientConfig, {[weak self] data in self?.reportDiff(diffData: data)})
             }).store(in: &disposeBag)
@@ -425,7 +457,7 @@ public class SyftJob: SyftJobProtocol {
 
     }
 
-    func downloadPlan(forWorkerId workerId: String, planId: Int, requestKey: String) -> AnyPublisher<Data, SwiftSyftError> {
+    func downloadPlan(forWorkerId workerId: String, planName: String, planId: Int, requestKey: String) -> AnyPublisher<Plan, SwiftSyftError> {
 
         var urlComponents = URLComponents()
         urlComponents.scheme = self.url.scheme
@@ -448,8 +480,9 @@ public class SyftJob: SyftJobProtocol {
         downloadPlanRequest.httpMethod = "GET"
 
         return URLSession.shared.dataTaskPublisher(for: downloadPlanRequest)
+                    .tryMap { try SyftProto_Execution_V1_Plan(serializedData: $0.data) }
                     .mapError { SwiftSyftError.networkError(underlyingError: $0, urlResponse: nil) }
-                    .map { $0.data }
+                    .map { Plan(name: planName, planProto: $0) }
                     .eraseToAnyPublisher()
 
     }

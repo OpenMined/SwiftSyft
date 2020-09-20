@@ -62,7 +62,7 @@ struct CycleResponseSuccess: Decodable {
     let requestKey: String
     let model: String
     let modelId: Int
-    let planConfig: PlanConfig
+    let plans: [String: Int]
     let clientConfig: FederatedClientConfig
 
     enum CodingKeys: String, CodingKey {
@@ -70,7 +70,7 @@ struct CycleResponseSuccess: Decodable {
         case requestKey = "request_key"
         case modelId = "model_id"
         case model = "model"
-        case planConfig = "plans"
+        case plans = "plans"
         case clientConfig = "client_config"
     }
 }
@@ -84,10 +84,7 @@ extension CycleResponseSuccess {
         requestKey = try container.decode(String.self, forKey: .requestKey)
         model = try container.decode(String.self, forKey: .model)
         modelId = try container.decode(Int.self, forKey: .modelId)
-
-        let planContainer = try container.nestedContainer(keyedBy: PlanConfig.CodingKeys.self, forKey: .planConfig)
-        let planId = try planContainer.decode(Int.self, forKey: .planId)
-        planConfig = PlanConfig(planId: planId)
+        plans = try container.decode([String: Int].self, forKey: .plans)
 
         let clientConfigContainer = try container.nestedContainer(keyedBy: FederatedClientConfig.CodingKeys.self, forKey: .clientConfig)
         let name =  try clientConfigContainer.decode(String.self, forKey: .name)
@@ -144,14 +141,6 @@ public struct FederatedClientConfig: Codable {
         case batchSize = "batch_size"
         case learningRate = "lr"
         case maxUpdates = "max_updates"
-    }
-}
-
-struct PlanConfig: Codable {
-    let planId: Int
-
-    enum CodingKeys: String, CodingKey {
-        case planId = "training_plan"
     }
 }
 
