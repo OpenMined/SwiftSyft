@@ -8,6 +8,7 @@
 //  - Added batching of data and labels
 
 import Foundation
+import SwiftSyft
 
 // Load either train/test data
 // Batch data according to batch size
@@ -19,6 +20,7 @@ enum ImageSetType {
 
 enum MNISTError: Error {
     case fileError
+    case tensorConversionError
 }
 
 private enum DataFileType {
@@ -27,6 +29,39 @@ private enum DataFileType {
 }
 
 class MNISTLoader {
+
+    static func loadAsTensors(setType: ImageSetType) throws -> [[TorchTensor]] {
+
+        switch setType {
+        case .train:
+            let (trainData, trainLabel) = try loadTrain()
+            return try convertToTensors(imageArray: trainData, label: trainLabel)
+        case .test:
+            let (testData, testLabel) = try loadTest()
+            return try convertToTensors(imageArray: testData, label: testLabel)
+        }
+    }
+
+    static func convertToTensors(imageArray: [[Float]], label: [Int]) throws -> [[TorchTensor]] {
+
+        var resultTensors: [[TorchTensor]] = []
+        for (imageArray, label) in zip(imageArray, label) {
+            var mutableImageArray = imageArray
+            guard let imageTensor = TorchTensor.new(withData: &mutableImageArray, size: [28, 28], type: .float) else {
+                throw MNISTError.tensorConversionError
+            }
+
+            var oneHotRow = [Int](repeating: 0, count: 10)
+            oneHotRow[label] = 1
+            guard let labelTensor = TorchTensor.new(withData: &oneHotRow, size: [1, 10], type: .int) else {
+                throw MNISTError.tensorConversionError
+            }
+
+            resultTensors.append([imageTensor, labelTensor])
+        }
+        return resultTensors
+    }
+
 
     static func load(setType: ImageSetType, batchSize: Int) throws -> (data: LazyChunkSequence<[[Float]]>, labels: LazyChunkSequence<[Int]>) {
 
