@@ -8,7 +8,9 @@
   _(Char)                      \
   _(Int)                       \
   _(Float)                     \
+  _(Double)                    \
   _(Long)                      \
+  _(Bool)                      \
   _(Undefined)
 
 static inline c10::ScalarType scalarTypeFromTensorType(TorchTensorType type) {

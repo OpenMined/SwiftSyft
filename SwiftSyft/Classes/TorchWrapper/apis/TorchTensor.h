@@ -8,6 +8,8 @@ typedef NS_ENUM(NSUInteger, TorchTensorType) {
   TorchTensorTypeInt,        // 32bit signed integer
   TorchTensorTypeLong,       // 64bit signed integer
   TorchTensorTypeFloat,      // 32bit single precision floating point
+  TorchTensorTypeDouble,      // 64bit double precision floating point
+  TorchTensorTypeBool,      // Boolean
   TorchTensorTypeUndefined,  // Undefined tensor type. This indicates an error with the model
 };
 /**
