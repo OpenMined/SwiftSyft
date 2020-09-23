@@ -112,7 +112,7 @@ public class SyftJob: SyftJobProtocol {
     let ping: Int = 8
     let upload: String = "23"
 
-    var onReadyBlock: (_ plan: SyftPlan, _ clientConfig: FederatedClientConfig, _ report: ModelReport) -> Void = { _, _, _ in }
+    var onReadyBlock: (_ model: SyftModel, _ planDictionary: [String: TorchModule], _ clientConfig: FederatedClientConfig, _ report: ModelReport) -> Void = { _, _, _, _ in }
     var onErrorBlock: (_ error: SwiftSyftError) -> Void = { _ in }
     var onRejectedBlock: (_ timeout: TimeInterval?) -> Void = { _ in }
 
@@ -343,13 +343,19 @@ public class SyftJob: SyftJobProtocol {
 
             }
             .mapError { SwiftSyftError.networkResponseError(underlyingError: $0)}
-            .map { planDictionary -> [String: TorchTrainingModule] in
+            .tryMap { planDictionary -> [String: TorchModule] in
 
-                return planDictionary.mapValues { planURL in
-                    return TorchTrainingModule(fileAtPath: planURL.path)
+                return try planDictionary.mapValues { planURL in
+//                    return TorchTrainingModule(fileAtPath: planURL.path)
+                    guard let module = TorchModule.loadTorchscriptModel(planURL.path) else {
+                        throw SwiftSyftError.unknownError(underlyingError: nil)
+                    }
+
+                    return module
                 }
 
             }
+            .mapError { SwiftSyftError.unknownError(underlyingError: $0) }
 
         clientConfigPublisher.zip(planPublisher, modelParamPublisher)
             .sink(receiveCompletion: { [unowned self] completion in
@@ -371,14 +377,18 @@ public class SyftJob: SyftJobProtocol {
                         self.onErrorBlock(error)
                     }
                 }
-            }, receiveValue: { [weak self] (clientConfig, planDictionary, modelParam) in
+            }, receiveValue: { [unowned self] (clientConfig, planDictionary, modelParam) in
 
-                guard let trainingModule = planDictionary.values.first else {
-                    return
-                }
+//                guard let trainingModule = planDictionary.values.first else {
+//                    return
+//                }
 
-                let syftPlan = SyftPlan(trainingModule: trainingModule, modelState: modelParam)
-                self?.onReadyBlock(syftPlan, clientConfig, {[weak self] data in self?.reportDiff(diffData: data)})
+//                let syftPlan = SyftPlan(trainingModule: trainingModule, modelState: modelParam)
+//                self?.onReadyBlock(planDictionary, clientConfig, {[weak self] data in self?.reportDiff(diffData: data)})
+
+                let model = SyftModel(modelState: modelParam)
+                self.onReadyBlock(model, planDictionary, clientConfig, {[weak self] data in self?.reportDiff(diffData: data)})
+
             }).store(in: &disposeBag)
 
     }
@@ -622,7 +632,7 @@ public class SyftJob: SyftJobProtocol {
     /// - parameter plan: `SyftPlan` use this to train your model and generate diffs
     /// - parameter clientConfig: contains training configuration such as batch size and learning rate.
     /// - parameter report: closure that accepts diffs as `Data` and sends them to PyGrid.
-    public func onReady(execute: @escaping (_ plan: SyftPlan, _ clientConfig: FederatedClientConfig, _ report: ModelReport) -> Void) {
+    public func onReady(execute: @escaping (_ model: SyftModel, _ plan: [String: TorchModule], _ clientConfig: FederatedClientConfig, _ report: ModelReport) -> Void) {
         self.onReadyBlock = execute
     }
 

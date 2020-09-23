@@ -96,77 +96,77 @@ class HomeViewController: UIViewController, UITextViewDelegate {
             // plan - Use this to generate diffs using our training data
             // clientConfig - contains the configuration for the training cycle (batchSize, learning rate) and metadata for the model (name, version)
             // modelReport - Used as a completion block and reports the diffs to PyGrid.
-            self.syftJob?.onReady(execute: { plan, clientConfig, modelReport in
+            self.syftJob?.onReady(execute: { modelParams, plan, clientConfig, modelReport in
 
-                // Set label to show that MNIST data is currently being loaded into memory
-                DispatchQueue.main.sync {
-                    self.loadingLabel.text = "Loading MNIST Data"
-                }
+//                // Set label to show that MNIST data is currently being loaded into memory
+//                DispatchQueue.main.sync {
+//                    self.loadingLabel.text = "Loading MNIST Data"
+//                }
+//
+//                do {
+//
+//                    // This returns a lazily evaluated sequence for each MNIST image and the corresponding label
+//                    // It divides the training data and the label by batches
+//                    let (mnistData, labels) = try MNISTLoader.load(setType: .train, batchSize: clientConfig.batchSize)
+//
+//                    // Stop the loading indicator and present the line chart view controller
+//                    // plotting the loss from training
+//                    DispatchQueue.main.sync {
+//
+//                        self.loadingLabel.isHidden = true
+//                        self.activityIndicator.stopAnimating()
+//
+//                        // swiftlint:disable force_cast
+//                        let lineChartViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "LineChart") as! LossChartViewController
+//                        // swiftlint:enable force_cast
+//
+//                        self.show(lineChartViewController, sender: self)
+//
+//                        self.lossSubject = lineChartViewController.lossSubject
+//
+//                    }
+//
+//                    // Iterate through each batch of MNIST data and label
+//                    for case let (batchData, labels) in zip(mnistData, labels) {
+//
+//                        // We need to create an autorelease pool to release the training data from memory after each loop
+//                        try autoreleasepool {
+//
+//                            // Preprocess MNIST data by flattening all of the MNIST batch data as a single array
+//                            let flattenedBatch = MNISTLoader.flattenMNISTData(batchData)
+//
+//                            // Preprocess the label ( 0 to 9 ) by creating one-hot features and then flattening the entire thing
+//                            let oneHotLabels = MNISTLoader.oneHotMNISTLabels(labels: labels).compactMap { Float($0)}
+//
+//                            // Since we don't have native tensor wrappers in Swift yet, we use `TrainingData` and `ValidationData`
+//                            // classes to store the data and shape.
+//                            let trainingData = try TrainingData(data: flattenedBatch, shape: [clientConfig.batchSize, 784])
+//                            let validationData = try ValidationData(data: oneHotLabels, shape: [clientConfig.batchSize, 10])
+//
+//                            // Execute the plan with the training data and validation data. `plan.execute()` returns the loss and you can use
+//                            // it if you want to (plan.execute() has the @discardableResult attribute)
+//                            let loss = plan.execute(trainingData: trainingData, validationData: validationData, clientConfig: clientConfig)
+//
+//                            // Pass the loss to the line chart view controller to plot.
+//                            self.lossSubject?.send(loss)
+//                            print("loss: \(loss)")
+//
+//                        }
+//
+//                    }
+//
+//                    // Generate diff data and report the final diffs as
+//                    let diffStateData = try plan.generateDiffData()
+//                    modelReport(diffStateData)
+//
+//                    self.lossSubject?.send(completion: .finished)
 
-                do {
-
-                    // This returns a lazily evaluated sequence for each MNIST image and the corresponding label
-                    // It divides the training data and the label by batches
-                    let (mnistData, labels) = try MNISTLoader.load(setType: .train, batchSize: clientConfig.batchSize)
-
-                    // Stop the loading indicator and present the line chart view controller
-                    // plotting the loss from training
-                    DispatchQueue.main.sync {
-
-                        self.loadingLabel.isHidden = true
-                        self.activityIndicator.stopAnimating()
-
-                        // swiftlint:disable force_cast
-                        let lineChartViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "LineChart") as! LossChartViewController
-                        // swiftlint:enable force_cast
-
-                        self.show(lineChartViewController, sender: self)
-
-                        self.lossSubject = lineChartViewController.lossSubject
-
-                    }
-
-                    // Iterate through each batch of MNIST data and label
-                    for case let (batchData, labels) in zip(mnistData, labels) {
-
-                        // We need to create an autorelease pool to release the training data from memory after each loop
-                        try autoreleasepool {
-
-                            // Preprocess MNIST data by flattening all of the MNIST batch data as a single array
-                            let flattenedBatch = MNISTLoader.flattenMNISTData(batchData)
-
-                            // Preprocess the label ( 0 to 9 ) by creating one-hot features and then flattening the entire thing
-                            let oneHotLabels = MNISTLoader.oneHotMNISTLabels(labels: labels).compactMap { Float($0)}
-
-                            // Since we don't have native tensor wrappers in Swift yet, we use `TrainingData` and `ValidationData`
-                            // classes to store the data and shape.
-                            let trainingData = try TrainingData(data: flattenedBatch, shape: [clientConfig.batchSize, 784])
-                            let validationData = try ValidationData(data: oneHotLabels, shape: [clientConfig.batchSize, 10])
-
-                            // Execute the plan with the training data and validation data. `plan.execute()` returns the loss and you can use
-                            // it if you want to (plan.execute() has the @discardableResult attribute)
-                            let loss = plan.execute(trainingData: trainingData, validationData: validationData, clientConfig: clientConfig)
-
-                            // Pass the loss to the line chart view controller to plot.
-                            self.lossSubject?.send(loss)
-                            print("loss: \(loss)")
-
-                        }
-
-                    }
-
-                    // Generate diff data and report the final diffs as
-                    let diffStateData = try plan.generateDiffData()
-                    modelReport(diffStateData)
-
-                    self.lossSubject?.send(completion: .finished)
-
-                } catch let error {
-
-                    // Handle any error from the training cycle
-                    debugPrint(error.localizedDescription)
-
-                }
+//                } catch let error {
+//
+//                    // Handle any error from the training cycle
+//                    debugPrint(error.localizedDescription)
+//
+//                }
 
             })
 
