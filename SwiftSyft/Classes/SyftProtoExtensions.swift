@@ -22,6 +22,49 @@ enum TensorType: Int {
 
 extension SyftProto_Execution_V1_State {
 
+    func getTorchTensors() throws -> [TorchTensor] {
+
+        // extract tensor protobuf objects
+        var torchTensorsData: [SyftProto_Types_Torch_V1_TorchTensor] = []
+        var torchTensorsCount = 0
+        for tensor in self.tensors {
+            torchTensorsCount += 1
+            switch tensor.tensor {
+            case .torchParam(let torchParameter):
+                torchTensorsData.append(torchParameter.tensor)
+            case .torchTensor(let torchTensorData):
+                torchTensorsData.append(torchTensorData)
+            case nil:
+                break
+            }
+        }
+
+        var torchTensors: [TorchTensor] = []
+        for torchTensorData in torchTensorsData {
+            switch torchTensorData.contents {
+            case .contentsData(let tensorHolder):
+
+                guard let torchTensor = tensorHolder.torchTensor else {
+                    throw SwiftSyftError.unknownError(underlyingError: nil)
+                }
+
+                torchTensors.append(torchTensor)
+
+            case .contentsBin(_):
+                break
+            case nil:
+                break
+            }
+        }
+
+        guard torchTensors.count == torchTensorsCount else {
+            throw SwiftSyftError.unknownError(underlyingError: nil)
+        }
+
+        return torchTensors
+
+    }
+
 //     swiftlint:disable large_tuple
     func getTensorData() -> TensorsHolder {
 
