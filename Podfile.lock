@@ -60,7 +60,7 @@ SPEC CHECKSUMS:
   GoogleWebRTC: cfb83bc346435a17fe06bb05f04ad826b858a7fb
   LibTorch: 5478f8eafc4915cc10502f68054018f99a2037b5
   OHHTTPStubs: cb29d2a9d09a828ecb93349a2b0c64f99e0db89f
-  OpenMinedSwiftSyft: c7d5bf3b0b202e234989886314496a9426795f98
+  OpenMinedSwiftSyft: 7ce8c50a8f26b4795cf5223fdfc03cbfae641ec3
   SwiftLint: 8f5d2f903e1c9bcbc832fd16771e80a263ac6cbb
   SwiftProtobuf: 2cbd9409689b7df170d82a92a33443c8e3e14a70
   SyftProto: da02767fd695d222748d6bdf78ff7ddbe7b1982f
