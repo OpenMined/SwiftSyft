@@ -113,7 +113,7 @@ class CycleRequestTests: XCTestCase {
         self.cycleRejectClient = SyftClient(url: URL(string: "http://test.com:3000")!)!
         self.cycleRejectJob = self.cycleRejectClient.newJob(modelName: "mnist", version: "1.0")
 
-        self.cycleRejectJob.onRejected { _ in
+        self.cycleRejectJob.onError { _ in
             cycleRejectedExpectation.fulfill()
         }
 
@@ -127,7 +127,7 @@ class CycleRequestTests: XCTestCase {
 
         cycleRequestResult = .rejectedWithTimeout
 
-        let cycleRejectedExpectation = expectation(description: "test cycle request rejected")
+        let cycleRejectedExpectation = expectation(description: "test cycle request rejected with timeout")
 
         self.cycleRejectTimeoutClient = SyftClient(url: URL(string: "http://test.com:3000")!)!
         self.cycleRejectTimeoutJob = self.cycleRejectTimeoutClient.newJob(modelName: "mnist", version: "1.0")
