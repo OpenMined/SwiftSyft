@@ -37,7 +37,7 @@ Pod::Spec.new do |s|
 
   s.pod_target_xcconfig = {
     'HEADER_SEARCH_PATHS' => '$(inherited) "${PODS_ROOT}/LibTorch/install/include"',
-    'VALID_ARCHS' => 'x86 arm64'
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'
   }
   
   # s.resource_bundles = {
@@ -47,7 +47,7 @@ Pod::Spec.new do |s|
 #  s.public_header_files = 'SwiftSyft/Classes/TorchWrapper/apis/*.h'
   s.private_header_files = 'SwiftSyft/Classes/TorchWrapper/src/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'LibTorch', '~> 1.6.0'
+  s.dependency 'LibTorch', '~> 1.6.1'
   s.dependency 'GoogleWebRTC', '~> 1.1.0'
   s.dependency 'SyftProto', '0.4.9'
   

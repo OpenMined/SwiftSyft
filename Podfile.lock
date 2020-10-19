@@ -3,11 +3,11 @@ PODS:
     - Charts/Core (= 3.5.0)
   - Charts/Core (3.5.0)
   - GoogleWebRTC (1.1.29400)
-  - LibTorch (1.6.0):
-    - LibTorch/Core (= 1.6.0)
-  - LibTorch/Core (1.6.0):
+  - LibTorch (1.6.1):
+    - LibTorch/Core (= 1.6.1)
+  - LibTorch/Core (1.6.1):
     - LibTorch/Torch
-  - LibTorch/Torch (1.6.0)
+  - LibTorch/Torch (1.6.1)
   - OHHTTPStubs/Core (9.0.0)
   - OHHTTPStubs/Default (9.0.0):
     - OHHTTPStubs/Core
@@ -23,11 +23,11 @@ PODS:
     - OHHTTPStubs/Default
   - OpenMinedSwiftSyft (0.1.3-beta1):
     - GoogleWebRTC (~> 1.1.0)
-    - LibTorch (~> 1.6.0)
+    - LibTorch (~> 1.6.1)
     - SyftProto (= 0.4.9)
   - OpenMinedSwiftSyft/Tests (0.1.3-beta1):
     - GoogleWebRTC (~> 1.1.0)
-    - LibTorch (~> 1.6.0)
+    - LibTorch (~> 1.6.1)
     - OHHTTPStubs/Swift
     - SyftProto (= 0.4.9)
   - SwiftLint (0.38.2)
@@ -58,9 +58,9 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Charts: 40a08591df1f8ad5c223ddedfb1a06da92f24f7c
   GoogleWebRTC: cfb83bc346435a17fe06bb05f04ad826b858a7fb
-  LibTorch: 5478f8eafc4915cc10502f68054018f99a2037b5
+  LibTorch: 32a83630ab5b4505f205c7e332975a2d3d6e0c55
   OHHTTPStubs: cb29d2a9d09a828ecb93349a2b0c64f99e0db89f
-  OpenMinedSwiftSyft: c7d5bf3b0b202e234989886314496a9426795f98
+  OpenMinedSwiftSyft: ae7db71eca1f76c11705c174e835927bb371d62c
   SwiftLint: 8f5d2f903e1c9bcbc832fd16771e80a263ac6cbb
   SwiftProtobuf: 2cbd9409689b7df170d82a92a33443c8e3e14a70
   SyftProto: da02767fd695d222748d6bdf78ff7ddbe7b1982f

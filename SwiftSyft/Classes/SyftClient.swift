@@ -297,7 +297,13 @@ public class SyftJob: SyftJobProtocol {
                 return self.downloadModel(forWorkerId: workerId, modelId: cycleResponseSuccess.modelId, requestKey: cycleResponseSuccess.requestKey)
             }
             .tryMap { try SyftProto_Execution_V1_State(serializedData: $0) }
-            .mapError { SwiftSyftError.networkResponseError(underlyingError: $0)}
+            .mapError { error -> SwiftSyftError in
+                if let error = error as? SwiftSyftError {
+                    return error
+                } else {
+                    return SwiftSyftError.networkResponseError(underlyingError: error)
+                }
+            }
 
         // Download plan
         let planPublisher = cycleResponsePublisher
@@ -321,7 +327,13 @@ public class SyftJob: SyftJobProtocol {
 
                 return fileURL.path
             }
-            .mapError { SwiftSyftError.networkResponseError(underlyingError: $0)}
+            .mapError { error -> SwiftSyftError in
+                if let error = error as? SwiftSyftError {
+                    return error
+                } else {
+                    return SwiftSyftError.networkResponseError(underlyingError: error)
+                }
+            }
             .map { TorchTrainingModule(fileAtPath: $0) }
 
         clientConfigPublisher.zip(planPublisher, modelParamPublisher)
@@ -522,7 +534,8 @@ public class SyftJob: SyftJobProtocol {
             switch completionResult {
             case .finished:
                 break
-            case .failure:                self.onErrorBlock(SwiftSyftError.networkResponseError(underlyingError: nil))
+            case .failure:
+                self.onErrorBlock(SwiftSyftError.networkResponseError(underlyingError: nil))
             }
 
         }, receiveValue: { [unowned self] cycleRequestResponse in
