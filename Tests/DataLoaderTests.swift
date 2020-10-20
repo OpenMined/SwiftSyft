@@ -3,22 +3,20 @@ import GameplayKit
 @testable import SwiftSyft
 
 // https://stackoverflow.com/questions/54821659/swift-4-2-seeding-a-random-number-generator
-class SeededGenerator: RandomNumberGenerator {
-    let seed: UInt64
-    private let generator: GKMersenneTwisterRandomSource
-    convenience init() {
-        self.init(seed: 0)
+struct SeededGenerator : RandomNumberGenerator {
+
+    mutating func next() -> UInt64 {
+        // GKRandom produces values in [INT32_MIN, INT32_MAX] range; hence we need two numbers to produce 64-bit value.
+        let next1 = UInt64(bitPattern: Int64(gkrandom.nextInt()))
+        let next2 = UInt64(bitPattern: Int64(gkrandom.nextInt()))
+        return next1 ^ (next2 << 32)
     }
+
     init(seed: UInt64) {
-        self.seed = seed
-        generator = GKMersenneTwisterRandomSource(seed: seed)
+        self.gkrandom = GKMersenneTwisterRandomSource(seed: seed)
     }
-    func next<T>(upperBound: T) -> T where T : FixedWidthInteger, T : UnsignedInteger {
-        return T(abs(generator.nextInt(upperBound: Int(upperBound))))
-    }
-    func next<T>() -> T where T : FixedWidthInteger, T : UnsignedInteger {
-        return T(abs(generator.nextInt()))
-    }
+
+    private let gkrandom: GKRandom
 }
 
 // LibTorch tensor operations (ex. torch::cat) currently not working in
@@ -33,11 +31,12 @@ class DataLoaderTests: XCTestCase {
 
         var result: [Int] = []
         while let next = randomIterator.next() {
+            print(next)
             result.append(next)
         }
 
         XCTAssertEqual(original.count, result.count)
-        XCTAssertEqual(result, [3, 4, 2, 5, 1])
+        XCTAssertEqual(result, [2, 1, 3, 4, 5])
 
     }
 
