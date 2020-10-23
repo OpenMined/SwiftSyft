@@ -42,7 +42,6 @@ Cocoapods is a dependency manager for Cocoa projects. Just add `OpenMinedSwiftSy
 ```
 pod 'OpenMinedSwiftSyft', ~> 0.1.3-beta1
 ```
-
 ## Quick Start
 
 As a developer, there are few steps to building your own secure federated learning system upon the OpenMined infrastructure:
