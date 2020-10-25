@@ -89,7 +89,7 @@ class HomeViewController: UIViewController, UITextViewDelegate {
             self.activityIndicator.startAnimating()
 
             // Create a new federated learning job with the model name and version
-            self.syftJob = syftClient.newJob(modelName: "mnist", version: "1.0.0")
+            self.syftJob = syftClient.newJob(modelName: "mnist", version: "1.0")
 
             // This function is called when SwiftSyft has downloaded the plans and model parameters from PyGrid
             // You are ready to train your model on your data
