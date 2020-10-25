@@ -37,7 +37,17 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Baschdl",
+      "name": "Sebastian Bischoff",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/3034832?v=4",
+      "profile": "https://github.com/Baschdl",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
-  "contributorsPerLine": 7
+  "contributorsPerLine": 7,
+  "skipCi": true
 }
