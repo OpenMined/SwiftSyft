@@ -1,7 +1,7 @@
 import Foundation
 import SyftProto
 
-struct SwiftSyftError: LocalizedError {
+struct TensorError: LocalizedError {
     var localizedDescription: String
 }
 
@@ -33,7 +33,7 @@ public class TensorData<T> {
         if let tensorType = typeMapping[ObjectIdentifier(type(of: data).Element.self)] {
             self.tensorType = tensorType
         } else {
-            throw SwiftSyftError(localizedDescription: "Unsupported type selected for array. Please use Int, Int64, Float or Double")
+            throw TensorError(localizedDescription: "Unsupported type selected for array. Please use Int, Int64, Float or Double")
         }
     }
 }
@@ -65,8 +65,8 @@ public class SyftPlan {
     ///   - clientConfig: contains training parameters (batch size and learning rate)
     @discardableResult public func execute<T, U>(trainingData: TrainingData<T>, validationData: ValidationData<U>, clientConfig: FederatedClientConfig) -> Float {
 
-        var trainingDataCopy = trainingData
-        var validationDataCopy = validationData
+        let trainingDataCopy = trainingData
+        let validationDataCopy = validationData
 
         let stateTensorsHolder = self.updatedModelState.getTensorData()
 

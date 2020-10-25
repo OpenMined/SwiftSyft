@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3379668E2BAA148BED838C7D /* Pods_SwiftSyft_Background.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8371AA738D593992250B9DB /* Pods_SwiftSyft_Background.framework */; };
 		BE2D78E2246556A500CBCC9A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2D78E1246556A500CBCC9A /* AppDelegate.swift */; };
 		BE2D78E4246556A500CBCC9A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2D78E3246556A500CBCC9A /* SceneDelegate.swift */; };
 		BE2D78E6246556A500CBCC9A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2D78E5246556A500CBCC9A /* ViewController.swift */; };
@@ -18,11 +19,9 @@
 		BEEED18F2468228E0091EEA4 /* train-labels-idx1-ubyte in Resources */ = {isa = PBXBuildFile; fileRef = BEEED18A2468228E0091EEA4 /* train-labels-idx1-ubyte */; };
 		BEEED1902468228E0091EEA4 /* MNISTLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEED18B2468228E0091EEA4 /* MNISTLoader.swift */; };
 		BEEED1912468228E0091EEA4 /* t10k-labels-idx1-ubyte in Resources */ = {isa = PBXBuildFile; fileRef = BEEED18C2468228E0091EEA4 /* t10k-labels-idx1-ubyte */; };
-		ED2F16AE7AA535967FA66EB5 /* libPods-SwiftSyft-Background.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B0A4C8E597007DE7E58FEBB9 /* libPods-SwiftSyft-Background.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B0A4C8E597007DE7E58FEBB9 /* libPods-SwiftSyft-Background.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SwiftSyft-Background.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE2D78DE246556A500CBCC9A /* SwiftSyft-Background.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftSyft-Background.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE2D78E1246556A500CBCC9A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BE2D78E3246556A500CBCC9A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -37,6 +36,7 @@
 		BEEED18B2468228E0091EEA4 /* MNISTLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MNISTLoader.swift; path = ../../../Example/SwiftSyft/MNISTLoader.swift; sourceTree = "<group>"; };
 		BEEED18C2468228E0091EEA4 /* t10k-labels-idx1-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; name = "t10k-labels-idx1-ubyte"; path = "../../../Example/SwiftSyft/t10k-labels-idx1-ubyte"; sourceTree = "<group>"; };
 		EE87355EF82A7E3557B508E3 /* Pods-SwiftSyft-Background.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftSyft-Background.release.xcconfig"; path = "Target Support Files/Pods-SwiftSyft-Background/Pods-SwiftSyft-Background.release.xcconfig"; sourceTree = "<group>"; };
+		F8371AA738D593992250B9DB /* Pods_SwiftSyft_Background.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftSyft_Background.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB23A710EE2A54E5A3697F64 /* Pods-SwiftSyft-Background.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftSyft-Background.debug.xcconfig"; path = "Target Support Files/Pods-SwiftSyft-Background/Pods-SwiftSyft-Background.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -45,7 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ED2F16AE7AA535967FA66EB5 /* libPods-SwiftSyft-Background.a in Frameworks */,
+				3379668E2BAA148BED838C7D /* Pods_SwiftSyft_Background.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,7 +100,7 @@
 		C8B55A352CB0C6410DC5C645 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				B0A4C8E597007DE7E58FEBB9 /* libPods-SwiftSyft-Background.a */,
+				F8371AA738D593992250B9DB /* Pods_SwiftSyft_Background.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

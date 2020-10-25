@@ -20,7 +20,7 @@
 		BEDCA17D243236FC007747A5 /* t10k-images-idx3-ubyte in Resources */ = {isa = PBXBuildFile; fileRef = BEDCA179243236FC007747A5 /* t10k-images-idx3-ubyte */; };
 		BEDCA17E243236FC007747A5 /* train-labels-idx1-ubyte in Resources */ = {isa = PBXBuildFile; fileRef = BEDCA17A243236FC007747A5 /* train-labels-idx1-ubyte */; };
 		BEDCA180243237C3007747A5 /* MNISTLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDCA17F243237C3007747A5 /* MNISTLoader.swift */; };
-		DD20E60AAA8BED2F7D6173A4 /* libPods-SwiftSyft_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BC01F94C28529D588A96676 /* libPods-SwiftSyft_Example.a */; };
+		F24D08EF18676B5F1B10A846 /* Pods_SwiftSyft_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FEEBF1F1C347407018E6440 /* Pods_SwiftSyft_Example.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +36,7 @@
 /* Begin PBXFileReference section */
 		3F48219C9B34CBEFE3051365 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		490BD72B6F91240C69E2BA37 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		5FEEBF1F1C347407018E6440 /* Pods_SwiftSyft_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftSyft_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD01AFB9204008FA782 /* SwiftSyft_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftSyft_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -46,7 +47,6 @@
 		607FACE51AFB9204008FA782 /* SwiftSyft_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftSyft_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
-		7BC01F94C28529D588A96676 /* libPods-SwiftSyft_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SwiftSyft_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE4D0A5F2453302E0013DD79 /* LossChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LossChartViewController.swift; sourceTree = "<group>"; };
 		BED313F624B70495005F2E95 /* OpenMinedSwiftSyft.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; fileEncoding = 4; name = OpenMinedSwiftSyft.podspec; path = ../OpenMinedSwiftSyft.podspec; sourceTree = "<group>"; };
 		BEDCA177243236FC007747A5 /* train-images-idx3-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; path = "train-images-idx3-ubyte"; sourceTree = "<group>"; };
@@ -63,7 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DD20E60AAA8BED2F7D6173A4 /* libPods-SwiftSyft_Example.a in Frameworks */,
+				F24D08EF18676B5F1B10A846 /* Pods_SwiftSyft_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -161,7 +161,7 @@
 		933CEEDCF94F73A123373697 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				7BC01F94C28529D588A96676 /* libPods-SwiftSyft_Example.a */,
+				5FEEBF1F1C347407018E6440 /* Pods_SwiftSyft_Example.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -294,11 +294,15 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SwiftSyft_Example/Pods-SwiftSyft_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Charts/Charts.framework",
 				"${PODS_ROOT}/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftProtobuf/SwiftProtobuf.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Charts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftProtobuf.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

@@ -41,7 +41,7 @@ class WebSocketAuthentication: XCTestCase {
 
     func testNoAuth() {
 
-        let url = URL(string: "ws://test.com:5000")!
+        let url = URL(string: "ws://test.com:3000")!
 
         self.noAuthSendMessageSubject = PassthroughSubject<SignallingMessagesRequest, Never>()
         self.noAuthReceiveMessageSubject = PassthroughSubject<SignallingMessagesResponse, Never>()
@@ -74,7 +74,7 @@ class WebSocketAuthentication: XCTestCase {
 
     func testWithAuthNoToken() {
 
-        let url = URL(string: "ws://test.com:5000")!
+        let url = URL(string: "ws://test.com:3000")!
 
         self.noTokenSendMessageSubject = PassthroughSubject<SignallingMessagesRequest, Never>()
         self.noTokenReceiveMessageSubject = PassthroughSubject<SignallingMessagesResponse, Never>()
@@ -109,7 +109,7 @@ class WebSocketAuthentication: XCTestCase {
 
     func testWithInvalidToken() {
 
-        let url = URL(string: "ws://test.com:5000")!
+        let url = URL(string: "ws://test.com:3000")!
 
         self.invalidTokenSendMessageSubject = PassthroughSubject<SignallingMessagesRequest, Never>()
         self.invalidTokenReceiveMessageSubject = PassthroughSubject<SignallingMessagesResponse, Never>()
@@ -145,7 +145,7 @@ class WebSocketAuthentication: XCTestCase {
 
     func testWithValidToken() {
 
-        let url = URL(string: "ws://test.com:5000")!
+        let url = URL(string: "ws://test.com:3000")!
 
         self.validTokenSendMessageSubject = PassthroughSubject<SignallingMessagesRequest, Never>()
         self.validTokenReceiveMessageSubject = PassthroughSubject<SignallingMessagesResponse, Never>()

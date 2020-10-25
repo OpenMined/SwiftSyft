@@ -28,7 +28,34 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Rohith-hacker",
+      "name": "Rohith Pudari",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/27728974?v=4",
+      "profile": "https://rohith-hacker.github.io/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Baschdl",
+      "name": "Sebastian Bischoff",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/3034832?v=4",
+      "profile": "https://github.com/Baschdl",
+      "contributions": [
+        "doc"
+       ]
+     },
+      "login": "lukereichold",
+      "name": "Luke Reichold",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/693592?v=4",
+      "profile": "http://lukereichold.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
-  "contributorsPerLine": 7
+  "contributorsPerLine": 7,
+  "skipCi": true
 }
