@@ -6,7 +6,7 @@
 ![OpenCollective](https://img.shields.io/opencollective/all/openmined)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # SwiftSyft
@@ -247,15 +247,15 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/mjjimenez"><img src="https://avatars3.githubusercontent.com/u/4151269?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mark Jimenez</b></sub></a><br /><a href="https://github.com/OpenMined/SwiftSyft/commits?author=mjjimenez" title="Code">💻</a> <a href="https://github.com/OpenMined/SwiftSyft/commits?author=mjjimenez" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://github.com/mamuleanu"><img src="https://avatars0.githubusercontent.com/u/10297451?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Madalin Mamuleanu</b></sub></a><br /><a href="https://github.com/OpenMined/SwiftSyft/commits?author=mamuleanu" title="Code">💻</a></td>
-    <td align="center"><a href="https://rohith-hacker.github.io/"><img src="https://avatars1.githubusercontent.com/u/27728974?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Rohith Pudari</b></sub></a><br /><a href="https://github.com/OpenMined/SwiftSyft/commits?author=Rohith-hacker" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/mjjimenez"><img src="https://avatars3.githubusercontent.com/u/4151269?v=4" width="100px;" alt=""/><br /><sub><b>Mark Jimenez</b></sub></a><br /><a href="https://github.com/OpenMined/SwiftSyft/commits?author=mjjimenez" title="Code">💻</a> <a href="https://github.com/OpenMined/SwiftSyft/commits?author=mjjimenez" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/mamuleanu"><img src="https://avatars0.githubusercontent.com/u/10297451?v=4" width="100px;" alt=""/><br /><sub><b>Madalin Mamuleanu</b></sub></a><br /><a href="https://github.com/OpenMined/SwiftSyft/commits?author=mamuleanu" title="Code">💻</a></td>
+    <td align="center"><a href="https://rohith-hacker.github.io/"><img src="https://avatars1.githubusercontent.com/u/27728974?v=4" width="100px;" alt=""/><br /><sub><b>Rohith Pudari</b></sub></a><br /><a href="https://github.com/OpenMined/SwiftSyft/commits?author=Rohith-hacker" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/Baschdl"><img src="https://avatars0.githubusercontent.com/u/3034832?v=4" width="100px;" alt=""/><br /><sub><b>Sebastian Bischoff</b></sub></a><br /><a href="https://github.com/OpenMined/SwiftSyft/commits?author=Baschdl" title="Documentation">📖</a></td>
   </tr>
 </table>
 
-<!-- markdownlint-restore -->
+<!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
-
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
