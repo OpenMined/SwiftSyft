@@ -251,6 +251,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/mamuleanu"><img src="https://avatars0.githubusercontent.com/u/10297451?v=4" width="100px;" alt=""/><br /><sub><b>Madalin Mamuleanu</b></sub></a><br /><a href="https://github.com/OpenMined/SwiftSyft/commits?author=mamuleanu" title="Code">💻</a></td>
     <td align="center"><a href="https://rohith-hacker.github.io/"><img src="https://avatars1.githubusercontent.com/u/27728974?v=4" width="100px;" alt=""/><br /><sub><b>Rohith Pudari</b></sub></a><br /><a href="https://github.com/OpenMined/SwiftSyft/commits?author=Rohith-hacker" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/Baschdl"><img src="https://avatars0.githubusercontent.com/u/3034832?v=4" width="100px;" alt=""/><br /><sub><b>Sebastian Bischoff</b></sub></a><br /><a href="https://github.com/OpenMined/SwiftSyft/commits?author=Baschdl" title="Documentation">📖</a></td>
+    <td align="center"><a href="http://lukereichold.com"><img src="https://avatars3.githubusercontent.com/u/693592?v=4" width="100px;" alt=""/><br /><sub><b>Luke Reichold</b></sub></a><br /><a href="https://github.com/OpenMined/SwiftSyft/commits?author=lukereichold" title="Code">💻</a></td>
   </tr>
 </table>
 
