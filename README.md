@@ -179,7 +179,10 @@ virtualenv -p python3 venv
 source venv/bin/activate
 python setup.py install
 ```
-
+- Make virtual environment available for Jupyter Notebook
+```bash
+python -m ipykernel install --user --name=venv
+```
 - Host Jupyter Notebook
 
 ```bash
@@ -187,8 +190,8 @@ jupyter notebook
 ```
 
 - Open a browser and navigate to [localhost:8888](http://localhost:8888/). You should be able to see the PySyft notebook console.
-- In the Jupyter Notebook, navigate to `examples/tutorials/model-centric-fl`
-- Run the notebook `Part 01 - Create Plan`. Now PyGrid is setup and the model is hosted over it.
+- In the Jupyter Notebook, navigate to `examples/model-centric`
+- Run the notebook `01-Create-plan` with the `venv` kernel. Now PyGrid is setup and the model is hosted over it.
 
 ```
 syft.base_url="<IP_address_from_step_16>:5000"
