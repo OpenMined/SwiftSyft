@@ -21,11 +21,11 @@ PODS:
   - OHHTTPStubs/OHPathHelpers (9.0.0)
   - OHHTTPStubs/Swift (9.0.0):
     - OHHTTPStubs/Default
-  - OpenMinedSwiftSyft (0.1.3-beta1):
+  - OpenMinedSwiftSyft (0.1.3-beta2):
     - GoogleWebRTC (~> 1.1.0)
     - LibTorch (~> 1.6.1)
     - SyftProto (= 0.4.9)
-  - OpenMinedSwiftSyft/Tests (0.1.3-beta1):
+  - OpenMinedSwiftSyft/Tests (0.1.3-beta2):
     - GoogleWebRTC (~> 1.1.0)
     - LibTorch (~> 1.6.1)
     - OHHTTPStubs/Swift
@@ -60,7 +60,7 @@ SPEC CHECKSUMS:
   GoogleWebRTC: cfb83bc346435a17fe06bb05f04ad826b858a7fb
   LibTorch: 32a83630ab5b4505f205c7e332975a2d3d6e0c55
   OHHTTPStubs: cb29d2a9d09a828ecb93349a2b0c64f99e0db89f
-  OpenMinedSwiftSyft: ae7db71eca1f76c11705c174e835927bb371d62c
+  OpenMinedSwiftSyft: 763cce92a26eecfa98e1598716e8507cab1e413a
   SwiftLint: 8f5d2f903e1c9bcbc832fd16771e80a263ac6cbb
   SwiftProtobuf: 2cbd9409689b7df170d82a92a33443c8e3e14a70
   SyftProto: da02767fd695d222748d6bdf78ff7ddbe7b1982f
