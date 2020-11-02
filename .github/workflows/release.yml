@@ -9,6 +9,8 @@ jobs:
   documentation:
 
     runs-on: macos-latest
+    env: 
+      DEVELOPER_DIR: /Applications/Xcode_12.2.app/Contents/Developer
     name: Create API documentation
     if: github.event_name == 'release' && !failure()
 
@@ -40,6 +42,8 @@ jobs:
   publish:
     needs: documentation
     runs-on: macos-latest
+    env: 
+      DEVELOPER_DIR: /Applications/Xcode_12.2.app/Contents/Developer
     name: Publish this version to Cocoapods
     if: github.event_name == 'release' && !failure()
 

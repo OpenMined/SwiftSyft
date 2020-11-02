@@ -35,6 +35,8 @@ Pod::Spec.new do |s|
   s.source_files = 'SwiftSyft/**/*'
   s.static_framework = true
 
+  s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+
   s.pod_target_xcconfig = {
     'HEADER_SEARCH_PATHS' => '$(inherited) "${PODS_ROOT}/LibTorch/install/include"',
     'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'
