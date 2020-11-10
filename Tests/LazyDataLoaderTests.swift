@@ -10,7 +10,7 @@ import GameplayKit
 @testable import SwiftSyft
 
 // https://stackoverflow.com/questions/54821659/swift-4-2-seeding-a-random-number-generator
-struct SeededGenerator : RandomNumberGenerator {
+struct LazySeededGenerator : RandomNumberGenerator {
 
     mutating func next() -> UInt64 {
         // GKRandom produces values in [INT32_MIN, INT32_MAX] range; hence we need two numbers to produce 64-bit value.
@@ -29,12 +29,12 @@ struct SeededGenerator : RandomNumberGenerator {
 // LibTorch tensor operations (ex. torch::cat) currently not working in
 // test target with error message: "PyTorch is not linked with support for cpu devices".
 // Will wait for these operations to work before adding more tests.
-class DataLoaderTests: XCTestCase {
+class LazyDataLoaderTests: XCTestCase {
 
     func testRandomIterator() {
 
         let original = [1,2,3,4,5]
-        var randomIterator = RandomIterator(collection: original, randomNumberGenerator: SeededGenerator(seed: 23))
+        var randomIterator = LazyRandomIterator(sequence: original, randomNumberGenerator: LazySeededGenerator(seed: 23))
 
         var result: [Int] = []
         while let next = randomIterator.next() {
