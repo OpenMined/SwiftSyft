@@ -48,7 +48,7 @@ As a developer, there are few steps to building your own secure federated learni
 2. :earth_americas: Host your model and plans on [PyGrid](https://github.com/OpenMined/PyGrid) which will deal with all the federated learning components of your pipeline. You will need to set up a PyGrid server somewhere, please see their installation instructions on how to do this.
 3. :tada: Start training on the device!
 
-**:notebook: The entire workflow and process is described in greater detail in our [project roadmap](https://github.com/OpenMined/Roadmap/blob/master/web_and_mobile_team/projects/federated_learning.md).**
+**:notebook: The entire workflow and process is described in greater detail in our [project roadmap](https://github.com/OpenMined/Roadmap/blob/master/federated_learning/projects/model_centric_fl.md).**
 
 You can use SwiftSyft as a front-end or as a background service. The following is a quick start example usage:
 
@@ -183,13 +183,13 @@ python setup.py install
 ```bash
 python -m ipykernel install --user --name=venv
 ```
-- Host Jupyter Notebook
+- Host Jupyter Notebook from the PyGrid folder
 
 ```bash
 jupyter notebook
 ```
 
-- Open a browser and navigate to [localhost:8888](http://localhost:8888/). You should be able to see the PySyft notebook console.
+- Open a browser and navigate to [localhost:8888](http://localhost:8888/). You should be able to see the PyGrid notebook console.
 - In the Jupyter Notebook, navigate to `examples/model-centric`
 - Run the notebook `01-Create-plan` with the `venv` kernel. Now PyGrid is setup and the model is hosted over it.
 
