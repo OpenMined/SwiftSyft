@@ -18,27 +18,6 @@ import Foundation
 //    init(dataset: dataset)
 //}
 
-struct LazyRandomIterator<T: Sequence> {
-
-    var mutableSequence: [T.Element]
-    var randomNumberGenerator: AnyRandomNumberGenerator
-
-    init(sequence: T, randomNumberGenerator: RandomNumberGenerator = SystemRandomNumberGenerator()) {
-        self.mutableSequence = Array(sequence)
-        self.randomNumberGenerator = AnyRandomNumberGenerator(randomNumberGenerator)
-    }
-
-    mutating func next() -> T.Element? {
-
-        guard let randomIndex = mutableSequence.indices.randomElement(using: &randomNumberGenerator) else {
-            return nil
-        }
-
-        let randomElement = mutableSequence.remove(at: randomIndex)
-        return randomElement
-    }
-}
-
 class LazyDataLoader<T: Sequence>: Sequence {
     var dataset: T
     required init(dataset: T) {
