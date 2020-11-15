@@ -61,8 +61,8 @@ class CycleRequestTests: XCTestCase {
                 let responseFilePath = OHPathForFile("cycle-request-rejected.json", type(of: self))!
                 return HTTPStubsResponse(fileAtPath: responseFilePath, statusCode: 200, headers: nil)
             case nil:
-                return HTTPStubsResponse(error: URLError.init(URLError.Code.cancelled))
                 XCTFail("Set cycle request appropriate result before testing")
+                return HTTPStubsResponse(error: URLError.init(URLError.Code.cancelled))
             }
         }
 
