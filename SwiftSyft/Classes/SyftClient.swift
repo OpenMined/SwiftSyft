@@ -302,7 +302,13 @@ public class SyftJob: SyftJobProtocol {
                 return self.downloadModel(forWorkerId: workerId, modelId: cycleResponseSuccess.modelId, requestKey: cycleResponseSuccess.requestKey)
             }
             .tryMap { try SyftProto_Execution_V1_State(serializedData: $0) }
-            .mapError { SwiftSyftError.networkResponseError(underlyingError: $0)}
+            .mapError { error -> SwiftSyftError in
+                if let error = error as? SwiftSyftError {
+                    return error
+                } else {
+                    return SwiftSyftError.networkResponseError(underlyingError: error)
+                }
+            }
 
         // Download plan
         let planPublisher = cycleResponsePublisher
@@ -342,7 +348,6 @@ public class SyftJob: SyftJobProtocol {
                 return Dictionary(uniqueKeysWithValues: planArray)
 
             }
-            .mapError { SwiftSyftError.networkResponseError(underlyingError: $0)}
             .tryMap { planDictionary -> [String: TorchModule] in
 
                 return try planDictionary.mapValues { planURL in
@@ -355,7 +360,13 @@ public class SyftJob: SyftJobProtocol {
                 }
 
             }
-            .mapError { SwiftSyftError.unknownError(underlyingError: $0) }
+            .mapError { error -> SwiftSyftError in
+                if let error = error as? SwiftSyftError {
+                    return error
+                } else {
+                    return SwiftSyftError.networkResponseError(underlyingError: error)
+                }
+            }
 
         clientConfigPublisher.zip(planPublisher, modelParamPublisher)
             .sink(receiveCompletion: { [unowned self] completion in
@@ -565,7 +576,8 @@ public class SyftJob: SyftJobProtocol {
             switch completionResult {
             case .finished:
                 break
-            case .failure:                self.onErrorBlock(SwiftSyftError.networkResponseError(underlyingError: nil))
+            case .failure:
+                self.onErrorBlock(SwiftSyftError.networkResponseError(underlyingError: nil))
             }
 
         }, receiveValue: { [unowned self] cycleRequestResponse in

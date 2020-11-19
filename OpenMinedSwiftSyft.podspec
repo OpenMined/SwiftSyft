@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'OpenMinedSwiftSyft'
   s.module_name      = 'SwiftSyft'
-  s.version          = '0.1.3-beta1'
+  s.version          = '0.1.3-beta2'
   s.summary          = 'The official Syft worker for iOS, built in Swift.'
 
 # This description is used to generate tags and improve search results.
@@ -35,9 +35,11 @@ Pod::Spec.new do |s|
   s.source_files = 'SwiftSyft/**/*'
   s.static_framework = true
 
+  s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+
   s.pod_target_xcconfig = {
     'HEADER_SEARCH_PATHS' => '$(inherited) "${PODS_ROOT}/LibTorch/install/include"',
-    'VALID_ARCHS' => 'x86 arm64'
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'
   }
   
   # s.resource_bundles = {
@@ -47,7 +49,7 @@ Pod::Spec.new do |s|
 #  s.public_header_files = 'SwiftSyft/Classes/TorchWrapper/apis/*.h'
   s.private_header_files = 'SwiftSyft/Classes/TorchWrapper/src/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'LibTorch', '~> 1.6.0'
+  s.dependency 'LibTorch', '~> 1.6.1'
   s.dependency 'GoogleWebRTC', '~> 1.1.0'
   s.dependency 'SyftProto', '0.4.9'
   

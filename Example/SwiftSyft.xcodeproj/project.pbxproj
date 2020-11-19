@@ -48,7 +48,7 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		BE4D0A5F2453302E0013DD79 /* LossChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LossChartViewController.swift; sourceTree = "<group>"; };
-		BED313F624B70495005F2E95 /* OpenMinedSwiftSyft.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; fileEncoding = 4; name = OpenMinedSwiftSyft.podspec; path = ../OpenMinedSwiftSyft.podspec; sourceTree = "<group>"; };
+		BED313F624B70495005F2E95 /* OpenMinedSwiftSyft.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; fileEncoding = 4; name = OpenMinedSwiftSyft.podspec; path = ../OpenMinedSwiftSyft.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		BEDCA177243236FC007747A5 /* train-images-idx3-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; path = "train-images-idx3-ubyte"; sourceTree = "<group>"; };
 		BEDCA178243236FC007747A5 /* t10k-labels-idx1-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; path = "t10k-labels-idx1-ubyte"; sourceTree = "<group>"; };
 		BEDCA179243236FC007747A5 /* t10k-images-idx3-ubyte */ = {isa = PBXFileReference; lastKnownFileType = file; path = "t10k-images-idx3-ubyte"; sourceTree = "<group>"; };
@@ -226,7 +226,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 1150;
+				LastUpgradeCheck = 1210;
 				ORGANIZATIONNAME = CocoaPods;
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
@@ -424,6 +424,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -481,6 +482,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
