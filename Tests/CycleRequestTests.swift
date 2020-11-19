@@ -97,11 +97,6 @@ class CycleRequestTests: XCTestCase {
             cycleAcceptedExpectation.fulfill()
         }
 
-        self.cycleAcceptJob.onError { error in
-            print(error.localizedDescription)
-
-        }
-
         self.cycleAcceptJob.start(chargeDetection: false, wifiDetection: false)
 
         wait(for: [cycleAcceptedExpectation], timeout: 7)

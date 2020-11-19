@@ -103,11 +103,6 @@ class JobTests: XCTestCase {
             jobCompletedExpectation.fulfill()
         }
 
-        self.oneJobJob.onError { error in
-            print(error.localizedDescription)
-            
-        }
-
         self.oneJobJob.start(chargeDetection: false, wifiDetection: false)
 
         wait(for: [jobCompletedExpectation], timeout: 7)
