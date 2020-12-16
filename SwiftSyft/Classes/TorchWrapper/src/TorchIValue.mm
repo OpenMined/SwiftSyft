@@ -81,6 +81,7 @@ DEFINE_IS_SCALAR_TYPE(TensorList)
 DEFINE_IS_SCALAR_TYPE(BoolList)
 DEFINE_IS_SCALAR_TYPE(DoubleList)
 DEFINE_IS_SCALAR_TYPE(IntList)
+DEFINE_IS_SCALAR_TYPE(Tuple)
 
 #define TO_VALUE(type1, type2, type3)                   \
   -(type3)to##type1 {                                   \
@@ -123,6 +124,23 @@ DEFINE_IVALUE_SCALAR_TYPE_VALUE(TO_LIST)
   }
   return [ret copy];
 }
+
+- (nullable NSArray<TorchTensor*>*)tupleToTensorList {
+    if (!_impl.isTuple()) {
+      return nil;
+    }
+
+    auto elementsVector = _impl.toTuple()->elements();
+    NSMutableArray* ret = [[NSMutableArray alloc] init];
+    for (auto tensorIvalue : elementsVector) {
+        TorchTensor* tensor = [TorchTensor newWithTensor:tensorIvalue.toTensor()];
+        [ret addObject:tensor];
+    }
+
+    return [ret copy];
+
+}
+
 
 - (NSString*)toString {
   if (!_impl.isString()) {

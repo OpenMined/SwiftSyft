@@ -36,6 +36,14 @@ typedef NS_ENUM(NSUInteger, TorchTensorType) {
  The raw buffer of tensor
  */
 @property(nonatomic, readonly) void* data;
+
+/**
+    Holds a strong reference to the buffer of the tensor so it doesn't get deallocated during the liftime of the tensor
+ */
+@property (strong, nonatomic) NSValue *pointerValue;
+
+@property (nonatomic, copy) void (^deinitBlock)(void);
+
 /**
  Creat a tensor object with data type, shape and a raw pointer to a data buffer.
 
@@ -56,6 +64,13 @@ typedef NS_ENUM(NSUInteger, TorchTensorType) {
 - (nullable TorchTensor *)mul:(TorchTensor *)other error:(NSError **)error;
 - (nullable TorchTensor *)div:(TorchTensor *)other error:(NSError **)error;
 
+- (void)print;
+- (TorchTensor *)reshape:(NSArray<NSNumber *> *)shape;
+
+// Gets scalar value out of tensor. Only works for float tensors
+- (float)item;
+
+- (NSArray<NSNumber *> *)toArray;
 + (TorchTensor *)cat:(NSArray<TorchTensor *> *)tensor;
 
 @end

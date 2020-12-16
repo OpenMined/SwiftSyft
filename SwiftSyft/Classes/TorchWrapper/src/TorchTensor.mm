@@ -107,6 +107,33 @@ static inline TorchTensorType tensorTypeFromScalarType(c10::ScalarType type) {
     return torch::equal(_impl, other.toTensor);
 }
 
+- (void)print {
+    std::cout << _impl << std::endl;
+}
+
+- (float)item {
+    return _impl.item<float>();
+}
+
+- (NSArray<NSNumber *> *)toArray {
+
+    float* floatBuffer = _impl.data_ptr<float>();
+
+    auto dims = _impl.sizes();
+    long length = 1;
+    for (int i = 0; i < dims.size(); ++i) {
+        length = length * dims[i];
+    }
+
+    NSMutableArray *tensorArray = [[NSMutableArray alloc] init];
+    for (int i = 0; i < length; i++) {
+        [tensorArray addObject:@(floatBuffer[i])];
+    }
+
+    return [tensorArray copy];
+
+}
+
 #pragma mark NSCopying
 
 - (instancetype)copyWithZone:(NSZone*)zone {
@@ -138,6 +165,28 @@ static inline TorchTensorType tensorTypeFromScalarType(c10::ScalarType type) {
 
     try {
         at::Tensor result =  torch::cat(tensorsImpl, 0);
+        return [TorchTensor newWithTensor:result];
+    } catch (std::exception const& exception) {
+        NSLog(@"%s", exception.what());
+        return nil;
+    }
+
+    return nil;
+
+}
+
+- (TorchTensor *)reshape:(NSArray<NSNumber *> *)shape {
+
+    std::vector<int64_t> shapeVector;
+
+    for (NSNumber* dimSize in shape) {
+
+        shapeVector.push_back([dimSize intValue]);
+
+    }
+
+    try {
+        at::Tensor result =  torch::reshape(_impl, shapeVector);
         return [TorchTensor newWithTensor:result];
     } catch (std::exception const& exception) {
         NSLog(@"%s", exception.what());
@@ -202,6 +251,12 @@ static inline TorchTensorType tensorTypeFromScalarType(c10::ScalarType type) {
         NSString *errorMessage = [NSString stringWithFormat:@"%s", exception.what()];
         *error = [NSError errorWithDomain:TorchErrorDomain code:TorchTensorOperationError userInfo:@{NSLocalizedDescriptionKey: errorMessage}];
         return nil;
+    }
+}
+
+- (void)dealloc {
+    if (self.deinitBlock) {
+        self.deinitBlock();
     }
 }
 
