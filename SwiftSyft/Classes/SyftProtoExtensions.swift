@@ -44,7 +44,7 @@ extension SyftProto_Execution_V1_State {
             switch torchTensorData.contents {
             case .contentsData(let tensorHolder):
 
-                guard let torchTensor = tensorHolder.torchTensor else {
+                guard let torchTensor  = tensorHolder.torchTensor else {
                     throw SwiftSyftError.unknownError(underlyingError: nil)
                 }
 
@@ -114,84 +114,62 @@ extension SyftProto_Execution_V1_State {
 }
 
 extension SyftProto_Types_Torch_V1_TensorData {
+
     var torchTensor: TorchTensor? {
+
+        let shape = self.shape.dims.map { Int($0) }
+
         if !self.contentsUint8.isEmpty {
 
-            var copy = contentsUint8
-
-            return TorchTensor.new(withData: &copy, size: self.shape.dims as [NSNumber], type: .byte)
+            return TorchTensor.new(array: self.contentsUint8, size: shape)
 
         } else if !contentsInt8.isEmpty {
 
-            var copy = contentsInt8
-
-            return TorchTensor.new(withData: &copy, size: self.shape.dims as [NSNumber], type: .char)
+            return TorchTensor.new(array: self.contentsInt8, size: shape)
 
         } else if !contentsInt16.isEmpty {
 
-            var copy = contentsInt16
-
-            return TorchTensor.new(withData: &copy, size: self.shape.dims as [NSNumber], type: .int)
+            return TorchTensor.new(array: self.contentsInt16, size: shape)
 
         } else if !contentsInt32.isEmpty {
 
-            var copy = contentsInt32
-
-            return TorchTensor.new(withData: &copy, size: self.shape.dims as [NSNumber], type: .int)
+            return TorchTensor.new(array: self.contentsInt32, size: shape)
 
         } else if !contentsInt64.isEmpty {
 
-            var copy = contentsInt64
-
-            return TorchTensor.new(withData: &copy, size: self.shape.dims as [NSNumber], type: .long)
+            return TorchTensor.new(array: self.contentsInt64, size: shape)
 
         } else if !contentsFloat16.isEmpty {
 
-            var copy = contentsFloat16
-
-            return TorchTensor.new(withData: &copy, size: self.shape.dims as [NSNumber], type: .float)
+            return TorchTensor.new(array: self.contentsFloat16, size: shape)
 
         } else if !contentsFloat32.isEmpty {
 
-            var copy = contentsFloat32
-
-            return TorchTensor.new(withData: &copy, size: self.shape.dims as [NSNumber], type: .float)
+            return TorchTensor.new(array: self.contentsFloat32, size: shape)
 
         } else if !contentsFloat64.isEmpty {
 
-            var copy = contentsFloat64
-
-            return TorchTensor.new(withData: &copy, size: self.shape.dims as [NSNumber], type: .double)
+            return TorchTensor.new(array: self.contentsFloat64, size: shape)
 
         } else if !contentsBool.isEmpty {
 
-            var copy = contentsBool
-
-            return TorchTensor.new(withData: &copy, size: self.shape.dims as [NSNumber], type: .bool)
+            return TorchTensor.new(array: self.contentsBool, size: shape)
 
         } else if !contentsQint8.isEmpty {
 
-            var copy = contentsQint8
-
-            return TorchTensor.new(withData: &copy, size: self.shape.dims as [NSNumber], type: .byte)
+            return TorchTensor.new(array: self.contentsQint8, size: shape)
 
         } else if !contentsQuint8.isEmpty {
 
-            var copy = contentsQuint8
-
-            return TorchTensor.new(withData: &copy, size: self.shape.dims as [NSNumber], type: .int)
+            return TorchTensor.new(array: self.contentsQuint8, size: shape)
 
         } else if !contentsQint32.isEmpty {
 
-            var copy = contentsQint32
-
-            return TorchTensor.new(withData: &copy, size: self.shape.dims as [NSNumber], type: .int)
+            return TorchTensor.new(array: self.contentsQint32, size: shape)
 
         } else if !contentsBfloat16.isEmpty {
 
-            var copy = contentsBfloat16
-
-            return TorchTensor.new(withData: &copy, size: self.shape.dims as [NSNumber], type: .float)
+            return TorchTensor.new(array: self.contentsBfloat16, size: shape)
 
         } else {
             return nil
@@ -319,4 +297,3 @@ extension SyftProto_Execution_V1_State {
 
     }
 }
-
