@@ -47,13 +47,15 @@ class MNISTLoader {
         var resultTensors: [[TorchTensor]] = []
         for (imageArray, label) in zip(imageArray, label) {
             var mutableImageArray = imageArray
-            guard let imageTensor = TorchTensor.new(withData: &mutableImageArray, size: [28, 28], type: .float) else {
+
+            guard let imageTensor = TorchTensor.new(array: mutableImageArray, size: [1, 28, 28]) else {
                 throw MNISTError.tensorConversionError
             }
 
             var oneHotRow = [Int](repeating: 0, count: 10)
             oneHotRow[label] = 1
-            guard let labelTensor = TorchTensor.new(withData: &oneHotRow, size: [1, 10], type: .int) else {
+
+            guard let labelTensor = TorchTensor.new(array: oneHotRow, size: [1, 10]) else {
                 throw MNISTError.tensorConversionError
             }
 
@@ -61,7 +63,6 @@ class MNISTLoader {
         }
         return resultTensors
     }
-
 
     static func load(setType: ImageSetType, batchSize: Int) throws -> (data: LazyChunkSequence<[[Float]]>, labels: LazyChunkSequence<[Int]>) {
 
