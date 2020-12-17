@@ -69,7 +69,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // This function is called when SwiftSyft has downloaded the plans and model parameters from PyGrid
         // You are ready to train your model on your data
-        // plan - Use this to generate diffs using our training data
+        // modelParams - Contains the tensor parameters of your model. Update these tensors during training
+        // and generate the diff at the end of your training run.
+        // plans - contains all the torchscript plans to be executed on your data.
         // clientConfig - contains the configuration for the training cycle (batchSize, learning rate) and metadata for the model (name, version)
         // modelReport - Used as a completion block and reports the diffs to PyGrid.
         self.syftJob?.onReady(execute: { modelParams, plans, clientConfig, modelReport in
