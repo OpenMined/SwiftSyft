@@ -93,7 +93,7 @@ class CycleRequestTests: XCTestCase {
         self.cycleAcceptClient = SyftClient(url: URL(string: "http://test.com:3000")!)!
         self.cycleAcceptJob = self.cycleAcceptClient.newJob(modelName: "mnist", version: "1.0")
 
-        self.cycleAcceptJob.onReady { (_, _, _) in
+        self.cycleAcceptJob.onReady { (_, _, _, _) in
             cycleAcceptedExpectation.fulfill()
         }
 

@@ -87,7 +87,7 @@ class JobTests: XCTestCase {
         self.oneJobClient = SyftClient(url: URL(string: "http://test.com:3000")!)!
         self.oneJobJob = self.oneJobClient.newJob(modelName: "mnist", version: "1.0")
 
-        self.oneJobJob.onReady { (plan, clientConfig, _) in
+        self.oneJobJob.onReady { (plan, _, clientConfig, _) in
 
             XCTAssertEqual(clientConfig.name, "mnist")
             XCTAssertEqual(clientConfig.version, "1.0.0")
@@ -118,12 +118,12 @@ class JobTests: XCTestCase {
         self.multipleJobOne = self.multipleJobClient.newJob(modelName: "mnist", version: "1.0")
         self.multipleJobTwo = self.multipleJobClient.newJob(modelName: "mnist", version: "1.0")
 
-        self.multipleJobOne.onReady { (_, _, _) in
+        self.multipleJobOne.onReady { (_, _, _, _) in
 
             jobOneExpectation.fulfill()
         }
 
-        self.multipleJobTwo.onReady { (_, _, _) in
+        self.multipleJobTwo.onReady { (_, _, _, _) in
             jobTwoExpectation.fulfill()
         }
 
@@ -142,7 +142,7 @@ class JobTests: XCTestCase {
         self.diffReportClient = SyftClient(url: URL(string: "http://test.com:3000")!)!
         self.diffReportJob = self.diffReportClient.newJob(modelName: "mnist", version: "1.0")
 
-        self.diffReportJob.onReady { (_, _, report) in
+        self.diffReportJob.onReady { (_, _, _,report) in
 
             report(Data())
 
@@ -186,7 +186,7 @@ class JobTests: XCTestCase {
             }
         })
         
-        self.multipleJobOne.onReady { (_,_,_) in
+        self.multipleJobOne.onReady { (_,_,_,_) in
             
             jobOneExpectation.fulfill()
         }

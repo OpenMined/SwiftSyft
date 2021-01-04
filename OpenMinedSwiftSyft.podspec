@@ -49,7 +49,7 @@ Pod::Spec.new do |s|
 #  s.public_header_files = 'SwiftSyft/Classes/TorchWrapper/apis/*.h'
   s.private_header_files = 'SwiftSyft/Classes/TorchWrapper/src/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'LibTorch', '~> 1.6.1'
+  s.dependency 'LibTorch', '~> 1.7'
   s.dependency 'GoogleWebRTC', '~> 1.1.0'
   s.dependency 'SyftProto', '0.4.9'
   

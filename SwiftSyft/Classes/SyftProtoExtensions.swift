@@ -22,6 +22,49 @@ enum TensorType: Int {
 
 extension SyftProto_Execution_V1_State {
 
+    func getTorchTensors() throws -> [TorchTensor] {
+
+        // extract tensor protobuf objects
+        var torchTensorsData: [SyftProto_Types_Torch_V1_TorchTensor] = []
+        var torchTensorsCount = 0
+        for tensor in self.tensors {
+            torchTensorsCount += 1
+            switch tensor.tensor {
+            case .torchParam(let torchParameter):
+                torchTensorsData.append(torchParameter.tensor)
+            case .torchTensor(let torchTensorData):
+                torchTensorsData.append(torchTensorData)
+            case nil:
+                break
+            }
+        }
+
+        var torchTensors: [TorchTensor] = []
+        for torchTensorData in torchTensorsData {
+            switch torchTensorData.contents {
+            case .contentsData(let tensorHolder):
+
+                guard let torchTensor  = tensorHolder.torchTensor else {
+                    throw SwiftSyftError.unknownError(underlyingError: nil)
+                }
+
+                torchTensors.append(torchTensor)
+
+            case .contentsBin(_):
+                break
+            case nil:
+                break
+            }
+        }
+
+        guard torchTensors.count == torchTensorsCount else {
+            throw SwiftSyftError.unknownError(underlyingError: nil)
+        }
+
+        return torchTensors
+
+    }
+
 //     swiftlint:disable large_tuple
     func getTensorData() -> TensorsHolder {
 
@@ -66,6 +109,71 @@ extension SyftProto_Execution_V1_State {
         let tensorsHolder = TensorsHolder(tensorPointerValues: tensorPointerArray, tensorData: tensorData, tensorShapes: shapes as [[NSNumber]], types: tensorTypes as [NSNumber])
 
         return tensorsHolder
+
+    }
+}
+
+extension SyftProto_Types_Torch_V1_TensorData {
+
+    var torchTensor: TorchTensor? {
+
+        let shape = self.shape.dims.map { Int($0) }
+
+        if !self.contentsUint8.isEmpty {
+
+            return TorchTensor.new(array: self.contentsUint8, size: shape)
+
+        } else if !contentsInt8.isEmpty {
+
+            return TorchTensor.new(array: self.contentsInt8, size: shape)
+
+        } else if !contentsInt16.isEmpty {
+
+            return TorchTensor.new(array: self.contentsInt16, size: shape)
+
+        } else if !contentsInt32.isEmpty {
+
+            return TorchTensor.new(array: self.contentsInt32, size: shape)
+
+        } else if !contentsInt64.isEmpty {
+
+            return TorchTensor.new(array: self.contentsInt64, size: shape)
+
+        } else if !contentsFloat16.isEmpty {
+
+            return TorchTensor.new(array: self.contentsFloat16, size: shape)
+
+        } else if !contentsFloat32.isEmpty {
+
+            return TorchTensor.new(array: self.contentsFloat32, size: shape)
+
+        } else if !contentsFloat64.isEmpty {
+
+            return TorchTensor.new(array: self.contentsFloat64, size: shape)
+
+        } else if !contentsBool.isEmpty {
+
+            return TorchTensor.new(array: self.contentsBool, size: shape)
+
+        } else if !contentsQint8.isEmpty {
+
+            return TorchTensor.new(array: self.contentsQint8, size: shape)
+
+        } else if !contentsQuint8.isEmpty {
+
+            return TorchTensor.new(array: self.contentsQuint8, size: shape)
+
+        } else if !contentsQint32.isEmpty {
+
+            return TorchTensor.new(array: self.contentsQint32, size: shape)
+
+        } else if !contentsBfloat16.isEmpty {
+
+            return TorchTensor.new(array: self.contentsBfloat16, size: shape)
+
+        } else {
+            return nil
+        }
 
     }
 }

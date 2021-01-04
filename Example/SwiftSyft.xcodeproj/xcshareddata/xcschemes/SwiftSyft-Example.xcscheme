@@ -95,6 +95,23 @@
                BlueprintName = "OpenMinedSwiftSyft-Unit-Tests"
                ReferencedContainer = "container:../Pods/Pods.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "CycleRequestTests/testCycleAccepted()">
+               </Test>
+               <Test
+                  Identifier = "JobTests/testChargeandWifi()">
+               </Test>
+               <Test
+                  Identifier = "JobTests/testModelDiffReport()">
+               </Test>
+               <Test
+                  Identifier = "JobTests/testMultipleJobCompletes()">
+               </Test>
+               <Test
+                  Identifier = "JobTests/testOneJobCompletes()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>
