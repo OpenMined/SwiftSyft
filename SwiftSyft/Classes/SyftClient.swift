@@ -39,6 +39,17 @@ struct Plan {
     let planProto: SyftProto_Execution_V1_Plan
 }
 
+/// Job events passed to job trainer
+enum SyftJobEvents {
+
+    case onReady(model: SyftModel, planDictionary: [String: TorchModule], clientConfig: FederatedClientConfig, report: ModelReport)
+
+    case onError(error: SwiftSyftError)
+
+    case onRejected(timeout: TimeInterval?)
+
+}
+
 /// Syft client for model-centric federated learning
 public class SyftClient: SyftClientProtocol {
     private let url: URL
@@ -123,6 +134,11 @@ public class SyftJob: SyftJobProtocol {
     private let batteryChargeCheck: () -> Bool
     private let wifiCheck: (NWPathMonitor, Bool) -> Future<Bool, Never>
 
+    private let jobEventsSubject = PassthroughSubject<SyftJobEvents, Error>()
+    var jobEventsPublisher: AnyPublisher<SyftJobEvents, Error> {
+        return jobEventsSubject.eraseToAnyPublisher()
+    }
+
     init(connectionType: SyftConnectionType,
          modelName: String,
          version: String,
@@ -143,6 +159,12 @@ public class SyftJob: SyftJobProtocol {
         case let .socket(url, sendMessageSubject: _, receiveMessagePublisher: _):
             self.url = url
         }
+
+    }
+
+    public func train() -> SyftJobTrainer {
+
+        return SyftJobTrainer(jobEventPublisher: self.jobEventsPublisher)
 
     }
 
@@ -399,6 +421,9 @@ public class SyftJob: SyftJobProtocol {
 
                 let model = SyftModel(modelState: modelParam)
                 self.onReadyBlock(model, planDictionary, clientConfig, {[weak self] data in self?.reportDiff(diffData: data)})
+
+                // Send job ready event to job trainer if it exists.
+                self.jobEventsSubject.send(.onReady(model: model, planDictionary: planDictionary, clientConfig: clientConfig, report: {[weak self] data in self?.reportDiff(diffData: data)}))
 
             }).store(in: &disposeBag)
 
