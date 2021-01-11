@@ -92,7 +92,10 @@ extension CycleResponseSuccess {
         let batchSize =  try clientConfigContainer.decode(Int.self, forKey: .batchSize)
         let learningRate =  try clientConfigContainer.decode(Float.self, forKey: .learningRate)
         let maxUpdates =  try clientConfigContainer.decode(Int.self, forKey: .maxUpdates)
-        clientConfig = FederatedClientConfig(name: name, version: version, batchSize: batchSize, learningRate: learningRate, maxUpdates: maxUpdates)
+
+        let maxEpochs = try clientConfigContainer.decodeIfPresent(Int.self, forKey: .maxEpochs) ?? 1
+
+        clientConfig = FederatedClientConfig(name: name, version: version, batchSize: batchSize, learningRate: learningRate, maxUpdates: maxUpdates, maxEpochs: maxEpochs)
     }
 }
 
@@ -135,12 +138,15 @@ public struct FederatedClientConfig: Codable {
     public let learningRate: Float
     public let maxUpdates: Int
 
+    public let maxEpochs: Int
+
     enum CodingKeys: String, CodingKey {
         case name
         case version
         case batchSize = "batch_size"
         case learningRate = "lr"
         case maxUpdates = "max_updates"
+        case maxEpochs = "max_epochs"
     }
 }
 
