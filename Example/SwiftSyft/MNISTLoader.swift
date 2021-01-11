@@ -48,7 +48,7 @@ class MNISTLoader {
         for (imageArray, label) in zip(imageArray, label) {
             var mutableImageArray = imageArray
 
-            guard let imageTensor = TorchTensor.new(array: mutableImageArray, size: [1, 28, 28]) else {
+            guard let imageTensor = TorchTensor.new(array: mutableImageArray, size: [1, 784]) else {
                 throw MNISTError.tensorConversionError
             }
 

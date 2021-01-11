@@ -139,7 +139,7 @@ class HomeViewController: UIViewController, UITextViewDelegate {
                     autoreleasepool {
 
                         // Preprocess MNIST data by flattening all of the MNIST batch data as a single array
-                        let MNISTTensors = batchedTensors[0].reshape([-1, 784])
+                        let MNISTTensors = batchedTensors[0]
 
                         // Preprocess the label ( 0 to 9 ) by creating one-hot features and then flattening the entire thing
                         let labels = batchedTensors[1]
