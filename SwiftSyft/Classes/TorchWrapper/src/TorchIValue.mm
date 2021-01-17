@@ -9,6 +9,12 @@
   _(Int, int, int64_t)                     \
   _(Double, double, double)
 
+@interface TorchIValue()
+
+@property (strong, nonatomic) TorchTensor *tensorWrapper;
+
+@end
+
 @implementation TorchIValue {
   at::IValue _impl;
 }
@@ -52,7 +58,11 @@ DEFINE_IVALUE_SCALAR_TYPE_VALUE(NEW_LIST)
 }
 
 + (instancetype)newWithTensor:(TorchTensor*)tensor {
+
   TorchIValue* value = [TorchIValue new];
+
+  // Store tensor wrapper so it won't be deallocated
+  value.tensorWrapper = tensor;
   value->_impl = at::IValue(tensor.toTensor);
   return value;
 }
