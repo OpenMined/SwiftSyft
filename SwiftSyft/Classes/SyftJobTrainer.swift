@@ -8,6 +8,26 @@
 import Foundation
 import Combine
 
+public enum SyftJobTrainerError: Error, LocalizedError {
+    case inputSpecError(spec: PlanInputSpec)
+
+    public var localizedDescription: String {
+        switch self {
+        case .inputSpecError(let spec):
+            return "Invalid Input Spec \(spec)"
+        }
+    }
+}
+
+public enum PlanInputSpec {
+
+    case data(dataIndex: Int)
+    case clientConfig(keyPath: PartialKeyPath<FederatedClientConfig>)
+    case modelParams
+    case modelParam(paramIndex: Int)
+
+}
+
 public class SyftJobTrainer {
 //public class SyftJobTrainer {
 
@@ -22,13 +42,19 @@ public class SyftJobTrainer {
     )
 
     private var dataLoader: AnySequence<[TorchTensor]>
+    private var planName: String
+    private var inputSpecs: [PlanInputSpec]
 
     var disposeBag = Set<AnyCancellable>()
 
     init(dataLoader: AnySequence<[TorchTensor]>,
+         planName: String,
+         inputSpecs: [PlanInputSpec],
          jobEventPublisher: AnyPublisher<SyftJobEvents, Error>) {
 
         self.dataLoader = dataLoader
+        self.planName = planName
+        self.inputSpecs = inputSpecs
 
         jobEventPublisher.sink { result in
             print(result)
@@ -73,30 +99,16 @@ public class SyftJobTrainer {
                 // We need to create an autorelease pool to release the training data from memory after each loop
                 autoreleasepool {
 
-                    // Preprocess MNIST data by flattening all of the MNIST batch data as a single array
-                    let MNISTTensors = batch[0]
+                    guard let planParameters: [TorchIValue] = try? self.planParametersFrom(data: batch,
+                                                                                           model: model,
+                                                                                           planDictionary: planDictionary,
+                                                                                           clientConfig: clientConfig) else {
 
-                    // Preprocess the label ( 0 to 9 ) by creating one-hot features and then flattening the entire thing
-                    let labels = batch[1]
-
-                    // Add batch_size, learning_rate and model_params as tensors
-                    let batchSize = [clientConfig.batchSize]
-                    let learningRate = [clientConfig.learningRate]
-
-                    guard
-                        let batchSizeTensor = TorchTensor.new(array: batchSize, size: [1]),
-                        let learningRateTensor = TorchTensor.new(array: learningRate, size: [1]) ,
-                        let modelParamTensors = model.paramTensorsForTraining else
-                    {
+                        // TODO: Add error handlers instead of return
                         return
                     }
 
-                    // Execute the torchscript plan with the training data, validation data, batch size, learning rate and model params
-                    let result = planDictionary["training_plan"]?.forward([TorchIValue.new(with: MNISTTensors),
-                                                                  TorchIValue.new(with: labels),
-                                                                  TorchIValue.new(with: batchSizeTensor),
-                                                                  TorchIValue.new(with: learningRateTensor),
-                                                                  TorchIValue.new(withTensorList: modelParamTensors)])
+                    let result = planDictionary[self.planName]?.forward(planParameters)
 
                     // Example returns a list of tensors in the folowing order: loss, accuracy, model param 1,
                     // model param 2, model param 3, model param 4
@@ -121,6 +133,8 @@ public class SyftJobTrainer {
 
                     model.paramTensorsForTraining = [param1, param2, param3, param4]
 
+                    print("end autorelease")
+
                 }
 
                 self.observations.batchEnd.forEach { closure in
@@ -140,6 +154,45 @@ public class SyftJobTrainer {
             closure()
         }
 
+    }
+
+    func planParametersFrom(data: [TorchTensor], model: SyftModel, planDictionary: [String: TorchModule], clientConfig: FederatedClientConfig) throws -> [TorchIValue] {
+
+        var parameters: [TorchIValue] = []
+
+        for spec in self.inputSpecs {
+
+            switch spec {
+            case .data(let index):
+                parameters.append(TorchIValue.new(with: data[index]))
+            case .clientConfig(let keyPath):
+                guard let configTensor = clientConfig.tensorFromProperty(with: keyPath) else {
+                    throw SyftJobTrainerError.inputSpecError(spec: spec)
+                }
+
+                parameters.append(TorchIValue.new(with: configTensor))
+
+            case .modelParam(let paramIndex):
+
+                guard let modelParams = model.paramTensorsForTraining else {
+                    throw SyftJobTrainerError.inputSpecError(spec: spec)
+                }
+
+                parameters.append(TorchIValue.new(with: modelParams[paramIndex]))
+
+            case .modelParams:
+
+                guard let modelParams = model.paramTensorsForTraining else {
+                    throw SyftJobTrainerError.inputSpecError(spec: spec)
+                }
+
+                parameters.append(TorchIValue.new(withTensorList: modelParams))
+
+            }
+
+        }
+
+        return parameters
     }
 
     public func onStarted(closure: @escaping () -> Void) {

@@ -162,9 +162,14 @@ public class SyftJob: SyftJobProtocol {
 
     }
 
-    public func train<T: Collection>(dataloader: MultiTensorDataLoader<T>) -> SyftJobTrainer where T.Element == [TorchTensor] {
+    public func train<T: Collection>(dataloader: MultiTensorDataLoader<T>,
+                                     planName: String,
+                                     inputSpecs: [PlanInputSpec]) -> SyftJobTrainer where T.Element == [TorchTensor] {
 
-        return SyftJobTrainer(dataLoader: AnySequence<[TorchTensor]>(dataloader), jobEventPublisher: self.jobEventsPublisher)
+        return SyftJobTrainer(dataLoader: AnySequence<[TorchTensor]>(dataloader),
+                              planName: planName,
+                              inputSpecs: inputSpecs,
+                              jobEventPublisher: self.jobEventsPublisher)
 
     }
 
