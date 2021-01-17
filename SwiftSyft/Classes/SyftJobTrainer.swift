@@ -28,6 +28,14 @@ public enum PlanInputSpec {
 
 }
 
+public enum PlanOutputSpec {
+
+    case loss
+    case metric(name: String)
+    case modelParam(paramIndex: Int)
+
+}
+
 public class SyftJobTrainer {
 //public class SyftJobTrainer {
 
@@ -37,24 +45,27 @@ public class SyftJobTrainer {
         epochStart: [(Int) -> Void](),
         epochEnd: [(Int) -> Void](),
         batchStart: [(Int, Int) -> Void](),
-        batchEnd: [(Int, Int) -> Void](),
+        batchEnd: [(Int, Int, [String: Float]) -> Void](),
         error: [(Error) -> Void]()
     )
 
     private var dataLoader: AnySequence<[TorchTensor]>
     private var planName: String
     private var inputSpecs: [PlanInputSpec]
+    private var outputSpecs: [PlanOutputSpec]
 
     var disposeBag = Set<AnyCancellable>()
 
     init(dataLoader: AnySequence<[TorchTensor]>,
          planName: String,
          inputSpecs: [PlanInputSpec],
+         outputSpecs: [PlanOutputSpec],
          jobEventPublisher: AnyPublisher<SyftJobEvents, Error>) {
 
         self.dataLoader = dataLoader
         self.planName = planName
         self.inputSpecs = inputSpecs
+        self.outputSpecs = outputSpecs
 
         jobEventPublisher.sink { result in
             print(result)
@@ -113,32 +124,18 @@ public class SyftJobTrainer {
                     // Example returns a list of tensors in the folowing order: loss, accuracy, model param 1,
                     // model param 2, model param 3, model param 4
                     guard let tensorResults = result?.tupleToTensorList() else {
+                        
+                        // TODO: Add error handlers instead of return
                         return
                     }
 
-                    let lossTensor = tensorResults[0]
-                    lossTensor.print()
-                    let loss = lossTensor.item()
+                    let (metrics, modelParams) = self.resolvePlanOutputs(planResults: tensorResults)
 
-                    print("loss: \(loss)")
+                    model.paramTensorsForTraining = modelParams
 
-                    let accuracyTensor = tensorResults[1]
-                    accuracyTensor.print()
-
-                    // Get updated param tensors and update them in param tensors holder
-                    let param1 = tensorResults[2]
-                    let param2 = tensorResults[3]
-                    let param3 = tensorResults[4]
-                    let param4 = tensorResults[5]
-
-                    model.paramTensorsForTraining = [param1, param2, param3, param4]
-
-                    print("end autorelease")
-
-                }
-
-                self.observations.batchEnd.forEach { closure in
-                    closure(epoch, batchIdx)
+                    self.observations.batchEnd.forEach { closure in
+                        closure(epoch, batchIdx, metrics)
+                    }
                 }
 
                 batchIdx += 1
@@ -195,6 +192,31 @@ public class SyftJobTrainer {
         return parameters
     }
 
+    func resolvePlanOutputs(planResults: [TorchTensor]) -> (metrics: [String: Float], modelParams: [TorchTensor]) {
+
+        var modelParamsDict: [Int: TorchTensor] = [:]
+        var metrics: [String: Float] = [:]
+
+        for (outputSpec, planResult) in zip(self.outputSpecs, planResults) {
+
+            switch outputSpec {
+            case .loss:
+                metrics["loss"] = planResult.item()
+            case .metric(let name):
+                metrics[name] = planResult.item()
+            case .modelParam(let index):
+                modelParamsDict[index] = planResult
+            }
+
+        }
+
+        let modelParams = modelParamsDict.sorted(by: { $0.0 < $1.0 }).map { $0.value }
+
+        return (metrics, modelParams)
+
+    }
+
+    // Observer methods
     public func onStarted(closure: @escaping () -> Void) {
         self.observations.started.append(closure)
     }
@@ -211,7 +233,7 @@ public class SyftJobTrainer {
         self.observations.batchStart.append(closure)
     }
 
-    public func onBatchEnd(closure: @escaping (Int, Int) -> Void) {
+    public func onBatchEnd(closure: @escaping (Int, Int, [String: Float]) -> Void) {
         self.observations.batchEnd.append(closure)
     }
 
