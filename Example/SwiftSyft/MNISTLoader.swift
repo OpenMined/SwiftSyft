@@ -52,7 +52,7 @@ class MNISTLoader {
                 throw MNISTError.tensorConversionError
             }
 
-            var oneHotRow = [Int](repeating: 0, count: 10)
+            var oneHotRow = [UInt8](repeating: 0, count: 10)
             oneHotRow[label] = 1
 
             guard let labelTensor = TorchTensor.new(array: oneHotRow, size: [1, 10]) else {

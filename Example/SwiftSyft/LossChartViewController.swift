@@ -34,7 +34,7 @@ class LossChartViewController: UIViewController {
         let leftAxis = lineChartView.leftAxis
         leftAxis.removeAllLimitLines()
         leftAxis.axisMaximum = 2.33
-        leftAxis.axisMinimum = 0.4
+        leftAxis.axisMinimum = 0.0
         leftAxis.gridLineDashLengths = [5, 5]
         leftAxis.drawLimitLinesBehindDataEnabled = true
 

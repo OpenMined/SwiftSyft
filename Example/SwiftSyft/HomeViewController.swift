@@ -90,7 +90,7 @@ class HomeViewController: UIViewController, UITextViewDelegate {
             self.activityIndicator.startAnimating()
 
             // Create a new federated learning job with the model name and version
-            self.syftJob = syftClient.newJob(modelName: "mnist", version: "1.0.0")
+            self.syftJob = syftClient.newJob(modelName: "mnist", version: "1.0")
 
             // This function is called when SwiftSyft has downloaded the plans and model parameters from PyGrid
             // You are ready to train your model on your data
@@ -145,7 +145,7 @@ class HomeViewController: UIViewController, UITextViewDelegate {
                         let labels = batchedTensors[1]
 
                         // Add batch_size, learning_rate and model_params as tensors
-                        let batchSize = [clientConfig.batchSize]
+                        let batchSize = [UInt32(clientConfig.batchSize)]
                         let learningRate = [clientConfig.learningRate]
 
                         guard
@@ -165,7 +165,7 @@ class HomeViewController: UIViewController, UITextViewDelegate {
 
                         // Example returns a list of tensors in the folowing order: loss, accuracy, model param 1,
                         // model param 2, model param 3, model param 4
-                        guard let tensorResults = result?.tupleToTensorList() else {
+                        guard let tensorResults = result?.toTensorList() else {
                             return
                         }
 
@@ -188,7 +188,6 @@ class HomeViewController: UIViewController, UITextViewDelegate {
                         modelParams.paramTensorsForTraining = [param1, param2, param3, param4]
 
                     }
-
                 }
 
                 // Generate diff data (subtract original model params from updated params) and report the final diffs as
