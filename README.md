@@ -99,7 +99,7 @@ if let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:5000")!, authTok
           let labels = batchedTensors[1]
 
           // Add batch_size, learning_rate and model_params as tensors
-          let batchSize = [clientConfig.batchSize]
+          let batchSize = [UInt32(clientConfig.batchSize)]
           let learningRate = [clientConfig.learningRate]
 
           guard
@@ -185,44 +185,26 @@ The demo app fetches the plans, protocols and model weights from PyGrid server h
 
 Follow these steps to setup an environment to run the demo app:
 
-- Clone the repo [PyGrid](https://github.com/OpenMined/PyGrid) and change directory to it
+- Clone the repo [PyGrid](https://github.com/OpenMined/PyGrid) and change directory to `PyGrid/apps/domain`
 
 ```bash
-git clone https://github.com/OpenMined/PyGrid
-cd PyGrid
+$ git clone https://github.com/OpenMined/PyGrid
+$ cd PyGrid/apps/domain
 ```
-
-- Install [docker](https://github.com/OpenMined/PyGrid/#getting-started)
-- Install docker-compose.
-- Execute `docker-compose` in the command line to start pygrid server.
+- Run the PyGrid Domain application
 
 ```bash
-docker-compose up
+$ ./run.sh --port 5000 --start_local_db
 ```
 
-- Install [PySyft 0.2.x branch](https://github.com/OpenMined/PySyft/tree/syft_0.2.x) from source in the virtual environment.
-```bash
-virtualenv -p python3 venv
-source venv/bin/activate
-python setup.py install
-```
-- Make virtual environment available for Jupyter Notebook
-```bash
-python -m ipykernel install --user --name=venv
-```
-- Host Jupyter Notebook from the PyGrid folder
+- Install [PySyft](https://github.com/OpenMined/PySyft) from source or via PyPy. Follow the instructions specified in the repo.
+- Clone the `PySyft` repo. In your command line, go to `PySyft/examples/federated-learning/model-centric/` folder and run jupyter notebook.
 
 ```bash
-jupyter notebook
+$ cd PySyft/examples/federated-learning/model-centric/
+$ jupyter notebook
 ```
-
-- Open a browser and navigate to [localhost:8888](http://localhost:8888/). You should be able to see the PyGrid notebook console.
-- In the Jupyter Notebook, navigate to `examples/model-centric`
-- Run the notebook `01-Create-plan` with the `venv` kernel. Now PyGrid is setup and the model is hosted over it.
-
-```
-syft.base_url="<IP_address_from_step_16>:5000"
-```
+- Open the notebook `mcfl_create_plan_mobile.ipynb` notebook. Run all the cells to host a plan to your running PyGrid domain server.
 
 - Set-up demo project using Cocoapods
 - Install [Cocoapods](https://cocoapods.org/)
