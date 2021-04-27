@@ -49,25 +49,6 @@ public extension Array where Element == TorchTensor {
 
 public extension TorchTensor {
 
-    static func new(array: [Int], size: [Int]) -> TorchTensor? {
-
-        var copy = array
-        let tensorPointer = UnsafeMutablePointer<Int>.allocate(capacity: copy.count)
-        tensorPointer.initialize(from: &copy, count: copy.count)
-
-        guard let tensor = TorchTensor.new(withData: tensorPointer, size: size as [NSNumber], type: .int) else {
-            return nil
-        }
-
-        tensor.pointerValue = NSValue(pointer: tensorPointer)
-        tensor.deinitBlock = {
-            tensorPointer.deallocate()
-        }
-
-        return tensor
-
-    }
-
     static func new(array: [Int8], size: [Int]) -> TorchTensor? {
 
         var copy = array
@@ -112,7 +93,7 @@ public extension TorchTensor {
         let tensorPointer = UnsafeMutablePointer<UInt32>.allocate(capacity: copy.count)
         tensorPointer.initialize(from: &copy, count: copy.count)
 
-        guard let tensor = TorchTensor.new(withData: tensorPointer, size: size as [NSNumber], type: .byte) else {
+        guard let tensor = TorchTensor.new(withData: tensorPointer, size: size as [NSNumber], type: .int) else {
             return nil
         }
 
@@ -131,7 +112,7 @@ public extension TorchTensor {
         let tensorPointer = UnsafeMutablePointer<Int32>.allocate(capacity: copy.count)
         tensorPointer.initialize(from: &copy, count: copy.count)
 
-        guard let tensor = TorchTensor.new(withData: tensorPointer, size: size as [NSNumber], type: .long) else {
+        guard let tensor = TorchTensor.new(withData: tensorPointer, size: size as [NSNumber], type: .int) else {
             return nil
         }
 
