@@ -69,19 +69,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // This function is called when SwiftSyft has downloaded the plans and model parameters from PyGrid
         // You are ready to train your model on your data
-        // plan - Use this to generate diffs using our training data
+        // modelParams - Contains the tensor parameters of your model. Update these tensors during training
+        // and generate the diff at the end of your training run.
+        // plans - contains all the torchscript plans to be executed on your data.
         // clientConfig - contains the configuration for the training cycle (batchSize, learning rate) and metadata for the model (name, version)
         // modelReport - Used as a completion block and reports the diffs to PyGrid.
-        self.syftJob?.onReady(execute: { plan, clientConfig, modelReport in
+        self.syftJob?.onReady(execute: { modelParams, plans, clientConfig, modelReport in
 
             do {
 
-                // This returns a lazily evaluated sequence for each MNIST image and the corresponding label
+                // This returns an array for each MNIST image and the corresponding label as PyTorch tensor
                 // It divides the training data and the label by batches
-                let (mnistData, labels) = try MNISTLoader.load(setType: .train, batchSize: clientConfig.batchSize)
+                let MNISTDataAndLabelTensors = try MNISTLoader.loadAsTensors(setType: .train)
+
+                // This loads the MNIST tensor into a dataloader to use for iterating during training
+                let dataLoader = MultiTensorDataLoader(dataset: MNISTDataAndLabelTensors, shuffle: true, batchSize: 64)
 
                 // Iterate through each batch of MNIST data and label
-                for case let (batchData, labels) in zip(mnistData, labels) {
+                for batchedTensors in dataLoader {
 
                     // This checks if the background task has been cancelled. If it is, cancel the training cycle
                     guard !self.backgroundTaskCancelled else {
@@ -92,26 +97,59 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     try autoreleasepool {
 
                         // Preprocess MNIST data by flattening all of the MNIST batch data as a single array
-                        let flattenedBatch = MNISTLoader.flattenMNISTData(batchData)
+                        let MNISTTensors = batchedTensors[0].reshape([-1, 784])
 
                         // Preprocess the label ( 0 to 9 ) by creating one-hot features and then flattening the entire thing
-                        let oneHotLabels = MNISTLoader.oneHotMNISTLabels(labels: labels).compactMap { Float($0)}
+                        let labels = batchedTensors[1]
 
-                        // Since we don't have native tensor wrappers in Swift yet, we use `TrainingData` and `ValidationData`
-                        // classes to store the data and shape.
-                        let trainingData = try TrainingData(data: flattenedBatch, shape: [clientConfig.batchSize, 784])
-                        let validationData = try ValidationData(data: oneHotLabels, shape: [clientConfig.batchSize, 10])
+                        // Add batch_size, learning_rate and model_params as tensors
+                        let batchSize = [clientConfig.batchSize]
+                        let learningRate = [clientConfig.learningRate]
 
-                        // Execute the plan with the training data and validation data. `plan.execute()` returns the loss and you can use
-                        // it if you want to (plan.execute() has the @discardableResult attribute)
-                        plan.execute(trainingData: trainingData, validationData: validationData, clientConfig: clientConfig)
+                        guard
+                            let batchSizeTensor = TorchTensor.new(array: batchSize, size: [1]),
+                            let learningRateTensor = TorchTensor.new(array: learningRate, size: [1]) ,
+                            let modelParamTensors = modelParams.paramTensorsForTraining else
+                        {
+
+                            // Finish the background task with error
+                            backgroundTask.setTaskCompleted(success: false)
+
+                            return
+                        }
+
+                        // Execute the torchscript plan with the training data, validation data, batch size, learning rate and model params
+                        let result = plans["training_plan"]?.forward([TorchIValue.new(with: MNISTTensors),
+                                                                      TorchIValue.new(with: labels),
+                                                                      TorchIValue.new(with: batchSizeTensor),
+                                                                      TorchIValue.new(with: learningRateTensor),
+                                                                      TorchIValue.new(withTensorList: modelParamTensors)])
+
+                        // Example returns a list of tensors in the folowing order: loss, accuracy, model param 1,
+                        // model param 2, model param 3, model param 4
+                        guard let tensorResults = result?.tupleToTensorList() else {
+                            return
+                        }
+
+                        // Get updated param tensors and update them in param tensors holder
+                        let param1 = tensorResults[2]
+                        let param2 = tensorResults[3]
+                        let param3 = tensorResults[4]
+                        let param4 = tensorResults[5]
+
+                        modelParams.paramTensorsForTraining = [param1, param2, param3, param4]
+
 
                     }
 
                 }
 
-                // Generate diff data and report the final diffs as
-                let diffStateData = try plan.generateDiffData()
+                // Generate diff data (subtract original model params from updated params) and report the final diffs as
+                guard let diffStateData = modelParams.generateDiffData() else {
+                    return
+                }
+
+                // Submit model params diff to server
                 modelReport(diffStateData)
 
                 // Finish the background task

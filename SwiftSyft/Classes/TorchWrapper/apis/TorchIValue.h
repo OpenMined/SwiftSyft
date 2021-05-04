@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)isDoubleList;
 - (BOOL)isIntList;
 - (BOOL)isTensorList;
+- (BOOL)isTuple;
 
 - (nullable TorchTensor*)toTensor;
 - (bool)toBool;
@@ -37,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSArray<NSNumber*>*)toIntList;
 - (nullable NSArray<NSNumber*>*)toDoubleList;
 - (nullable NSArray<TorchTensor*>*)toTensorList;
+- (nullable NSArray<TorchTensor*>*)tupleToTensorList;
 
 @end
 

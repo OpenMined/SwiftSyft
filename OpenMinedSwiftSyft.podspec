@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'OpenMinedSwiftSyft'
   s.module_name      = 'SwiftSyft'
-  s.version          = '0.1.3-beta2'
+  s.version          = '0.5'
   s.summary          = 'The official Syft worker for iOS, built in Swift.'
 
 # This description is used to generate tags and improve search results.
@@ -49,7 +49,7 @@ Pod::Spec.new do |s|
 #  s.public_header_files = 'SwiftSyft/Classes/TorchWrapper/apis/*.h'
   s.private_header_files = 'SwiftSyft/Classes/TorchWrapper/src/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'LibTorch', '~> 1.6.1'
+  s.dependency 'LibTorch', '~> 1.7'
   s.dependency 'GoogleWebRTC', '~> 1.1.0'
   s.dependency 'SyftProto', '0.4.9'
   

@@ -48,7 +48,7 @@ As a developer, there are few steps to building your own secure federated learni
 2. :earth_americas: Host your model and plans on [PyGrid](https://github.com/OpenMined/PyGrid) which will deal with all the federated learning components of your pipeline. You will need to set up a PyGrid server somewhere, please see their installation instructions on how to do this.
 3. :tada: Start training on the device!
 
-**:notebook: The entire workflow and process is described in greater detail in our [project roadmap](https://github.com/OpenMined/Roadmap/blob/master/web_and_mobile_team/projects/federated_learning.md).**
+**:notebook: The entire workflow and process is described in greater detail in our [project roadmap](https://github.com/OpenMined/Roadmap/blob/master/federated_learning/projects/model_centric_fl.md).**
 
 You can use SwiftSyft as a front-end or as a background service. The following is a quick start example usage:
 
@@ -70,53 +70,80 @@ if let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:5000")!, authTok
 
   // This function is called when SwiftSyft has downloaded the plans and model parameters from PyGrid
   // You are ready to train your model on your data
-  // plan - Use this to generate diffs using our training data
-  // clientConfig - contains the configuration for the training cycle (batchSize, learning rate) and
-  // metadata for the model (name, version)
+  // modelParams - Contains the tensor parameters of your model. Update these tensors during training
+  // and generate the diff at the end of your training run.
+  // plans - contains all the torchscript plans to be executed on your data.
+  // clientConfig - contains the configuration for the training cycle (batchSize, learning rate) and metadata for the model (name, version)
   // modelReport - Used as a completion block and reports the diffs to PyGrid.
-  self.syftJob?.onReady(execute: { plan, clientConfig, modelReport in
+  self.syftJob?.onReady(execute: { modelParams, plans, clientConfig, modelReport in
 
-    do {
+    // This returns an array for each MNIST image and the corresponding label as PyTorch tensor
+    // It divides the training data and the label by batches
+    guard let MNISTDataAndLabelTensors = try? MNISTLoader.loadAsTensors(setType: .train) else {
+        return
+    }
 
-        // This returns a lazily evaluated sequence for each MNIST image and the corresponding label
-        // It divides the training data and the label by batches
-        let (mnistData, labels) = try MNISTLoader.load(setType: .train, batchSize: clientConfig.batchSize)
+    // This loads the MNIST tensor into a dataloader to use for iterating during training
+    let dataLoader = MultiTensorDataLoader(dataset: MNISTDataAndLabelTensors, shuffle: true, batchSize: 64)
 
-        // Iterate through each batch of MNIST data and label
-        for case let (batchData, labels) in zip(mnistData, labels) {
+    // Iterate through each batch of MNIST data and label
+    for batchedTensors in dataLoader {
 
-            // We need to create an autorelease pool to release the training data from memory after each loop
-            try autoreleasepool {
+      // We need to create an autorelease pool to release the training data from memory after each loop
+      autoreleasepool {
 
-                // Preprocess MNIST data by flattening all of the MNIST batch data as a single array
-                let flattenedBatch = MNISTLoader.flattenMNISTData(batchData)
-                // Preprocess the label ( 0 to 9 ) by creating one-hot features and then flattening the entire thing
-                let oneHotLabels = MNISTLoader.oneHotMNISTLabels(labels: labels).compactMap { Float($0)}
+          // Preprocess MNIST data by flattening all of the MNIST batch data as a single array
+          let MNISTTensors = batchedTensors[0].reshape([-1, 784])
 
-                // Since we don't have native tensor wrappers in Swift yet, we use
-                // `TrainingData` and `ValidationData` classes to store the data and shape.
-                let trainingData = try TrainingData(data: flattenedBatch, shape: [clientConfig.batchSize, 784])
-                let validationData = try ValidationData(data: oneHotLabels, shape: [clientConfig.batchSize, 10])
+          // Preprocess the label ( 0 to 9 ) by creating one-hot features and then flattening the entire thing
+          let labels = batchedTensors[1]
 
-                // Execute the plan with the training data and validation data. `plan.execute()`
-                // returns the loss and you can use it if you want to (plan.execute()
-                // has the @discardableResult attribute)
-                let loss = plan.execute(trainingData: trainingData,
-                                      validationData: validationData,
-                                        clientConfig: clientConfig)
+          // Add batch_size, learning_rate and model_params as tensors
+          let batchSize = [UInt32(clientConfig.batchSize)]
+          let learningRate = [clientConfig.learningRate]
 
-            }
+          guard
+              let batchSizeTensor = TorchTensor.new(array: batchSize, size: [1]),
+              let learningRateTensor = TorchTensor.new(array: learningRate, size: [1]) ,
+              let modelParamTensors = modelParams.paramTensorsForTraining else
+          {
+              return
+          }
 
-        }
+          // Execute the torchscript plan with the training data, validation data, batch size, learning rate and model params
+          let result = plans["training_plan"]?.forward([TorchIValue.new(with: MNISTTensors),
+                                                        TorchIValue.new(with: labels),
+                                                        TorchIValue.new(with: batchSizeTensor),
+                                                        TorchIValue.new(with: learningRateTensor),
+                                                        TorchIValue.new(withTensorList: modelParamTensors)])
+
+          // Example returns a list of tensors in the folowing order: loss, accuracy, model param 1,
+          // model param 2, model param 3, model param 4
+          guard let tensorResults = result?.tupleToTensorList() else {
+              return
+          }
+
+          let lossTensor = tensorResults[0]
+          lossTensor.print()
+          let loss = lossTensor.item()
+
+          let accuracyTensor = tensorResults[1]
+          accuracyTensor.print()
+
+          // Get updated param tensors and update them in param tensors holder
+          let param1 = tensorResults[2]
+          let param2 = tensorResults[3]
+          let param3 = tensorResults[4]
+          let param4 = tensorResults[5]
+
+          modelParams.paramTensorsForTraining = [param1, param2, param3, param4]
+
+      }
+    }
 
         // Generate diff data and report the final diffs as
         let diffStateData = try plan.generateDiffData()
         modelReport(diffStateData)
-
-    } catch let error {
-        // Handle any error from the training cycle
-        debugPrint(error.localizedDescription)
-    }
 
   })
 
@@ -158,44 +185,26 @@ The demo app fetches the plans, protocols and model weights from PyGrid server h
 
 Follow these steps to setup an environment to run the demo app:
 
-- Clone the repo [PyGrid](https://github.com/OpenMined/PyGrid) and change directory to it
+- Clone the repo [PyGrid](https://github.com/OpenMined/PyGrid) and change directory to `PyGrid/apps/domain`
 
 ```bash
-git clone https://github.com/OpenMined/PyGrid
-cd PyGrid
+$ git clone https://github.com/OpenMined/PyGrid
+$ cd PyGrid/apps/domain
 ```
-
-- Install [docker](https://github.com/OpenMined/PyGrid/#getting-started)
-- Install docker-compose.
-- Execute `docker-compose` in the command line to start pygrid server.
+- Run the PyGrid Domain application
 
 ```bash
-docker-compose up
+$ ./run.sh --port 5000 --start_local_db
 ```
 
-- Install [PySyft](https://github.com/OpenMined/PySyft) from source in the virtual environment.
-```bash
-virtualenv -p python3 venv
-source venv/bin/activate
-python setup.py install
-```
-- Make virtual environment available for Jupyter Notebook
-```bash
-python -m ipykernel install --user --name=venv
-```
-- Host Jupyter Notebook
+- Install [PySyft](https://github.com/OpenMined/PySyft) from source or via PyPy. Follow the instructions specified in the repo.
+- Clone the `PySyft` repo. In your command line, go to `PySyft/examples/federated-learning/model-centric/` folder and run jupyter notebook.
 
 ```bash
-jupyter notebook
+$ cd PySyft/examples/federated-learning/model-centric/
+$ jupyter notebook
 ```
-
-- Open a browser and navigate to [localhost:8888](http://localhost:8888/). You should be able to see the PySyft notebook console.
-- In the Jupyter Notebook, navigate to `examples/model-centric`
-- Run the notebook `01-Create-plan` with the `venv` kernel. Now PyGrid is setup and the model is hosted over it.
-
-```
-syft.base_url="<IP_address_from_step_16>:5000"
-```
+- Open the notebook `mcfl_create_plan_mobile.ipynb` notebook. Run all the cells to host a plan to your running PyGrid domain server.
 
 - Set-up demo project using Cocoapods
 - Install [Cocoapods](https://cocoapods.org/)

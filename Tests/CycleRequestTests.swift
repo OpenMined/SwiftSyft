@@ -61,8 +61,8 @@ class CycleRequestTests: XCTestCase {
                 let responseFilePath = OHPathForFile("cycle-request-rejected.json", type(of: self))!
                 return HTTPStubsResponse(fileAtPath: responseFilePath, statusCode: 200, headers: nil)
             case nil:
-                return HTTPStubsResponse(error: URLError.init(URLError.Code.cancelled))
                 XCTFail("Set cycle request appropriate result before testing")
+                return HTTPStubsResponse(error: URLError.init(URLError.Code.cancelled))
             }
         }
 
@@ -93,7 +93,7 @@ class CycleRequestTests: XCTestCase {
         self.cycleAcceptClient = SyftClient(url: URL(string: "http://test.com:3000")!)!
         self.cycleAcceptJob = self.cycleAcceptClient.newJob(modelName: "mnist", version: "1.0")
 
-        self.cycleAcceptJob.onReady { (_, _, _) in
+        self.cycleAcceptJob.onReady { (_, _, _, _) in
             cycleAcceptedExpectation.fulfill()
         }
 

@@ -139,7 +139,7 @@ extension Array where Element == TorchTensor {
     }
 }
 
-class DataLoader<T: Collection>: Sequence {
+public class DataLoader<T: Collection>: Sequence {
 
     let dataset: T
 
@@ -147,13 +147,13 @@ class DataLoader<T: Collection>: Sequence {
         self.dataset = dataset
     }
 
-    __consuming func makeIterator() -> AnyIterator<T.Element> {
+    public __consuming func makeIterator() -> AnyIterator<T.Element> {
         fatalError("Must subclass `DataLoader`")
     }
 
 }
 
-class TensorDataLoader<T: Collection>: DataLoader<T> where T.Element == TorchTensor {
+public class TensorDataLoader<T: Collection>: DataLoader<T> where T.Element == TorchTensor {
 
     var iterator: AnyIterator<T.Element>
 
@@ -177,16 +177,16 @@ class TensorDataLoader<T: Collection>: DataLoader<T> where T.Element == TorchTen
 
     }
 
-    __consuming override func makeIterator() -> AnyIterator<T.Element> {
+    public __consuming override func makeIterator() -> AnyIterator<T.Element> {
         return self.iterator
     }
 }
 
-class MultiTensorDataLoader<T: Collection>: DataLoader<T> where T.Element == [TorchTensor] {
+public class MultiTensorDataLoader<T: Collection>: DataLoader<T> where T.Element == [TorchTensor] {
 
     var iterator: AnyIterator<T.Element>
 
-    init(dataset: T, shuffle: Bool = true, batchSize: Int = 1) {
+    public init(dataset: T, shuffle: Bool = true, batchSize: Int = 1) {
 
         guard batchSize >= 1 else {
             preconditionFailure("Batch size must be greater than or equal to 1")
@@ -206,7 +206,7 @@ class MultiTensorDataLoader<T: Collection>: DataLoader<T> where T.Element == [To
 
     }
 
-    __consuming override func makeIterator() -> AnyIterator<T.Element> {
+    public __consuming override func makeIterator() -> AnyIterator<T.Element> {
         return self.iterator
     }
 
