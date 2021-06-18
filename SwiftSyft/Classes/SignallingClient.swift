@@ -104,7 +104,7 @@ extension SignallingClient {
 
         #if !DEBUG
         guard url.absoluteString.hasPrefix("wss") else {
-            preconditionFailure("Path for socket server shoud start with wss://")
+            preconditionFailure("Path for socket server should start with wss://")
         }
         #endif
 

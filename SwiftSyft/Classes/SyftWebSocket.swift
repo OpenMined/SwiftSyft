@@ -18,7 +18,7 @@ class SyftWebSocket: NSObject, SocketClientProtocol, URLSessionWebSocketDelegate
         super.init()
         #if !DEBUG
         guard url.absoluteString.hasPrefix("wss") else {
-            preconditionFailure("Path for socket server shoud start with wss://")
+            preconditionFailure("Path for socket server should start with wss://")
         }
         #endif
         urlSession = URLSession(configuration: .default, delegate: self, delegateQueue: delegateQueue)
